@@ -1,8 +1,13 @@
 package ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Expression extends ASTNode {
 	private Comparaison_expression comparaison_expression;
 
+	
+	
 	public Expression(Comparaison_expression comparaison_expression) {
 		this.comparaison_expression = comparaison_expression;
 	}

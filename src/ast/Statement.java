@@ -5,7 +5,6 @@ public class Statement extends ASTNode {
 	private Assignment assignment;
 	 
 	public Statement(Conditional_statement conditional_statement, Assignment assignment) {
-
 		this.conditional_statement = conditional_statement;
 		this.assignment = assignment;
 	}

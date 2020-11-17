@@ -2,26 +2,15 @@ package ast;
 
 
 
-public class ASTNode <T> {
+public class ASTNode{
 
 	
 	static int ctrID;
 	private int ID;
-	private T obj; 
 
 
-	public ASTNode(int iD, T obj) {
+	public ASTNode() {
 		ID = ++ctrID;
-		this.obj = obj;
-	}
-
-
-	public T getObj() {
-		return obj;
-	}
-
-	public void setObj(T obj) {
-		this.obj = obj;
 	}
 
 	public void setID(int iD) {

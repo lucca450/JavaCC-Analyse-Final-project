@@ -222,7 +222,7 @@ void statement() :
 
 		
 		
-		
+		System.out.println("FIN STATEMENT");
 	  
 		List<Statement> myStatementList = new ArrayList<Statement>();
 
@@ -324,12 +324,25 @@ void conditional_statement():
 	< IF > "(" expression()	")" "{" ( statement() )*
 	( LOOKAHEAD(2) "}" < ELSE > "{" ( statement() )* )? "}"
 
+	 {
+		myConditional_statement = new Conditional_statement();
+		myConditional_statement = (Conditional_statement)stack.pop();
 
+		Statement myStatement = new Statement();
+		myStatement = (Statement)stack.pop();
+
+		myStatement.setConditional_statement(myConditional_statement);
+		stack.push(myStatement);
+	 }
 }
 
 void expression():
 {
 
+	  Expression myExpression = new Expression();
+	  stack.push(myExpression);
+
+/*
 		Function myFunc = (Function)stack.pop();
 
 		Function_body fb = myFunc.getFunction_body();
@@ -352,16 +365,32 @@ void expression():
 		myFunc.setFunction_body(fb);
 		
 		stack.push(myFunc);
-  
+  */
 }
 {
  	comparaison_expression() ( logical_connector() comparaison_expression() )*
+
+
+ 	  {
+		myExpression = new Expression();
+		myExpression = (expression)stack.pop();
+
+		Conditional_statement myConditional_statement = new Conditional_statement();
+		myConditional_statement = (Conditional_statement)stack.pop();
+
+		myConditional_statement.setExpression(myExpression);
+		stack.push(myConditional_statement);
+	 }
 }
 
 void comparaison_expression():
 {
 
-		Function myFunc = (Function)stack.pop();
+  		
+  		Comparaison_expression myComparaison_expression = new Comparaison_expression();
+		stack.push(myComparaison_expression);
+
+	/*	Function myFunc = (Function)stack.pop();
 
 		Function_body fb = myFunc.getFunction_body();
 
@@ -383,12 +412,24 @@ void comparaison_expression():
 
 		myFunc.setFunction_body(fb);
 		
-		stack.push(myFunc);
+		stack.push(myFunc);*/
   
 }
 {
-	 arithmetic_expression_priority_low() ( comparaison_operator() arithmetic_expression_priority_low() )*  
+	 arithmetic_expression_priority_low() ( comparaison_operator() arithmetic_expression_priority_low() )*
+	 
+	 {
+	   	myComparaison_expression = new Comparaison_expression();
+		myComparaison_expression = (Comparaison_expression)stack.pop();
+		
+		Expression myExpression = new Expression();
+		myExpression = (Expression)stack.pop();
+
+		myExpression.setComparaison_expression(myComparaison_expression);
+		stack.push(myExpression);
+	 }
 }
+
 
 void arithmetic_expression_priority_low():
 {
@@ -400,7 +441,7 @@ void arithmetic_expression_priority_low():
 void arithmetic_expression():
 {
 }
-{
+{ 
 	unary_expression() ( arithmetic_operation() unary_expression() )*
 }
 
@@ -443,7 +484,28 @@ void value():
 
 	{
 
-		if(t != null)
+
+				System.out.println(stack.size());
+				if(t.toString == NULL) {
+				  }
+				Comparaison_expression myComparaison_expression = new Comparaison_expression();
+				myComparaison_expression = (Comparaison_expression)stack.pop();
+				
+					    if(myComparaison_expression.getValue() == null)
+					    {
+					     		 Value myValue = new Value(t.toString(), "RIEN");
+					     		 myComparaison_expression.setValue(myValue);
+					    }
+					    else if(myComparaison_expression.getValue2() == null)
+					    {
+								  Value myValue = new Value(t.toString(), "RIEN");
+							      myComparaison_expression.setValue2(myValue);
+					  	}
+
+				stack.push(myComparaison_expression);	  	
+
+
+		/*if(t != null)
 		{ 
 		
 		
@@ -483,7 +545,7 @@ void value():
 				myFunc.setFunction_body(fb);
 				
 				stack.push(myFunc);
-		}
+		}*/
 
 	}	
 }
@@ -512,7 +574,19 @@ void comparaison_operator():
   	(comp_operator= < EQUAL > | comp_operator= < NOT_EQUAL > | comp_operator= < GREATER > | comp_operator = < GREATER_OR_EQUAL > | comp_operator = < LOWER > | comp_operator= < LOWER_OR_EQUAL > 	)
   	{
 
-		
+				Comparaison_expression myComparaison_expression = new Comparaison_expression();
+				myComparaison_expression = (Comparaison_expression)stack.pop();
+
+				if(comp_operator.toString() == ">")
+			    {
+					Comparaison_operator myOperator = new Comparaison_operator(">");
+					myComparaison_expression.setComparaison_operator(myOperator);
+					stack.push(myComparaison_expression);
+				}
+	
+
+
+		/*
 		Function myFunc = (Function)stack.pop();
 
 		Function_body fb = myFunc.getFunction_body();
@@ -540,7 +614,7 @@ void comparaison_operator():
 		myFunc.setFunction_body(fb);
 		
 		stack.push(myFunc);
-		
+		*/
 
 
   	}

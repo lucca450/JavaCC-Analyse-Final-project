@@ -3,7 +3,7 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Conditional_statement extends ASTNode {
+public class Conditional_statement extends Statement {
 	
 	private Expression expression;
 	private List<Statement> statement_list = new ArrayList<Statement>();

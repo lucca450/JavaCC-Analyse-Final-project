@@ -233,7 +233,20 @@ public class Grammaire implements GrammaireConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
+                System.out.println("FIN STATEMENT");
 
+                List<Statement> myStatementList = new ArrayList<Statement>();
+
+                while(stack.size() > 1)
+                {
+                        myStatementList.add((Statement)stack.pop());
+                }
+
+                Function myFunc = (Function)stack.pop();
+                Function_body fb = myFunc.getFunction_body();
+                fb.setStatement_list(myStatementList);
+                myFunc.setFunction_body(fb);
+                stack.push(myFunc);
   }
 
   final public void variable_declaration() throws ParseException {
@@ -341,7 +354,6 @@ public class Grammaire implements GrammaireConstants {
 		
 		stack.push(myFunc);*/
 
-        System.out.println("after conditionnal statement" + stack.size());
     jj_consume_token(IF);
     jj_consume_token(42);
     expression();
@@ -385,32 +397,19 @@ public class Grammaire implements GrammaireConstants {
       ;
     }
     jj_consume_token(46);
-        System.out.println("after conditionnal statement" + stack.size());
+                myConditional_statement = new Conditional_statement();
+                myConditional_statement = (Conditional_statement)stack.pop();
+
+                Statement myStatement = new Statement();
+                myStatement = (Statement)stack.pop();
+
+                myStatement.setConditional_statement(myConditional_statement);
+                stack.push(myStatement);
   }
 
   final public void expression() throws ParseException {
-                Function myFunc = (Function)stack.pop();
-
-                Function_body fb = myFunc.getFunction_body();
-
-                List<Statement> myStatementList =  fb.getStatement_list();
-
-                for (Statement s : myStatementList)
-                {
-                  Conditional_statement myConditional_statement = s.getConditional_statement();
-                    if(myConditional_statement.getExpression() == null)
-                    {
-                      Expression myExpression = new Expression();
-                      myConditional_statement.setExpression(myExpression);
-                      break;
-                    }
-                }
-
-                fb.setStatement_list(myStatementList);
-
-                myFunc.setFunction_body(fb);
-
-                stack.push(myFunc);
+          Expression myExpression = new Expression();
+          stack.push(myExpression);
     comparaison_expression();
     label_8:
     while (true) {
@@ -426,32 +425,19 @@ public class Grammaire implements GrammaireConstants {
       logical_connector();
       comparaison_expression();
     }
+                myExpression = new Expression();
+                myExpression = (expression)stack.pop();
+
+                Conditional_statement myConditional_statement = new Conditional_statement();
+                myConditional_statement = (Conditional_statement)stack.pop();
+
+                myConditional_statement.setExpression(myExpression);
+                stack.push(myConditional_statement);
   }
 
   final public void comparaison_expression() throws ParseException {
-                Function myFunc = (Function)stack.pop();
-
-                Function_body fb = myFunc.getFunction_body();
-
-                List<Statement> myStatementList =  fb.getStatement_list();
-
-                for (Statement s : myStatementList)
-                {
-                  Conditional_statement myConditional_statement = s.getConditional_statement();
-                  Expression myExpression = myConditional_statement.getExpression();
-                    if(myExpression.getComparaison_expression() == null)
-                    {
-                      Comparaison_expression myComparaison_expression = new Comparaison_expression();
-                      myExpression.setComparaison_expression(myComparaison_expression);
-                      break;
-                    }
-                }
-
-                fb.setStatement_list(myStatementList);
-
-                myFunc.setFunction_body(fb);
-
-                stack.push(myFunc);
+                Comparaison_expression myComparaison_expression = new Comparaison_expression();
+                stack.push(myComparaison_expression);
     arithmetic_expression_priority_low();
     label_9:
     while (true) {
@@ -471,6 +457,14 @@ public class Grammaire implements GrammaireConstants {
       comparaison_operator();
       arithmetic_expression_priority_low();
     }
+                myComparaison_expression = new Comparaison_expression();
+                myComparaison_expression = (Comparaison_expression)stack.pop();
+
+                Expression myExpression = new Expression();
+                myExpression = (Expression)stack.pop();
+
+                myExpression.setComparaison_expression(myComparaison_expression);
+                stack.push(myExpression);
   }
 
   final public void arithmetic_expression_priority_low() throws ParseException {
@@ -584,47 +578,68 @@ public class Grammaire implements GrammaireConstants {
         throw new ParseException();
       }
     }
-                if(t != null)
-                {
-
-
-                                Function myFunc = (Function)stack.pop();
-
-                                Function_body fb = myFunc.getFunction_body();
-
-                                List<Statement> myStatementList =  fb.getStatement_list();
-
-                                for (Statement s : myStatementList)
-                                {
-                                  Conditional_statement myConditional_statement = s.getConditional_statement();
-                                  Expression myExpression = myConditional_statement.getExpression();
-                                  Comparaison_expression myComparaison_expression = myExpression.getComparaison_expression();
-
-
-                                  for (Parameter_declaration pd : myFunc.getParameter_declaration_list())
-                                  {
+                                System.out.println(stack.size());
+                                if(t.toString == NULL) {
+                                  }
+                                Comparaison_expression myComparaison_expression = new Comparaison_expression();
+                                myComparaison_expression = (Comparaison_expression)stack.pop();
 
                                             if(myComparaison_expression.getValue() == null)
                                             {
-                                                         Value myValue = new Value(t.toString(), pd.getType());
+                                                         Value myValue = new Value(t.toString(), "RIEN");
                                                          myComparaison_expression.setValue(myValue);
-                                                         break;
                                             }
                                             else if(myComparaison_expression.getValue2() == null)
                                             {
-                                                                  Value myValue = new Value(t.toString(),pd.getType());
+                                                                  Value myValue = new Value(t.toString(), "RIEN");
                                                               myComparaison_expression.setValue2(myValue);
-                                                              break;
                                                 }
-                                  }
-                                }
 
-                                fb.setStatement_list(myStatementList);
+                                stack.push(myComparaison_expression);
 
-                                myFunc.setFunction_body(fb);
 
-                                stack.push(myFunc);
-                }
+                /*if(t != null)
+		{ 
+		
+		
+				Function myFunc = (Function)stack.pop();
+		
+				Function_body fb = myFunc.getFunction_body();
+		
+				List<Statement> myStatementList =  fb.getStatement_list();
+		
+				for (Statement s : myStatementList) 
+				{
+				  Conditional_statement myConditional_statement = s.getConditional_statement();
+				  Expression myExpression = myConditional_statement.getExpression();
+				  Comparaison_expression myComparaison_expression = myExpression.getComparaison_expression();
+		
+		
+				  for (Parameter_declaration pd : myFunc.getParameter_declaration_list()) 
+				  {
+				    
+					    if(myComparaison_expression.getValue() == null)
+					    {
+					     		 Value myValue = new Value(t.toString(), pd.getType());
+					     		 myComparaison_expression.setValue(myValue);
+					     		 break;
+					    }
+					    else if(myComparaison_expression.getValue2() == null)
+					    {
+								  Value myValue = new Value(t.toString(),pd.getType());
+							      myComparaison_expression.setValue2(myValue);
+							      break;
+					  	}
+				  }  	
+				}
+				
+				fb.setStatement_list(myStatementList);
+		
+				myFunc.setFunction_body(fb);
+				
+				stack.push(myFunc);
+		}*/
+
   }
 
   final public void arithmetic_operation() throws ParseException {
@@ -686,33 +701,48 @@ public class Grammaire implements GrammaireConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-                Function myFunc = (Function)stack.pop();
+                                Comparaison_expression myComparaison_expression = new Comparaison_expression();
+                                myComparaison_expression = (Comparaison_expression)stack.pop();
 
-                Function_body fb = myFunc.getFunction_body();
+                                if(comp_operator.toString() == ">")
+                            {
+                                        Comparaison_operator myOperator = new Comparaison_operator(">");
+                                        myComparaison_expression.setComparaison_operator(myOperator);
+                                        stack.push(myComparaison_expression);
+                                }
 
-                List<Statement> myStatementList =  fb.getStatement_list();
 
-                for (Statement s : myStatementList)
-                {
-                  Conditional_statement myConditional_statement = s.getConditional_statement();
-                  Expression myExpression = myConditional_statement.getExpression();
-                  Comparaison_expression myComparaison_expression = myExpression.getComparaison_expression();
-                    if(myComparaison_expression.getComparaison_operator() == null)
-                    {
-                      if(comp_operator.toString() == ">")
-                          {
-                              Comparaison_operator myComparaison_operator = new Comparaison_operator(">");
-                              myComparaison_expression.setComparaison_operator(myComparaison_operator);
-                              break;
-                      }
-                    }
-                }
 
-                fb.setStatement_list(myStatementList);
+                /*
+		Function myFunc = (Function)stack.pop();
 
-                myFunc.setFunction_body(fb);
+		Function_body fb = myFunc.getFunction_body();
 
-                stack.push(myFunc);
+		List<Statement> myStatementList =  fb.getStatement_list();
+
+		for (Statement s : myStatementList) 
+		{
+		  Conditional_statement myConditional_statement = s.getConditional_statement();
+		  Expression myExpression = myConditional_statement.getExpression();
+		  Comparaison_expression myComparaison_expression = myExpression.getComparaison_expression();
+		    if(myComparaison_expression.getComparaison_operator() == null)
+		    {
+		      if(comp_operator.toString() == ">")
+			  {
+			      Comparaison_operator myComparaison_operator = new Comparaison_operator(">");
+			      myComparaison_expression.setComparaison_operator(myComparaison_operator);
+			      break;
+		      }
+		    }
+		}
+		
+		fb.setStatement_list(myStatementList);
+
+		myFunc.setFunction_body(fb);
+		
+		stack.push(myFunc);
+		*/
+
   }
 
   final public void logical_connector() throws ParseException {
@@ -889,8 +919,9 @@ public class Grammaire implements GrammaireConstants {
     return false;
   }
 
-  private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
+  private boolean jj_3_2() {
+    if (jj_scan_token(46)) return true;
+    if (jj_scan_token(ELSE)) return true;
     return false;
   }
 
@@ -899,9 +930,8 @@ public class Grammaire implements GrammaireConstants {
     return false;
   }
 
-  private boolean jj_3_2() {
-    if (jj_scan_token(46)) return true;
-    if (jj_scan_token(ELSE)) return true;
+  private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
     return false;
   }
 
