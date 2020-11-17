@@ -1,0 +1,590 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = false;
+  debug_parser = false;}PARSER_BEGIN(Grammaire)
+import java.io.*;
+import ast.*;
+import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Grammaire{
+
+  static Stack stack = new Stack();
+  static int uniqueID = 0;
+  
+  
+  public static void main(String args []) throws ParseException  {    
+    try {      
+	    InputStream inputStream = new FileInputStream(new File("test.txt"));	    Grammaire parser = new Grammaire(inputStream);
+	    parser.function();
+
+
+
+		/*System.out.println("yo");
+		stack.push("bot");
+		stack.push("mid");
+		stack.push("top");*/
+		//System.out.println(stack.peek());
+
+
+			  System.out.println(stack.peek());
+
+	    
+ 	 } catch(IOException exception) {
+		exception.printStackTrace();
+ 	 }  }}PARSER_END(Grammaire)
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+MORE :
+{
+	"//" : IN_SINGLE_LINE_COMMENT
+}
+
+<IN_SINGLE_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "\n" | "\r" | "\r\n" > : DEFAULT
+}
+
+<IN_SINGLE_LINE_COMMENT>
+MORE :
+{
+  < ~[] >
+}
+TOKEN : /* OPERATEURS */{
+  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >
+| < MODULO : "%" >
+| < ASSIGN : "=" >
+| < EQUAL : "==" >
+| < NOT_EQUAL : "<>" >
+| < GREATER : ">" >
+| < GREATER_OR_EQUAL : ">=" >
+| < LOWER : "<" >
+| < LOWER_OR_EQUAL : "<=" >
+| < AND : "&&" >
+| < OR : "||" >
+| < NOT : "!" >
+| < PREFIX_INCREMENT : "++" >
+| < PREFIX_DECREMENT : "--" >}
+
+TOKEN : /* MOTS CLÉS */
+{
+  < IF : "if" >
+| < ELSE : "else" >
+| < WHILE : "while" >
+| < FOR : "for" > // A RETIRER
+| < TRUE: "TRUE" >
+| < FALSE : "FALSE" >
+| < RETURN : "return" >
+| < NEW : "new" >
+}
+
+TOKEN : /* TYPES */
+{  < INTEGER_TYPE : "int" >
+| < DECIMAL_TYPE : "double" >
+| < BOOLEAN : "bool" >
+| < VOID : "void" >
+}TOKEN :	/* LITTERAUX */{
+  < #DIGIT: ["0"-"9"] >
+| < #LETTER : ["A"-"Z", "a" - "z"] >
+| < INTEGER : ("-")? ( < DIGIT > )+ >
+| < DECIMAL :
+		("-")? (< DIGIT >)+ "." (< DIGIT >)*
+	|  	("-")? (< DIGIT >)* "." (< DIGIT >)+
+	>
+| < IDENTIFIER : < LETTER > (< LETTER > | < DIGIT >)* >}
+
+void function() :
+{
+  Token ident = null;
+  Token f_type = null;
+}
+{
+	(
+		f_type = type() | f_type = < VOID > 
+	)
+	ident = < IDENTIFIER >
+	{
+	 // System.out.println("Function : << " + ident.toString() + " >>");
+	  stack.push(new Function(f_type.toString() , ident.toString()));
+	  Function myFunction = (Function)stack.peek();
+	}
+	"(" (parameter_declaration() ("," parameter_declaration())*)? ")" "{"
+		function_body()
+	"}"
+
+	{
+	  myFunction.accept(new VisitorPrint(0));
+	}
+	
+	(function())*
+	< EOF >
+}
+
+void parameter_declaration():
+{
+    Token ident = null;
+    Token type = null;
+}
+{
+	type = type() ident = < IDENTIFIER >
+	{
+
+		Parameter_declaration myParameter_declaration = new Parameter_declaration(type.toString(), ident.toString());
+	  	stack.push(myParameter_declaration);
+		/*
+		Function myFunc = (Function)stack.pop();
+		
+		List<Parameter_declaration> myList =  myFunc.getParameter_declaration_list();
+
+		Parameter_declaration myParameter_declaration = new Parameter_declaration(type.toString(), ident.toString());
+		
+		myList.add(myParameter_declaration);
+
+		myFunc.setParameter_declaration_list(myList);
+		
+		stack.push(myFunc);
+		*/
+	}
+}
+
+void function_body() :
+{
+
+		List<Parameter_declaration> myParameter_declarationList = new ArrayList<Parameter_declaration>();
+
+		while(stack.size() > 1)
+		{
+			myParameter_declarationList.add((Parameter_declaration)stack.pop());
+		}
+
+  		Function myFunc = (Function)stack.pop();
+		myFunc.setParameter_declaration_list(myParameter_declarationList);
+		stack.push(myFunc);
+}
+{
+	{	
+	  	Function myFunction = (Function)stack.pop();
+		Function_body fb = new Function_body();
+		myFunction.setFunction_body(fb);
+		stack.push(myFunction);	}
+	
+    ( variable_declaration() ";" )*
+  	( statement() )*
+	( return_statement() )?
+	
+}
+void statement() :
+{		
+}
+{
+	{
+	  
+	  /*	Function myFunc = (Function)stack.pop();
+
+		Function_body fb = myFunc.getFunction_body();
+
+		List<Statement> myStatementList =  fb.getStatement_list();
+
+		Statement myStatement = new Statement();
+		
+		myStatementList.add(myStatement);
+
+		fb.setStatement_list(myStatementList);
+
+		myFunc.setFunction_body(fb);
+		
+		stack.push(myFunc);*/
+
+
+		Statement myStatement = new Statement();
+		stack.push(myStatement);
+
+	}
+	(		(
+			LOOKAHEAD(2)			assignment() | function_call()
+		) ";"
+		| conditional_statement()
+		| while_loop()
+		| for_loop()
+	)
+
+
+	{
+
+
+		
+		
+		
+	  
+		List<Statement> myStatementList = new ArrayList<Statement>();
+
+		while(stack.size() > 1)
+		{
+			myStatementList.add((Statement)stack.pop());
+		}
+
+  		Function myFunc = (Function)stack.pop();
+  		Function_body fb = myFunc.getFunction_body();
+		fb.setStatement_list(myStatementList);
+		myFunc.setFunction_body(fb);
+		stack.push(myFunc);
+	}
+
+}
+
+void variable_declaration():
+{
+}
+{
+	type() assignment()	("," assignment() )*
+}
+
+Token litteral_value() :
+{
+  Token t = null;
+}
+{
+	(		t = < INTEGER >
+		| t = < DECIMAL >
+		| boolean_value()
+	)
+	{
+  			  return t;
+	}	
+}
+
+void boolean_value() :
+{
+}
+{
+	( < TRUE > | < FALSE > )
+}
+
+Token type() :
+{
+  Token tok=null;
+}
+{
+	(
+		
+		tok = < INTEGER_TYPE >
+		| tok = < DECIMAL_TYPE >
+		| tok = < BOOLEAN >
+	)
+
+	{
+	  return tok;
+	}
+}
+
+void conditional_statement():
+{
+}
+{
+
+	{
+
+	  Conditional_statement myConditional_statement = new Conditional_statement();
+	  stack.push(myConditional_statement);
+
+
+	  
+	  /*	Function myFunc = (Function)stack.pop();
+
+		Function_body fb = myFunc.getFunction_body();
+
+		List<Statement> myStatementList =  fb.getStatement_list();
+
+		for (Statement s : myStatementList) 
+		{ 
+		    if(s.getConditional_statement() == null)
+		    {
+		      Conditional_statement myConditional_statement = new Conditional_statement();
+		      //myConditional_statement.ShowMessage();
+		      s.setConditional_statement(myConditional_statement);
+		      break;
+		    }
+		}
+		
+		fb.setStatement_list(myStatementList);
+
+		myFunc.setFunction_body(fb);
+		
+		stack.push(myFunc);*/
+	}
+
+	< IF > "(" expression()	")" "{" ( statement() )*
+	( LOOKAHEAD(2) "}" < ELSE > "{" ( statement() )* )? "}"
+
+
+}
+
+void expression():
+{
+
+		Function myFunc = (Function)stack.pop();
+
+		Function_body fb = myFunc.getFunction_body();
+
+		List<Statement> myStatementList =  fb.getStatement_list();
+
+		for (Statement s : myStatementList) 
+		{
+		  Conditional_statement myConditional_statement = s.getConditional_statement();
+		    if(myConditional_statement.getExpression() == null)
+		    {
+		      Expression myExpression = new Expression();
+		      myConditional_statement.setExpression(myExpression);
+		      break;
+		    }
+		}
+		
+		fb.setStatement_list(myStatementList);
+
+		myFunc.setFunction_body(fb);
+		
+		stack.push(myFunc);
+  
+}
+{
+ 	comparaison_expression() ( logical_connector() comparaison_expression() )*
+}
+
+void comparaison_expression():
+{
+
+		Function myFunc = (Function)stack.pop();
+
+		Function_body fb = myFunc.getFunction_body();
+
+		List<Statement> myStatementList =  fb.getStatement_list();
+
+		for (Statement s : myStatementList) 
+		{
+		  Conditional_statement myConditional_statement = s.getConditional_statement();
+		  Expression myExpression = myConditional_statement.getExpression(); 
+		    if(myExpression.getComparaison_expression() == null)
+		    {
+		      Comparaison_expression myComparaison_expression = new Comparaison_expression();
+		      myExpression.setComparaison_expression(myComparaison_expression);
+		      break;
+		    }
+		}
+		
+		fb.setStatement_list(myStatementList);
+
+		myFunc.setFunction_body(fb);
+		
+		stack.push(myFunc);
+  
+}
+{
+	 arithmetic_expression_priority_low() ( comparaison_operator() arithmetic_expression_priority_low() )*  
+}
+
+void arithmetic_expression_priority_low():
+{
+}
+{
+	arithmetic_expression() ( arithmetic_operation_piority_low() arithmetic_expression() )*
+}
+
+void arithmetic_expression():
+{
+}
+{
+	unary_expression() ( arithmetic_operation() unary_expression() )*
+}
+
+void unary_expression():
+{
+}
+{
+	( unary_operator() )? term()
+}
+
+void term():
+{
+}
+{
+	value() | "(" expression() ")"
+}
+
+void unary_operator():
+{
+}
+{
+	(		< PREFIX_INCREMENT >
+		| < PREFIX_DECREMENT >
+		| < NOT >
+	)
+}
+
+void value():
+{
+  Token t = null ;
+
+}
+{  	
+	( 
+		LOOKAHEAD(2) function_call()
+		| t = < IDENTIFIER >
+		| t = litteral_value()
+	)
+
+
+	{
+
+		if(t != null)
+		{ 
+		
+		
+				Function myFunc = (Function)stack.pop();
+		
+				Function_body fb = myFunc.getFunction_body();
+		
+				List<Statement> myStatementList =  fb.getStatement_list();
+		
+				for (Statement s : myStatementList) 
+				{
+				  Conditional_statement myConditional_statement = s.getConditional_statement();
+				  Expression myExpression = myConditional_statement.getExpression();
+				  Comparaison_expression myComparaison_expression = myExpression.getComparaison_expression();
+		
+		
+				  for (Parameter_declaration pd : myFunc.getParameter_declaration_list()) 
+				  {
+				    
+					    if(myComparaison_expression.getValue() == null)
+					    {
+					     		 Value myValue = new Value(t.toString(), pd.getType());
+					     		 myComparaison_expression.setValue(myValue);
+					     		 break;
+					    }
+					    else if(myComparaison_expression.getValue2() == null)
+					    {
+								  Value myValue = new Value(t.toString(),pd.getType());
+							      myComparaison_expression.setValue2(myValue);
+							      break;
+					  	}
+				  }  	
+				}
+				
+				fb.setStatement_list(myStatementList);
+		
+				myFunc.setFunction_body(fb);
+				
+				stack.push(myFunc);
+		}
+
+	}	
+}
+
+void arithmetic_operation():
+{
+}
+{
+	( < MULTIPLY > | < DIVIDE > | < MODULO > )
+}
+
+void arithmetic_operation_piority_low():
+{
+}
+{
+	( < PLUS > | < MINUS > )
+}
+
+void comparaison_operator():
+{
+  Token comp_operator=null;
+
+
+}
+{
+  	(comp_operator= < EQUAL > | comp_operator= < NOT_EQUAL > | comp_operator= < GREATER > | comp_operator = < GREATER_OR_EQUAL > | comp_operator = < LOWER > | comp_operator= < LOWER_OR_EQUAL > 	)
+  	{
+
+		
+		Function myFunc = (Function)stack.pop();
+
+		Function_body fb = myFunc.getFunction_body();
+
+		List<Statement> myStatementList =  fb.getStatement_list();
+
+		for (Statement s : myStatementList) 
+		{
+		  Conditional_statement myConditional_statement = s.getConditional_statement();
+		  Expression myExpression = myConditional_statement.getExpression();
+		  Comparaison_expression myComparaison_expression = myExpression.getComparaison_expression();
+		    if(myComparaison_expression.getComparaison_operator() == null)
+		    {
+		      if(comp_operator.toString() == ">")
+			  {
+			      Comparaison_operator myComparaison_operator = new Comparaison_operator(">");
+			      myComparaison_expression.setComparaison_operator(myComparaison_operator);
+			      break;
+		      }
+		    }
+		}
+		
+		fb.setStatement_list(myStatementList);
+
+		myFunc.setFunction_body(fb);
+		
+		stack.push(myFunc);
+		
+
+
+  	}
+}
+
+void logical_connector():
+{
+}
+{
+	( < AND > | < OR > )
+}
+
+void function_call():
+{
+}
+{
+	< IDENTIFIER > "(" (expression() ("," expression())*)* ")"
+}
+
+void assignment():
+{
+}
+{
+ 
+    < IDENTIFIER > < ASSIGN > expression()
+}
+
+void while_loop():
+{
+}
+{
+	< WHILE > "(" expression() ")" "{" (statement())* "}"
+}
+
+void for_loop():
+{
+}
+{
+	< FOR > "(" (assignment())? ";" (expression())? ";" (assignment())?  ")" "{" (statement())* "}"
+}
+
+void return_statement():
+{
+}
+{
+	< RETURN > expression() ";"
+}
