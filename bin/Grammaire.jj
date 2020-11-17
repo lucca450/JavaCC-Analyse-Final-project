@@ -373,7 +373,7 @@ void expression():
 
  	  {
 		myExpression = new Expression();
-		myExpression = (expression)stack.pop();
+		myExpression = (Expression)stack.pop();
 
 		Conditional_statement myConditional_statement = new Conditional_statement();
 		myConditional_statement = (Conditional_statement)stack.pop();
@@ -486,8 +486,7 @@ void value():
 
 
 				System.out.println(stack.size());
-				if(t.toString == NULL) {
-				  }
+
 				Comparaison_expression myComparaison_expression = new Comparaison_expression();
 				myComparaison_expression = (Comparaison_expression)stack.pop();
 				

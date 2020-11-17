@@ -426,7 +426,7 @@ public class Grammaire implements GrammaireConstants {
       comparaison_expression();
     }
                 myExpression = new Expression();
-                myExpression = (expression)stack.pop();
+                myExpression = (Expression)stack.pop();
 
                 Conditional_statement myConditional_statement = new Conditional_statement();
                 myConditional_statement = (Conditional_statement)stack.pop();
@@ -579,8 +579,7 @@ public class Grammaire implements GrammaireConstants {
       }
     }
                                 System.out.println(stack.size());
-                                if(t.toString == NULL) {
-                                  }
+
                                 Comparaison_expression myComparaison_expression = new Comparaison_expression();
                                 myComparaison_expression = (Comparaison_expression)stack.pop();
 
@@ -913,15 +912,21 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3R_17() {
+  private boolean jj_3R_16() {
     if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(42)) return true;
+    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 
   private boolean jj_3_2() {
     if (jj_scan_token(46)) return true;
     if (jj_scan_token(ELSE)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_17() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(42)) return true;
     return false;
   }
 
@@ -932,12 +937,6 @@ public class Grammaire implements GrammaireConstants {
 
   private boolean jj_3_3() {
     if (jj_3R_17()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_16() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 
