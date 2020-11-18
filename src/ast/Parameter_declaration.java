@@ -20,6 +20,14 @@ public class Parameter_declaration extends ASTNode {
 		return parameter_name;
 	}
 	
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setParameter_name(String parameter_name) {
+		this.parameter_name = parameter_name;
+	}
+
 	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
 		visitor.visit(this, nbrOfSpaces);
 	}

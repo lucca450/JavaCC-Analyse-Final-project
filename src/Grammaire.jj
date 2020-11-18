@@ -112,9 +112,7 @@ void function() :
 	)
 	ident = < IDENTIFIER >
 	{
-	 // System.out.println("Function : << " + ident.toString() + " >>");
 	  stack.push(new Function(f_type.toString() , ident.toString()));
-	  Function myFunction = (Function)stack.peek();
 	}
 	"(" (parameter_declaration() ("," parameter_declaration())*)? ")" "{"
 		function_body()
@@ -134,11 +132,26 @@ void parameter_declaration():
     Token type = null;
 }
 {
+
+	{
+	  Parameter_declaration myParameter_declaration = new Parameter_declaration();
+	  stack.push(myParameter_declaration);
+	}
+  
 	type = type() ident = < IDENTIFIER >
 	{
 
-		Parameter_declaration myParameter_declaration = new Parameter_declaration(type.toString(), ident.toString());
-	  	stack.push(myParameter_declaration);
+		myParameter_declaration = (Parameter_declaration)stack.pop();
+		myParameter_declaration.setParameter_name(ident.toString());
+		myParameter_declaration.setType(type.toString());
+			
+		Function myFunction = (Function)stack.peek();
+
+		List<Parameter_declaration> parameter_declaration_list = myFunction.getParameter_declaration_list();
+		parameter_declaration_list.add(myParameter_declaration);
+		
+		myFunction.setParameter_declaration_list(parameter_declaration_list);
+
 		/*
 		Function myFunc = (Function)stack.pop();
 		
@@ -157,37 +170,37 @@ void parameter_declaration():
 
 void function_body() :
 {
+  // La stack contient : Function 
 
-		List<Parameter_declaration> myParameter_declarationList = new ArrayList<Parameter_declaration>();
-
-		while(stack.size() > 1)
-		{
-			myParameter_declarationList.add((Parameter_declaration)stack.pop());
-		}
-
-  		Function myFunc = (Function)stack.pop();
-		myFunc.setParameter_declaration_list(myParameter_declarationList);
-		stack.push(myFunc);
 }
 {
-	{	
-	  	Function myFunction = (Function)stack.pop();
-		Function_body fb = new Function_body();
-		myFunction.setFunction_body(fb);
-		stack.push(myFunction);	}
+	{
+	    Function_body myFunction_body = new Function_body();
+	  	stack.push(myFunction_body);
+	  	StatementList myStatementList = new StatementList();
+	  	stack.push(myStatementList);	}
 	
     ( variable_declaration() ";" )*
   	( statement() )*
 	( return_statement() )?
 	
-}
+		{
+		    StatementList myStatementList = (StatementList)stack.pop();
+			myFunction_body = (Function_body)stack.pop();
+			myFunction_body.setStatement_list(myStatementList);
+			Function myFunction = (Function)stack.peek();
+			myFunction.setFunction_body(myFunction_body);
+		}}
 void statement() :
 {		
 }
 {
 	{
+		Statement myStatement = new Statement();
+		stack.push(myStatement);
+		
 	  
-	  /*	Function myFunc = (Function)stack.pop();
+	  /*Function myFunc = (Function)stack.pop();
 
 		Function_body fb = myFunc.getFunction_body();
 
@@ -203,9 +216,26 @@ void statement() :
 		
 		stack.push(myFunc);*/
 
-
+/*
 		Statement myStatement = new Statement();
-		stack.push(myStatement);
+		try {
+		  		  System.out.println("TRY");
+		  Conditional_statement myConditionnal_statement = new Conditional_statement();
+		  myConditionnal_statement = (Conditional_statement)stack.peek();
+		  List<Statement> statement_list = new ArrayList<Statement>();
+		  statement_list = myConditionnal_statement.getStatement_list();
+		  statement_list.add(mystatement);
+		  myConditionnal_statement.setStatement_list(statement_list);
+		  
+		//  myConditionnal_statement = (Conditional_statement)stack.pop();
+		 // myStatement.setConditional_statement(myConditionnal_statement);
+
+		}
+		catch(Exception e) {
+		  		  System.out.println("catch");
+		}
+		  stack.push(myStatement);
+*/
 
 	}
 	(		(
@@ -218,20 +248,9 @@ void statement() :
 
 
 	{
-
-	  
-		List<Statement> myStatementList = new ArrayList<Statement>();
-
-		while(stack.size() > 1)
-		{
-			myStatementList.add((Statement)stack.pop());
-		}
-
-  		Function myFunc = (Function)stack.pop();
-  		Function_body fb = myFunc.getFunction_body();
-		fb.setStatement_list(myStatementList);
-		myFunc.setFunction_body(fb);
-		stack.push(myFunc);
+		myStatement = (Statement)stack.pop();
+		StatementList myStatementList = (StatementList)stack.peek();
+		myStatementList.add(myStatement);
 	}
 
 }
@@ -290,8 +309,9 @@ void conditional_statement():
 
 	  Conditional_statement myConditional_statement = new Conditional_statement();
 	  stack.push(myConditional_statement);
-
-
+	  StatementList myStatementList = new StatementList();
+	  stack.push(myStatementList);
+	
 	  
 	  /*	Function myFunc = (Function)stack.pop();
 

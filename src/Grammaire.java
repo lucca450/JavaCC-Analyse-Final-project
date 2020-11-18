@@ -54,9 +54,7 @@ public class Grammaire implements GrammaireConstants {
       throw new ParseException();
     }
     ident = jj_consume_token(IDENTIFIER);
-         // System.out.println("Function : << " + ident.toString() + " >>");
           stack.push(new Function(f_type.toString() , ident.toString()));
-          Function myFunction = (Function)stack.peek();
     jj_consume_token(42);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER_TYPE:
@@ -107,10 +105,21 @@ public class Grammaire implements GrammaireConstants {
   final public void parameter_declaration() throws ParseException {
     Token ident = null;
     Token type = null;
+          Parameter_declaration myParameter_declaration = new Parameter_declaration();
+          stack.push(myParameter_declaration);
     type = type();
     ident = jj_consume_token(IDENTIFIER);
-                Parameter_declaration myParameter_declaration = new Parameter_declaration(type.toString(), ident.toString());
-                stack.push(myParameter_declaration);
+                myParameter_declaration = (Parameter_declaration)stack.pop();
+                myParameter_declaration.setParameter_name(ident.toString());
+                myParameter_declaration.setType(type.toString());
+
+                Function myFunction = (Function)stack.peek();
+
+                List<Parameter_declaration> parameter_declaration_list = myFunction.getParameter_declaration_list();
+                parameter_declaration_list.add(myParameter_declaration);
+
+                myFunction.setParameter_declaration_list(parameter_declaration_list);
+
                 /*
 		Function myFunc = (Function)stack.pop();
 		
@@ -128,20 +137,10 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void function_body() throws ParseException {
-                List<Parameter_declaration> myParameter_declarationList = new ArrayList<Parameter_declaration>();
-
-                while(stack.size() > 1)
-                {
-                        myParameter_declarationList.add((Parameter_declaration)stack.pop());
-                }
-
-                Function myFunc = (Function)stack.pop();
-                myFunc.setParameter_declaration_list(myParameter_declarationList);
-                stack.push(myFunc);
-                Function myFunction = (Function)stack.pop();
-                Function_body fb = new Function_body();
-                myFunction.setFunction_body(fb);
-                stack.push(myFunction);
+            Function_body myFunction_body = new Function_body();
+                stack.push(myFunction_body);
+                StatementList myStatementList = new StatementList();
+                stack.push(myStatementList);
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -180,10 +179,19 @@ public class Grammaire implements GrammaireConstants {
       jj_la1[6] = jj_gen;
       ;
     }
+                    StatementList myStatementList = (StatementList)stack.pop();
+                        myFunction_body = (Function_body)stack.pop();
+                        myFunction_body.setStatement_list(myStatementList);
+                        Function myFunction = (Function)stack.peek();
+                        myFunction.setFunction_body(myFunction_body);
   }
 
   final public void statement() throws ParseException {
-          /*	Function myFunc = (Function)stack.pop();
+                Statement myStatement = new Statement();
+                stack.push(myStatement);
+
+
+          /*Function myFunc = (Function)stack.pop();
 
 		Function_body fb = myFunc.getFunction_body();
 
@@ -199,9 +207,27 @@ public class Grammaire implements GrammaireConstants {
 		
 		stack.push(myFunc);*/
 
+/*
+		Statement myStatement = new Statement();
+		try {
+		  		  System.out.println("TRY");
+		  Conditional_statement myConditionnal_statement = new Conditional_statement();
+		  myConditionnal_statement = (Conditional_statement)stack.peek();
+		  List<Statement> statement_list = new ArrayList<Statement>();
+		  statement_list = myConditionnal_statement.getStatement_list();
+		  statement_list.add(mystatement);
+		  myConditionnal_statement.setStatement_list(statement_list);
+		  
+		//  myConditionnal_statement = (Conditional_statement)stack.pop();
+		 // myStatement.setConditional_statement(myConditionnal_statement);
 
-                Statement myStatement = new Statement();
-                stack.push(myStatement);
+		}
+		catch(Exception e) {
+		  		  System.out.println("catch");
+		}
+		  stack.push(myStatement);
+*/
+
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case IDENTIFIER:
       if (jj_2_1(2)) {
@@ -233,18 +259,9 @@ public class Grammaire implements GrammaireConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-                List<Statement> myStatementList = new ArrayList<Statement>();
-
-                while(stack.size() > 1)
-                {
-                        myStatementList.add((Statement)stack.pop());
-                }
-
-                Function myFunc = (Function)stack.pop();
-                Function_body fb = myFunc.getFunction_body();
-                fb.setStatement_list(myStatementList);
-                myFunc.setFunction_body(fb);
-                stack.push(myFunc);
+                myStatement = (Statement)stack.pop();
+                StatementList myStatementList = (StatementList)stack.peek();
+                myStatementList.add(myStatement);
   }
 
   final public void variable_declaration() throws ParseException {
@@ -326,6 +343,14 @@ public class Grammaire implements GrammaireConstants {
   final public void conditional_statement() throws ParseException {
           Conditional_statement myConditional_statement = new Conditional_statement();
           stack.push(myConditional_statement);
+
+
+
+        //statement
+
+        // stratement cs
+
+
 
 
 
@@ -908,16 +933,6 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_3R_16()) return true;
-    return false;
-  }
-
   private boolean jj_3R_16() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(ASSIGN)) return true;
@@ -933,6 +948,16 @@ public class Grammaire implements GrammaireConstants {
   private boolean jj_3R_17() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(42)) return true;
+    return false;
+  }
+
+  private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_3R_16()) return true;
     return false;
   }
 

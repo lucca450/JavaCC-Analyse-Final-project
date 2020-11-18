@@ -6,9 +6,9 @@ import java.util.List;
 public class Conditional_statement extends Statement {
 	
 	private Expression expression;
-	private List<Statement> statement_list = new ArrayList<Statement>();
+	private StatementList statement_list;
 	
-	public Conditional_statement(Expression expression, List<Statement> statement_list) {
+	public Conditional_statement(Expression expression, StatementList statement_list) {
 		this.expression = expression;
 		this.statement_list = statement_list;
 	}
@@ -25,11 +25,11 @@ public class Conditional_statement extends Statement {
 		this.expression = expression;
 	}
 
-	public List<Statement> getStatement_list() {
+	public StatementList getStatement_list() {
 		return statement_list;
 	}
 
-	public void setStatement_list(List<Statement> statement_list) {
+	public void setStatement_list(StatementList statement_list) {
 		this.statement_list = statement_list;
 	}
 
@@ -47,7 +47,8 @@ public class Conditional_statement extends Statement {
 		
 		expression.accept(visitor, nbrOfSpaces);
 
-        for (Statement s : statement_list) {
+		
+        for (Statement s : statement_list.getStatement_list()) {
             s.accept(visitor,nbrOfSpaces);
         }
 	}

@@ -7,10 +7,10 @@ public class Function_body extends ASTNode{
 
 	 
 	private List<Variable_declaration> variable_declaration_list = new ArrayList<Variable_declaration>();
-	private List<Statement> statement_list = new ArrayList<Statement>();
+	private StatementList statement_list ;
 	private Return_statement return_statement;
 	
-	public Function_body(List<Variable_declaration> variable_declaration_list, List<Statement> statement_list, Return_statement return_statement)
+	public Function_body(List<Variable_declaration> variable_declaration_list, StatementList statement_list, Return_statement return_statement)
 	{
 		this.variable_declaration_list = variable_declaration_list;
 		this.statement_list = statement_list;
@@ -30,11 +30,11 @@ public class Function_body extends ASTNode{
 		this.variable_declaration_list = variable_declaration_list;
 	}
 
-	public List<Statement> getStatement_list() {
+	public StatementList getStatement_list() {
 		return statement_list;
 	}
 
-	public void setStatement_list(List<Statement> statement_list) {
+	public void setStatement_list(StatementList statement_list) {
 		this.statement_list = statement_list;
 	}
 
@@ -63,7 +63,7 @@ public class Function_body extends ASTNode{
             vd.accept(visitor);
         }
         
-        for (Statement sl : statement_list) {
+        for (Statement sl : statement_list.getStatement_list()) {
             sl.accept(visitor,nbrOfSpaces);
         }
 
