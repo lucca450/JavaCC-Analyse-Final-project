@@ -29,7 +29,7 @@ public class VisitorPrint {
     	String spaces = "";
     	
     	for (int i = 0; i < nbrOfSpaces; i++) {
-    		  spaces += " ";
+    		  spaces += "	";
     	}
     	
     	return spaces;
@@ -68,68 +68,29 @@ public class VisitorPrint {
     public void visit(Comparaison_expression comparaison_expression, int nbrOfSpaces) {
     	
 
-    	if(comparaison_expression.getComparaison_operator().toString() == ">") {
-    		
+    	if(comparaison_expression.getComparaison_operator().toString() == ">") {		
         	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_GRAND, " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
-    		
-    		
-    		/*
-    		String str1 = "";
-    		String str2 = "";
-    		
-    		if(comparaison_expression.getValue().getType().equals("int")) {
-        		str1 = " " + comparaison_expression.getValue().toString() + " : ENTIER";
-    		}
-    		else if(comparaison_expression.getValue().getType().equals("double")) {
-    			str1 = " " + comparaison_expression.getValue().toString() + " : DECIMAL";
-    		}
-    		
-    		
-    		if(comparaison_expression.getValue2().getType().equals("int")) {
-        		str2 = " " + comparaison_expression.getValue2().toString() + " : ENTIER";
-    		}
-    		else if(comparaison_expression.getValue2().getType().equals("double")) {
-    			str2 = " " + comparaison_expression.getValue2().toString() + " : DECIMAL";
-    		}
-
-    		
-        	System.out.println("Condition PLUS_GRAND_EGAL , " + str1 + str2);	
-        	
-    		*/
-
     	}
     	
-    	if(comparaison_expression.getComparaison_operator().toString() == "<") {
+    	if(comparaison_expression.getComparaison_operator().toString() == "<") {  		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_PETIT , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
+    	}
     		
-        	System.out.println("Condition PLUS_PETIT , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
-    		
-    		
-    		/*
-    		String str1 = "";
-    		String str2 = "";
-    		
-    		if(comparaison_expression.getValue().getType().equals("int")) {
-        		str1 = " " + comparaison_expression.getValue().toString() + " : ENTIER";
-    		}
-    		else if(comparaison_expression.getValue().getType().equals("double")) {
-    			str1 = " " + comparaison_expression.getValue().toString() + " : DECIMAL";
-    		}
-    		
-    		
-    		if(comparaison_expression.getValue2().getType().equals("int")) {
-        		str2 = " " + comparaison_expression.getValue2().toString() + " : ENTIER";
-    		}
-    		else if(comparaison_expression.getValue2().getType().equals("double")) {
-    			str2 = " " + comparaison_expression.getValue2().toString() + " : DECIMAL";
-    		}
-
-    		
-        	System.out.println("Condition PLUS_GRAND_EGAL , " + str1 + str2);	
-        	
-    		*/
-
+    	if(comparaison_expression.getComparaison_operator().toString() == ">=") {  		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_GRAND_EGAL , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
     	}
     	
+    	if(comparaison_expression.getComparaison_operator().toString() == "<=") {  		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_PETIT_EGAL , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
+    	}
+    	
+    	if(comparaison_expression.getComparaison_operator().toString() == "==") {  		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition EGAL , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
+    	}
+    	
+    	if(comparaison_expression.getComparaison_operator().toString() == "<>") {  		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PAS_EGAL , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
+    	}
     	
     }
 }

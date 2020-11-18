@@ -140,8 +140,8 @@ void parameter_declaration():
 	}
   
 	type = type() ident = < IDENTIFIER >
+	
 	{
-
 		myParameter_declaration = (Parameter_declaration)stack.pop();
 		myParameter_declaration.setParameter_name(ident.toString());
 		myParameter_declaration.setType(type.toString());
@@ -152,27 +152,11 @@ void parameter_declaration():
 		parameter_declaration_list.add(myParameter_declaration);
 		
 		myFunction.setParameter_declaration_list(parameter_declaration_list);
-
-		/*
-		Function myFunc = (Function)stack.pop();
-		
-		List<Parameter_declaration> myList =  myFunc.getParameter_declaration_list();
-
-		Parameter_declaration myParameter_declaration = new Parameter_declaration(type.toString(), ident.toString());
-		
-		myList.add(myParameter_declaration);
-
-		myFunc.setParameter_declaration_list(myList);
-		
-		stack.push(myFunc);
-		*/
 	}
 }
 
 void function_body() :
 {
-  // La stack contient : Function 
-
 }
 {
 	{
@@ -199,45 +183,6 @@ void statement() :
 	{
 		Statement myStatement = new Statement();
 		stack.push(myStatement);
-		
-	  
-	  /*Function myFunc = (Function)stack.pop();
-
-		Function_body fb = myFunc.getFunction_body();
-
-		List<Statement> myStatementList =  fb.getStatement_list();
-
-		Statement myStatement = new Statement();
-		
-		myStatementList.add(myStatement);
-
-		fb.setStatement_list(myStatementList);
-
-		myFunc.setFunction_body(fb);
-		
-		stack.push(myFunc);*/
-
-/*
-		Statement myStatement = new Statement();
-		try {
-		  		  System.out.println("TRY");
-		  Conditional_statement myConditionnal_statement = new Conditional_statement();
-		  myConditionnal_statement = (Conditional_statement)stack.peek();
-		  List<Statement> statement_list = new ArrayList<Statement>();
-		  statement_list = myConditionnal_statement.getStatement_list();
-		  statement_list.add(mystatement);
-		  myConditionnal_statement.setStatement_list(statement_list);
-		  
-		//  myConditionnal_statement = (Conditional_statement)stack.pop();
-		 // myStatement.setConditional_statement(myConditionnal_statement);
-
-		}
-		catch(Exception e) {
-		  		  System.out.println("catch");
-		}
-		  stack.push(myStatement);
-*/
-
 	}
 	(		(
 			LOOKAHEAD(2)			assignment() | function_call()
@@ -307,34 +252,8 @@ void conditional_statement():
 {
 
 	{
-
 	  Conditional_statement myConditional_statement = new Conditional_statement();
 	  stack.push(myConditional_statement);
-
-	
-	  
-	  /*	Function myFunc = (Function)stack.pop();
-
-		Function_body fb = myFunc.getFunction_body();
-
-		List<Statement> myStatementList =  fb.getStatement_list();
-
-		for (Statement s : myStatementList) 
-		{ 
-		    if(s.getConditional_statement() == null)
-		    {
-		      Conditional_statement myConditional_statement = new Conditional_statement();
-		      //myConditional_statement.ShowMessage();
-		      s.setConditional_statement(myConditional_statement);
-		      break;
-		    }
-		}
-		
-		fb.setStatement_list(myStatementList);
-
-		myFunc.setFunction_body(fb);
-		
-		stack.push(myFunc);*/
 	}
 
 	< IF > "(" expression()	")"
@@ -353,109 +272,47 @@ void conditional_statement():
 			Statement myStatement = (Statement)stack.peek();
 			myStatement.setConditional_statement(myConditional_statement);
 
-
-
-	    /*
-		myConditional_statement = new Conditional_statement();
-		myConditional_statement = (Conditional_statement)stack.pop();
-
-		Statement myStatement = new Statement();
-		myStatement = (Statement)stack.pop();
-
-		myStatement.setConditional_statement(myConditional_statement);
-		stack.push(myStatement);
-		*/
 	 }
 }
 
 void expression():
 {
-
-	  Expression myExpression = new Expression();
-	  stack.push(myExpression);
-
-/*
-		Function myFunc = (Function)stack.pop();
-
-		Function_body fb = myFunc.getFunction_body();
-
-		List<Statement> myStatementList =  fb.getStatement_list();
-
-		for (Statement s : myStatementList) 
-		{
-		  Conditional_statement myConditional_statement = s.getConditional_statement();
-		    if(myConditional_statement.getExpression() == null)
-		    {
-		      Expression myExpression = new Expression();
-		      myConditional_statement.setExpression(myExpression);
-		      break;
-		    }
-		}
-		
-		fb.setStatement_list(myStatementList);
-
-		myFunc.setFunction_body(fb);
-		
-		stack.push(myFunc);
-  */
 }
 {
+
+   	{
+   	  Expression myExpression = new Expression();
+	  stack.push(myExpression);
+	}
+	  
  	comparaison_expression() ( logical_connector() comparaison_expression() )*
 
 
- 	  {
+ 	 {
 		myExpression = (Expression)stack.pop();
 
 		Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
 		myConditional_statement.setExpression(myExpression);
-
 	 }
 }
 
 void comparaison_expression():
 {
-
-  		
-  		Comparaison_expression myComparaison_expression = new Comparaison_expression();
-		stack.push(myComparaison_expression);
-
-	/*	Function myFunc = (Function)stack.pop();
-
-		Function_body fb = myFunc.getFunction_body();
-
-		List<Statement> myStatementList =  fb.getStatement_list();
-
-		for (Statement s : myStatementList) 
-		{
-		  Conditional_statement myConditional_statement = s.getConditional_statement();
-		  Expression myExpression = myConditional_statement.getExpression(); 
-		    if(myExpression.getComparaison_expression() == null)
-		    {
-		      Comparaison_expression myComparaison_expression = new Comparaison_expression();
-		      myExpression.setComparaison_expression(myComparaison_expression);
-		      break;
-		    }
-		}
-		
-		fb.setStatement_list(myStatementList);
-
-		myFunc.setFunction_body(fb);
-		
-		stack.push(myFunc);*/
-  
 }
 {
+
+
+  	{
+  		Comparaison_expression myComparaison_expression = new Comparaison_expression();
+		stack.push(myComparaison_expression);
+	}
+	
 	 arithmetic_expression_priority_low() ( comparaison_operator() arithmetic_expression_priority_low() )*
 	 
 	 {
-	   	myComparaison_expression = new Comparaison_expression();
-		myComparaison_expression = (Comparaison_expression)stack.pop();
-		
-		Expression myExpression = new Expression();
-		myExpression = (Expression)stack.pop();
-
-		myExpression.setComparaison_expression(myComparaison_expression);
-		stack.push(myExpression);
+	   	myComparaison_expression = (Comparaison_expression)stack.pop();	
+		Expression myExpression = (Expression)stack.peek();
+		myExpression.setComparaison_expression(myComparaison_expression);		
 	 }
 }
 
@@ -501,9 +358,15 @@ void unary_operator():
 void value():
 {
   Token t = null ;
-
 }
-{  	
+{
+	{
+  		Value myValue = new Value();
+  		stack.push(myValue);
+	}
+
+
+  
 	( 
 		LOOKAHEAD(2) function_call()
 		| t = < IDENTIFIER >
@@ -513,66 +376,21 @@ void value():
 
 	{
 
-
-				Comparaison_expression myComparaison_expression = new Comparaison_expression();
-				myComparaison_expression = (Comparaison_expression)stack.pop();
+				myValue = (Value)stack.pop();
+				Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
 				
 					    if(myComparaison_expression.getValue() == null)
 					    {
-					     		 Value myValue = new Value(t.toString(), "RIEN");
+					      		 myValue.setIdentificateur(t.toString());
+					      		 //myValue.setType();
 					     		 myComparaison_expression.setValue(myValue);
 					    }
 					    else if(myComparaison_expression.getValue2() == null)
 					    {
-								  Value myValue = new Value(t.toString(), "RIEN");
-							      myComparaison_expression.setValue2(myValue);
-					  	}
-
-				stack.push(myComparaison_expression);	  	
-
-
-		/*if(t != null)
-		{ 
-		
-		
-				Function myFunc = (Function)stack.pop();
-		
-				Function_body fb = myFunc.getFunction_body();
-		
-				List<Statement> myStatementList =  fb.getStatement_list();
-		
-				for (Statement s : myStatementList) 
-				{
-				  Conditional_statement myConditional_statement = s.getConditional_statement();
-				  Expression myExpression = myConditional_statement.getExpression();
-				  Comparaison_expression myComparaison_expression = myExpression.getComparaison_expression();
-		
-		
-				  for (Parameter_declaration pd : myFunc.getParameter_declaration_list()) 
-				  {
-				    
-					    if(myComparaison_expression.getValue() == null)
-					    {
-					     		 Value myValue = new Value(t.toString(), pd.getType());
-					     		 myComparaison_expression.setValue(myValue);
-					     		 break;
-					    }
-					    else if(myComparaison_expression.getValue2() == null)
-					    {
-								  Value myValue = new Value(t.toString(),pd.getType());
-							      myComparaison_expression.setValue2(myValue);
-							      break;
-					  	}
-				  }  	
-				}
-				
-				fb.setStatement_list(myStatementList);
-		
-				myFunc.setFunction_body(fb);
-				
-				stack.push(myFunc);
-		}*/
-
+					      		 myValue.setIdentificateur(t.toString());
+					      		 //myValue.setType();
+					     		 myComparaison_expression.setValue2(myValue);
+					  	}  	
 	}	
 }
 
@@ -593,56 +411,22 @@ void arithmetic_operation_piority_low():
 void comparaison_operator():
 {
   Token comp_operator=null;
-
-
 }
 {
-  	(comp_operator= < EQUAL > | comp_operator= < NOT_EQUAL > | comp_operator= < GREATER > | comp_operator = < GREATER_OR_EQUAL > | comp_operator = < LOWER > | comp_operator= < LOWER_OR_EQUAL > 	)
-  	{
 
-				Comparaison_expression myComparaison_expression = new Comparaison_expression();
-				myComparaison_expression = (Comparaison_expression)stack.pop();
-
-				if(comp_operator.toString() == ">")
-			    {
-					Comparaison_operator myOperator = new Comparaison_operator(">");
-					myComparaison_expression.setComparaison_operator(myOperator);
-					stack.push(myComparaison_expression);
-				}
+ 	{
+  		Comparaison_operator myOperator = new Comparaison_operator();
+  		stack.push(myOperator);
+	}
 	
+  	(comp_operator= < EQUAL > | comp_operator= < NOT_EQUAL > | comp_operator= < GREATER > | comp_operator = < GREATER_OR_EQUAL > | comp_operator = < LOWER > | comp_operator= < LOWER_OR_EQUAL > 	)
+  	
+  	{
+				myOperator = (Comparaison_operator)stack.pop();
+				Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
 
-
-		/*
-		Function myFunc = (Function)stack.pop();
-
-		Function_body fb = myFunc.getFunction_body();
-
-		List<Statement> myStatementList =  fb.getStatement_list();
-
-		for (Statement s : myStatementList) 
-		{
-		  Conditional_statement myConditional_statement = s.getConditional_statement();
-		  Expression myExpression = myConditional_statement.getExpression();
-		  Comparaison_expression myComparaison_expression = myExpression.getComparaison_expression();
-		    if(myComparaison_expression.getComparaison_operator() == null)
-		    {
-		      if(comp_operator.toString() == ">")
-			  {
-			      Comparaison_operator myComparaison_operator = new Comparaison_operator(">");
-			      myComparaison_expression.setComparaison_operator(myComparaison_operator);
-			      break;
-		      }
-		    }
-		}
-		
-		fb.setStatement_list(myStatementList);
-
-		myFunc.setFunction_body(fb);
-		
-		stack.push(myFunc);
-		*/
-
-
+				myOperator.setComparaison_operator(comp_operator.toString());
+				myComparaison_expression.setComparaison_operator(myOperator);
   	}
 }
 

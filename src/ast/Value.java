@@ -9,6 +9,9 @@ public class Value extends ASTNode {
 		this.type = type;
 	}
 
+	public Value() {
+		
+	}
 
 	public String getIdentificateur() {
 		return identificateur;
