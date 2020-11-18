@@ -29,10 +29,10 @@ public class Expression extends ASTNode {
 		return "Expression [comparaison_expression=" + comparaison_expression + "]";
 	}
 	
-	public void accept(VisitorPrint visitor) {
+	public void accept(VisitorPrint visitor,int nbrOfSpaces) {
 		visitor.visit(this);
 		
-		comparaison_expression.accept(visitor);
+		comparaison_expression.accept(visitor, nbrOfSpaces);
 	}
 	
 }

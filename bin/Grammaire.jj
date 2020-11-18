@@ -219,10 +219,6 @@ void statement() :
 
 	{
 
-
-		
-		
-		System.out.println("FIN STATEMENT");
 	  
 		List<Statement> myStatementList = new ArrayList<Statement>();
 
@@ -484,8 +480,6 @@ void value():
 
 	{
 
-
-				System.out.println(stack.size());
 
 				Comparaison_expression myComparaison_expression = new Comparaison_expression();
 				myComparaison_expression = (Comparaison_expression)stack.pop();

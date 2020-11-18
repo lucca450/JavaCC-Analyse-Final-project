@@ -46,12 +46,12 @@ public class Comparaison_expression extends ASTNode {
 				+ value2 + "]";
 	}
 
-	public void accept(VisitorPrint visitor) {
+	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
 		/*value.accept(visitor);
 		comparaison_operator.accept(visitor);
 		value2.accept(visitor);*/
 		
-		visitor.visit(this);
+		visitor.visit(this,nbrOfSpaces+1);
 	}
 
 

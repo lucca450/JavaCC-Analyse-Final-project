@@ -233,8 +233,6 @@ public class Grammaire implements GrammaireConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-                System.out.println("FIN STATEMENT");
-
                 List<Statement> myStatementList = new ArrayList<Statement>();
 
                 while(stack.size() > 1)
@@ -578,8 +576,6 @@ public class Grammaire implements GrammaireConstants {
         throw new ParseException();
       }
     }
-                                System.out.println(stack.size());
-
                                 Comparaison_expression myComparaison_expression = new Comparaison_expression();
                                 myComparaison_expression = (Comparaison_expression)stack.pop();
 
@@ -912,6 +908,16 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
+  private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_3R_16()) return true;
+    return false;
+  }
+
   private boolean jj_3R_16() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(ASSIGN)) return true;
@@ -927,16 +933,6 @@ public class Grammaire implements GrammaireConstants {
   private boolean jj_3R_17() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(42)) return true;
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_3R_16()) return true;
-    return false;
-  }
-
-  private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
     return false;
   }
 

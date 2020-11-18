@@ -57,20 +57,20 @@ public class VisitorPrint {
         //System.out.println("STATEMENT. - PAS IMPLEMENTÉ");
     }
     
-    public void visit(Conditional_statement conditional_statement) {
-    	System.out.println("Expression conditionnelle");
+    public void visit(Conditional_statement conditional_statement, int nbrOfSpaces) {
+    	System.out.println(spacesGenerator(nbrOfSpaces) +"Expression conditionnelle");
     }
     
     public void visit(Expression expression) {
     	//System.out.println("Expression ");
     }
     
-    public void visit(Comparaison_expression comparaison_expression) {
+    public void visit(Comparaison_expression comparaison_expression, int nbrOfSpaces) {
     	
 
     	if(comparaison_expression.getComparaison_operator().toString() == ">") {
     		
-        	System.out.println("Condition PLUS_GRAND , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_GRAND, " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
     		
     		
     		/*

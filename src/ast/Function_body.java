@@ -64,7 +64,7 @@ public class Function_body extends ASTNode{
         }
         
         for (Statement sl : statement_list) {
-            sl.accept(visitor);
+            sl.accept(visitor,nbrOfSpaces);
         }
 
 	}
