@@ -113,6 +113,7 @@ void function() :
 	ident = < IDENTIFIER >
 	{
 	  stack.push(new Function(f_type.toString() , ident.toString()));
+	  Function myFunction = (Function)stack.peek();
 	}
 	"(" (parameter_declaration() ("," parameter_declaration())*)? ")" "{"
 		function_body()
@@ -185,7 +186,7 @@ void function_body() :
 	( return_statement() )?
 	
 		{
-		    StatementList myStatementList = (StatementList)stack.pop();
+		    myStatementList = (StatementList)stack.pop();
 			myFunction_body = (Function_body)stack.pop();
 			myFunction_body.setStatement_list(myStatementList);
 			Function myFunction = (Function)stack.peek();
@@ -309,8 +310,7 @@ void conditional_statement():
 
 	  Conditional_statement myConditional_statement = new Conditional_statement();
 	  stack.push(myConditional_statement);
-	  StatementList myStatementList = new StatementList();
-	  stack.push(myStatementList);
+
 	
 	  
 	  /*	Function myFunc = (Function)stack.pop();
@@ -337,10 +337,25 @@ void conditional_statement():
 		stack.push(myFunc);*/
 	}
 
-	< IF > "(" expression()	")" "{" ( statement() )*
+	< IF > "(" expression()	")"
+	{
+	  StatementList myStatementList = new StatementList();
+	  stack.push(myStatementList);
+	}
+	"{" ( statement() )*
 	( LOOKAHEAD(2) "}" < ELSE > "{" ( statement() )* )? "}"
 
 	 {
+
+ 			myStatementList = (StatementList)stack.pop();
+			myConditional_statement = (Conditional_statement)stack.pop();
+			myConditional_statement.setStatement_list(myStatementList);
+			Statement myStatement = (Statement)stack.peek();
+			myStatement.setConditional_statement(myConditional_statement);
+
+
+
+	    /*
 		myConditional_statement = new Conditional_statement();
 		myConditional_statement = (Conditional_statement)stack.pop();
 
@@ -349,6 +364,7 @@ void conditional_statement():
 
 		myStatement.setConditional_statement(myConditional_statement);
 		stack.push(myStatement);
+		*/
 	 }
 }
 
@@ -388,14 +404,11 @@ void expression():
 
 
  	  {
-		myExpression = new Expression();
 		myExpression = (Expression)stack.pop();
 
-		Conditional_statement myConditional_statement = new Conditional_statement();
-		myConditional_statement = (Conditional_statement)stack.pop();
-
+		Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
 		myConditional_statement.setExpression(myExpression);
-		stack.push(myConditional_statement);
+
 	 }
 }
 

@@ -55,6 +55,7 @@ public class Grammaire implements GrammaireConstants {
     }
     ident = jj_consume_token(IDENTIFIER);
           stack.push(new Function(f_type.toString() , ident.toString()));
+          Function myFunction = (Function)stack.peek();
     jj_consume_token(42);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER_TYPE:
@@ -179,7 +180,7 @@ public class Grammaire implements GrammaireConstants {
       jj_la1[6] = jj_gen;
       ;
     }
-                    StatementList myStatementList = (StatementList)stack.pop();
+                    myStatementList = (StatementList)stack.pop();
                         myFunction_body = (Function_body)stack.pop();
                         myFunction_body.setStatement_list(myStatementList);
                         Function myFunction = (Function)stack.peek();
@@ -346,14 +347,6 @@ public class Grammaire implements GrammaireConstants {
 
 
 
-        //statement
-
-        // stratement cs
-
-
-
-
-
           /*	Function myFunc = (Function)stack.pop();
 
 		Function_body fb = myFunc.getFunction_body();
@@ -381,6 +374,8 @@ public class Grammaire implements GrammaireConstants {
     jj_consume_token(42);
     expression();
     jj_consume_token(44);
+          StatementList myStatementList = new StatementList();
+          stack.push(myStatementList);
     jj_consume_token(45);
     label_6:
     while (true) {
@@ -420,14 +415,25 @@ public class Grammaire implements GrammaireConstants {
       ;
     }
     jj_consume_token(46);
-                myConditional_statement = new Conditional_statement();
-                myConditional_statement = (Conditional_statement)stack.pop();
+                        myStatementList = (StatementList)stack.pop();
+                        myConditional_statement = (Conditional_statement)stack.pop();
+                        myConditional_statement.setStatement_list(myStatementList);
+                        Statement myStatement = (Statement)stack.peek();
+                        myStatement.setConditional_statement(myConditional_statement);
 
-                Statement myStatement = new Statement();
-                myStatement = (Statement)stack.pop();
 
-                myStatement.setConditional_statement(myConditional_statement);
-                stack.push(myStatement);
+
+            /*
+		myConditional_statement = new Conditional_statement();
+		myConditional_statement = (Conditional_statement)stack.pop();
+
+		Statement myStatement = new Statement();
+		myStatement = (Statement)stack.pop();
+
+		myStatement.setConditional_statement(myConditional_statement);
+		stack.push(myStatement);
+		*/
+
   }
 
   final public void expression() throws ParseException {
@@ -448,14 +454,10 @@ public class Grammaire implements GrammaireConstants {
       logical_connector();
       comparaison_expression();
     }
-                myExpression = new Expression();
                 myExpression = (Expression)stack.pop();
 
-                Conditional_statement myConditional_statement = new Conditional_statement();
-                myConditional_statement = (Conditional_statement)stack.pop();
-
+                Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
                 myConditional_statement.setExpression(myExpression);
-                stack.push(myConditional_statement);
   }
 
   final public void comparaison_expression() throws ParseException {
@@ -933,9 +935,8 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3R_16() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(ASSIGN)) return true;
+  private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
     return false;
   }
 
@@ -945,19 +946,20 @@ public class Grammaire implements GrammaireConstants {
     return false;
   }
 
-  private boolean jj_3R_17() {
+  private boolean jj_3R_16() {
     if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(42)) return true;
-    return false;
-  }
-
-  private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
+    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 
   private boolean jj_3_1() {
     if (jj_3R_16()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_17() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(42)) return true;
     return false;
   }
 

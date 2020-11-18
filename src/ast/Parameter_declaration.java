@@ -12,6 +12,11 @@ public class Parameter_declaration extends ASTNode {
 		this.parameter_name = parameter_name;
 	}
 	
+	public Parameter_declaration() 
+	{
+
+	}
+	
 	public String getType() {
 		return type;
 	}

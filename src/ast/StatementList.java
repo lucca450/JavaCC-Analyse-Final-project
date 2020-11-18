@@ -9,6 +9,10 @@ public class StatementList {
 	public StatementList(List<Statement> statement_list) {
 		this.statement_list = statement_list;
 	}
+	
+	public StatementList() {
+		
+	}
 
 	public List<Statement> getStatement_list() {
 		return statement_list;
