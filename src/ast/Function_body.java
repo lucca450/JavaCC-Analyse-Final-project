@@ -5,12 +5,11 @@ import java.util.List;
 
 public class Function_body extends ASTNode{
 
-	 
-	private List<Variable_declaration> variable_declaration_list = new ArrayList<Variable_declaration>();
+	private VariableDeclarationList variable_declaration_list;
 	private StatementList statement_list ;
 	private Return_statement return_statement;
 	
-	public Function_body(List<Variable_declaration> variable_declaration_list, StatementList statement_list, Return_statement return_statement)
+	public Function_body(VariableDeclarationList variable_declaration_list, StatementList statement_list, Return_statement return_statement)
 	{
 		this.variable_declaration_list = variable_declaration_list;
 		this.statement_list = statement_list;
@@ -22,11 +21,11 @@ public class Function_body extends ASTNode{
 
 	}
 	
-	public List<Variable_declaration> getVariable_declaration_list() {
+	public VariableDeclarationList getVariable_declaration_list() {
 		return variable_declaration_list;
 	}
 
-	public void setVariable_declaration_list(List<Variable_declaration> variable_declaration_list) {
+	public void setVariable_declaration_list(VariableDeclarationList variable_declaration_list) {
 		this.variable_declaration_list = variable_declaration_list;
 	}
 
@@ -59,7 +58,7 @@ public class Function_body extends ASTNode{
 	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
 		visitor.visit(this,nbrOfSpaces);
 
-        for (Variable_declaration vd : variable_declaration_list) {
+        for (Variable_declaration vd : variable_declaration_list.getVariable_declarationList()) {
             vd.accept(visitor);
         }
         

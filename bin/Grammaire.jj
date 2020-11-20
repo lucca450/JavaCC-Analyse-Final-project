@@ -160,19 +160,34 @@ void function_body() :
 }
 {
 	{
-	    Function_body myFunction_body = new Function_body();
-	  	stack.push(myFunction_body);
-	  	StatementList myStatementList = new StatementList();
-	  	stack.push(myStatementList);	}
+		    Function_body myFunction_body = new Function_body();
+		  	stack.push(myFunction_body);
 	
-    ( variable_declaration() ";" )*
+		  	VariableDeclarationList myVariableDeclarationList = new VariableDeclarationList();
+		  	stack.push(myVariableDeclarationList);	}
+	
+    ( variable_declaration() ";")*
+	{
+	  
+		    myVariableDeclarationList = (VariableDeclarationList)stack.pop();
+		    myFunction_body = (Function_body)stack.peek();
+		    myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
+		
+		   	StatementList myStatementList = new StatementList();
+			stack.push(myStatementList);
+	}
   	( statement() )*
+  	{
+		    myStatementList = (StatementList)stack.pop();
+			myFunction_body = (Function_body)stack.peek();
+			myFunction_body.setStatement_list(myStatementList);
+	}
 	( return_statement() )?
+
+	
 	
 		{
-		    myStatementList = (StatementList)stack.pop();
 			myFunction_body = (Function_body)stack.pop();
-			myFunction_body.setStatement_list(myStatementList);
 			Function myFunction = (Function)stack.peek();
 			myFunction.setFunction_body(myFunction_body);
 		}}
@@ -203,9 +218,27 @@ void statement() :
 
 void variable_declaration():
 {
+  Token t = null;
 }
 {
-	type() assignment()	("," assignment() )*
+  	{
+		Variable_declaration myVariable_declaration = new Variable_declaration();
+		stack.push(myVariable_declaration);
+
+		AssignmentList myAssignmentList = new AssignmentList();
+		stack.push(myAssignmentList);
+	}
+	t = type() assignment()	("," assignment())*
+	{
+		myAssignmentList = (AssignmentList)stack.pop();
+		
+		myVariable_declaration = (Variable_declaration)stack.pop();
+		myVariable_declaration.setAssignment_list(myAssignmentList);
+		myVariable_declaration.setType(t.toString());
+		
+		VariableDeclarationList myVariableDeclarationList = (VariableDeclarationList)stack.peek();
+		myVariableDeclarationList.add(myVariable_declaration);
+	}
 }
 
 Token litteral_value() :
@@ -446,10 +479,29 @@ void function_call():
 
 void assignment():
 {
+  Token identifier = null;
+  Token assign = null;
+  
 }
 {
- 
-    < IDENTIFIER > < ASSIGN > expression()
+	{
+	  Assignment myAssignment = new Assignment();
+	  stack.push(myAssignment);
+	}
+    identifier = < IDENTIFIER > assign = < ASSIGN > expression()
+    {
+      Expression myExpression = (Expression)stack.pop();
+      
+      myAssignment = (Assignment)stack.pop();
+      
+      myAssignment.setIdentifier(identifier.toString());
+      myAssignment.setAssign(assign.toString());
+	  myAssignment.setExpression(myExpression);
+
+	  AssignmentList myAssignmentList = new AssignmentList();
+	  myAssignmentList = (AssignmentList)stack.peek();
+	  myAssignmentList.add(myAssignment);
+	}
 }
 
 void while_loop():

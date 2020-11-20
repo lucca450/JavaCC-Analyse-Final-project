@@ -123,10 +123,11 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void function_body() throws ParseException {
-            Function_body myFunction_body = new Function_body();
-                stack.push(myFunction_body);
-                StatementList myStatementList = new StatementList();
-                stack.push(myStatementList);
+                    Function_body myFunction_body = new Function_body();
+                        stack.push(myFunction_body);
+
+                        VariableDeclarationList myVariableDeclarationList = new VariableDeclarationList();
+                        stack.push(myVariableDeclarationList);
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -142,6 +143,12 @@ public class Grammaire implements GrammaireConstants {
       variable_declaration();
       jj_consume_token(47);
     }
+                    myVariableDeclarationList = (VariableDeclarationList)stack.pop();
+                    myFunction_body = (Function_body)stack.peek();
+                    myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
+
+                        StatementList myStatementList = new StatementList();
+                        stack.push(myStatementList);
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -157,6 +164,9 @@ public class Grammaire implements GrammaireConstants {
       }
       statement();
     }
+                    myStatementList = (StatementList)stack.pop();
+                        myFunction_body = (Function_body)stack.peek();
+                        myFunction_body.setStatement_list(myStatementList);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RETURN:
       return_statement();
@@ -165,9 +175,7 @@ public class Grammaire implements GrammaireConstants {
       jj_la1[6] = jj_gen;
       ;
     }
-                    myStatementList = (StatementList)stack.pop();
                         myFunction_body = (Function_body)stack.pop();
-                        myFunction_body.setStatement_list(myStatementList);
                         Function myFunction = (Function)stack.peek();
                         myFunction.setFunction_body(myFunction_body);
   }
@@ -212,7 +220,13 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void variable_declaration() throws ParseException {
-    type();
+  Token t = null;
+                Variable_declaration myVariable_declaration = new Variable_declaration();
+                stack.push(myVariable_declaration);
+
+                AssignmentList myAssignmentList = new AssignmentList();
+                stack.push(myAssignmentList);
+    t = type();
     assignment();
     label_5:
     while (true) {
@@ -227,6 +241,14 @@ public class Grammaire implements GrammaireConstants {
       jj_consume_token(43);
       assignment();
     }
+                myAssignmentList = (AssignmentList)stack.pop();
+
+                myVariable_declaration = (Variable_declaration)stack.pop();
+                myVariable_declaration.setAssignment_list(myAssignmentList);
+                myVariable_declaration.setType(t.toString());
+
+                VariableDeclarationList myVariableDeclarationList = (VariableDeclarationList)stack.peek();
+                myVariableDeclarationList.add(myVariable_declaration);
   }
 
   final public Token litteral_value() throws ParseException {
@@ -360,10 +382,7 @@ public class Grammaire implements GrammaireConstants {
       logical_connector();
       comparaison_expression();
     }
-                myExpression = (Expression)stack.pop();
 
-                Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
-                myConditional_statement.setExpression(myExpression);
   }
 
   final public void comparaison_expression() throws ParseException {
@@ -646,9 +665,24 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void assignment() throws ParseException {
-    jj_consume_token(IDENTIFIER);
-    jj_consume_token(ASSIGN);
+  Token identifier = null;
+  Token assign = null;
+          Assignment myAssignment = new Assignment();
+          stack.push(myAssignment);
+    identifier = jj_consume_token(IDENTIFIER);
+    assign = jj_consume_token(ASSIGN);
     expression();
+      Expression myExpression = (Expression)stack.pop();
+
+      myAssignment = (Assignment)stack.pop();
+
+      myAssignment.setIdentifier(identifier.toString());
+      myAssignment.setAssign(assign.toString());
+          myAssignment.setExpression(myExpression);
+
+          AssignmentList myAssignmentList = new AssignmentList();
+          myAssignmentList = (AssignmentList)stack.peek();
+          myAssignmentList.add(myAssignment);
   }
 
   final public void while_loop() throws ParseException {
@@ -759,9 +793,8 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3R_16() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(ASSIGN)) return true;
+  private boolean jj_3_1() {
+    if (jj_3R_16()) return true;
     return false;
   }
 
@@ -776,8 +809,9 @@ public class Grammaire implements GrammaireConstants {
     return false;
   }
 
-  private boolean jj_3_1() {
-    if (jj_3R_16()) return true;
+  private boolean jj_3R_16() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 
