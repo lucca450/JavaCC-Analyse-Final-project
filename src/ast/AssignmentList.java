@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class AssignmentList {
@@ -24,4 +25,7 @@ public class AssignmentList {
 	public void add(Assignment a) {
 		assignmentList.add(a);
 	}
+
+
+
 }

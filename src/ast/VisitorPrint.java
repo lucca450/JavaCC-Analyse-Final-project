@@ -49,8 +49,21 @@ public class VisitorPrint {
         System.out.println(spacesGenerator(nbrOfSpaces) +"Corps de la fonction");
     }
     
-    public void visit(Variable_declaration variable_declaration) {
-        System.out.println("DECLARATION DE VARIABLES.  - PAS IMPLEMENTÉ");
+    public void visit(Variable_declaration variable_declaration, int nbrOfSpaces) {
+    	String returnString = "";
+    	
+        System.out.println(spacesGenerator(nbrOfSpaces) +"Déclaration de variable");
+        
+        returnString += (spacesGenerator(nbrOfSpaces) + variable_declaration.getType() + " ");
+        
+        AssignmentList myAssignmentListList = variable_declaration.getAssignment_list();
+        for (Assignment a : myAssignmentListList.getAssignmentList()) 
+        { 	 
+        		returnString += a.getIdentifier() + " " + a.getAssign() + " " + a.getExpression().getComparaison_expression() + ";\n";
+        } 
+        
+        System.out.println(returnString);
+        
     }
     
     public void visit(Statement statement) {

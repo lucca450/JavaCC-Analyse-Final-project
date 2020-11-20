@@ -42,8 +42,7 @@ public class Comparaison_expression extends ASTNode {
 
 	@Override
 	public String toString() {
-		return "Comparaison_expression [value=" + value + ", comparaison_operator=" + comparaison_operator + ", value2="
-				+ value2 + "]";
+		return "" + value + " " + comparaison_operator + " " + value2 ;
 	}
 
 	public void accept(VisitorPrint visitor, int nbrOfSpaces) {

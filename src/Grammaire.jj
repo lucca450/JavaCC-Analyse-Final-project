@@ -291,6 +291,13 @@ void conditional_statement():
 
 	< IF > "(" expression()	")"
 	{
+//déplacé le code en commentaire ici  - lucca
+		Expression	myExpression = (Expression)stack.pop();
+
+		myConditional_statement = (Conditional_statement)stack.peek();
+		myConditional_statement.setExpression(myExpression);
+//fin déplacé le code en commentaire ici   - lucca
+	  
 	  StatementList myStatementList = new StatementList();
 	  stack.push(myStatementList);
 	}
@@ -322,10 +329,12 @@ void expression():
 
 
  	 {
-		myExpression = (Expression)stack.pop();
+ 	   // - lucca
+		/*myExpression = (Expression)stack.pop();
 
 		Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
-		myConditional_statement.setExpression(myExpression);
+		myConditional_statement.setExpression(myExpression);*/
+		// fin - lucca
 	 }
 }
 

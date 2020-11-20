@@ -30,7 +30,7 @@ public class Variable_declaration extends ASTNode {
 		this.assignment_list = assignment_list;
 	}
 
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
+		visitor.visit(this, nbrOfSpaces);
 	}
 }

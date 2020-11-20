@@ -26,7 +26,7 @@ public class Expression extends ASTNode {
 
 	@Override
 	public String toString() {
-		return "Expression [comparaison_expression=" + comparaison_expression + "]";
+		return ""+comparaison_expression;
 	}
 	
 	public void accept(VisitorPrint visitor,int nbrOfSpaces) {

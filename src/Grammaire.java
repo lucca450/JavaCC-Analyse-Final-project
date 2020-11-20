@@ -316,6 +316,13 @@ public class Grammaire implements GrammaireConstants {
     jj_consume_token(42);
     expression();
     jj_consume_token(44);
+//déplacé le code en commentaire ici  - lucca
+                Expression      myExpression = (Expression)stack.pop();
+
+                myConditional_statement = (Conditional_statement)stack.peek();
+                myConditional_statement.setExpression(myExpression);
+//fin déplacé le code en commentaire ici   - lucca
+
           StatementList myStatementList = new StatementList();
           stack.push(myStatementList);
     jj_consume_token(45);
@@ -793,6 +800,12 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
+  private boolean jj_3_2() {
+    if (jj_scan_token(46)) return true;
+    if (jj_scan_token(ELSE)) return true;
+    return false;
+  }
+
   private boolean jj_3_1() {
     if (jj_3R_16()) return true;
     return false;
@@ -812,12 +825,6 @@ public class Grammaire implements GrammaireConstants {
   private boolean jj_3R_16() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(ASSIGN)) return true;
-    return false;
-  }
-
-  private boolean jj_3_2() {
-    if (jj_scan_token(46)) return true;
-    if (jj_scan_token(ELSE)) return true;
     return false;
   }
 
