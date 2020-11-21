@@ -64,7 +64,6 @@ public class VisitorPrint {
         	    for(Comparaison_expression ce : myComparaisonExpressionList.getComparaison_expressionList()) {
         	    	comparaisonString += ce.getValue() + " " + ce.getComparaison_operator() + " " +  ce.getValue2() ;
         	    }
-
         		returnString += a.getIdentifier() + " " + a.getAssign() + " " + comparaisonString/*.replace("null", "").replace(" ", "")*/ + ";\n";
         } 
         
@@ -100,7 +99,7 @@ public class VisitorPrint {
     
     
     public void visit(Comparaison_expressionList comparaison_expressionList, int nbrOfSpaces) {
-    	
+    	nbrOfSpaces++;
     	for(Comparaison_expression ce : comparaison_expressionList.getComparaison_expressionList()) {
     		ce.accept(this, nbrOfSpaces);
     		
@@ -108,7 +107,6 @@ public class VisitorPrint {
     }
     
     public void visit(Logical_connectorList logical_connectorList, int nbrOfSpaces) {
-    	
     	for(Logical_connector lc : logical_connectorList.getLogical_connectorList()) {
     		lc.accept(this, nbrOfSpaces);
     	}

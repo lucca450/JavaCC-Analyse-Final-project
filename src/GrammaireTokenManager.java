@@ -4,6 +4,8 @@ import ast.*;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Math;
+import java.util.Random;
 
 /** Token Manager. */
 public class GrammaireTokenManager implements GrammaireConstants

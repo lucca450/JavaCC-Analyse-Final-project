@@ -4,12 +4,67 @@ import ast.*;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Math;
+import java.util.Random;
 
 public class Grammaire implements GrammaireConstants {
 
+  static Object[][] myArray;
   static Stack stack = new Stack();
   static int uniqueID = 0;
 
+
+
+  public static Object[][] DataGenerator(Function myFunction)
+  {
+    int max =  10000;
+    int min = -10000;
+    int range = max - min + 1;
+
+        String type = "";
+
+        int qty = myFunction.getParameter_declaration_list().size();
+        int ctr = 0;
+        Object[][] tmpArray = new Object[qty][10];
+
+    for(Parameter_declaration pd : myFunction.getParameter_declaration_list())
+    {
+        type = pd.getType();
+
+        if(type.equals("int"))
+        {
+          int random_int;
+          for (int i = 0; i < 10; i++)
+          {
+                random_int = (int)(Math.random() * range) + min;
+                                tmpArray[ctr][i] = random_int;
+                  }
+
+
+        }else if(type.equals("double"))
+        {
+          double random_double;
+          for (int i = 0; i < 10; i++)
+          {
+                random_double = (double)(Math.random() * range) + min;
+                tmpArray[ctr][i] = random_double;
+                  }
+
+        }else if(type.equals("bool"))
+        {
+          for (int i = 0; i < 10; i++)
+          {
+                        Random r = new Random();
+                        tmpArray[ctr][i] = r.nextBoolean();
+                  }
+        }
+
+
+        ctr++;
+    }
+
+    return tmpArray;
+  }
 
   public static void main(String args []) throws ParseException
   {
@@ -19,10 +74,16 @@ public class Grammaire implements GrammaireConstants {
 
             parser.function();
 
-
-
-
                 System.out.println(stack.peek());
+
+
+                Function myFunction = (Function)stack.peek();
+                myArray = DataGenerator(myFunction);
+
+
+                        System.out.println("test   " );
+
+
 
 
          } catch(IOException exception) {
@@ -811,17 +872,6 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3R_16() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(ASSIGN)) return true;
-    return false;
-  }
-
-  private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
-    return false;
-  }
-
   private boolean jj_3_2() {
     if (jj_scan_token(46)) return true;
     if (jj_scan_token(ELSE)) return true;
@@ -836,6 +886,17 @@ public class Grammaire implements GrammaireConstants {
   private boolean jj_3R_17() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(42)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_16() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(ASSIGN)) return true;
+    return false;
+  }
+
+  private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
     return false;
   }
 
