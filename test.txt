@@ -1,12 +1,5 @@
 void test (int a) {
-	int b = 0;
-	int c = 0;
-	int d = b + c;
-	
-	if (a > 0) {
-		if (a > 0) {
-				if (a > 0) {
-				} 
-		} 
-	} 
+int b = 0;
+if (a > 0 && b == 0) {
+}
 }

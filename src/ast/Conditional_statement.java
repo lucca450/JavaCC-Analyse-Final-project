@@ -51,6 +51,7 @@ public class Conditional_statement extends Statement {
         for (Statement s : statement_list.getStatement_list()) {
             s.accept(visitor,nbrOfSpaces);
         }
+
 	}
 	
 }

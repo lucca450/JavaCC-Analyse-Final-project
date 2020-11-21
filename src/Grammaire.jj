@@ -21,14 +21,8 @@ public class Grammaire{
 
 
 
-		/*System.out.println("yo");
-		stack.push("bot");
-		stack.push("mid");
-		stack.push("top");*/
-		//System.out.println(stack.peek());
 
-
-			  System.out.println(stack.peek());
+		System.out.println(stack.peek());
 
 	    
  	 } catch(IOException exception) {
@@ -325,8 +319,8 @@ void expression():
 	  stack.push(myExpression);
 	}
 	  
- 	comparaison_expression() ( logical_connector() comparaison_expression() )*
-
+ 	comparaison_expression()
+ 	( logical_connector() comparaison_expression())*
 
  	 {
  	   // - lucca
@@ -342,8 +336,6 @@ void comparaison_expression():
 {
 }
 {
-
-
   	{
   		Comparaison_expression myComparaison_expression = new Comparaison_expression();
 		stack.push(myComparaison_expression);
@@ -363,6 +355,7 @@ void arithmetic_expression_priority_low():
 {
 }
 {
+
 	arithmetic_expression() ( arithmetic_operation_piority_low() arithmetic_expression() )*
 }
 
@@ -474,9 +467,22 @@ void comparaison_operator():
 
 void logical_connector():
 {
+  Token t = null;
 }
 {
-	( < AND > | < OR > )
+  	 {
+	   Logical_connector myLogical_connector = new Logical_connector();
+	   stack.push(myLogical_connector);
+	 }
+	    ( t = < AND > | t = < OR > )
+
+	 {
+	   myLogical_connector = (Logical_connector)stack.pop();
+	   myLogical_connector.setConnector(t.toString());
+
+	   Expression myExpression = (Expression)stack.peek();
+	   myExpression.setLogical_connector(myLogical_connector);	
+	 }
 }
 
 void function_call():

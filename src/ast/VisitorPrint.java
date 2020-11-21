@@ -78,6 +78,10 @@ public class VisitorPrint {
     	//System.out.println("Expression ");
     }
     
+    public void visit(Logical_connector logical_connector, int nbrOfSpaces) {
+    	System.out.println(spacesGenerator(nbrOfSpaces) +"test :" + logical_connector.getConnector());	
+    }
+    
     public void visit(Comparaison_expression comparaison_expression, int nbrOfSpaces) {
     	
 
