@@ -285,15 +285,14 @@ void conditional_statement():
 
 	< IF > "(" expression()	")"
 	{
-//déplacé le code en commentaire ici  - lucca
 		Expression	myExpression = (Expression)stack.pop();
 
 		myConditional_statement = (Conditional_statement)stack.peek();
 		myConditional_statement.setExpression(myExpression);
-//fin déplacé le code en commentaire ici   - lucca
+
 	  
-	  StatementList myStatementList = new StatementList();
-	  stack.push(myStatementList);
+	    StatementList myStatementList = new StatementList();
+	    stack.push(myStatementList);
 	}
 	"{" ( statement() )*
 	( LOOKAHEAD(2) "}" < ELSE > "{" ( statement() )* )? "}"
@@ -316,37 +315,40 @@ void expression():
 
    	{
    	  Expression myExpression = new Expression();
+
+
+	  Comparaison_expressionList myComparaison_expressionList = new Comparaison_expressionList();
+	  Logical_connectorList myLogical_connectorList = new Logical_connectorList();
+
+	  myExpression.setComparaison_expressionList(myComparaison_expressionList);
+	  myExpression.setLogical_connectorList(myLogical_connectorList);
+	  
 	  stack.push(myExpression);
 	}
 	  
  	comparaison_expression()
  	( logical_connector() comparaison_expression())*
 
- 	 {
- 	   // - lucca
-		/*myExpression = (Expression)stack.pop();
 
-		Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
-		myConditional_statement.setExpression(myExpression);*/
-		// fin - lucca
-	 }
 }
 
 void comparaison_expression():
 {
 }
 {
-  	{
+  	 {
   		Comparaison_expression myComparaison_expression = new Comparaison_expression();
 		stack.push(myComparaison_expression);
-	}
+	 }
 	
 	 arithmetic_expression_priority_low() ( comparaison_operator() arithmetic_expression_priority_low() )*
 	 
 	 {
 	   	myComparaison_expression = (Comparaison_expression)stack.pop();	
 		Expression myExpression = (Expression)stack.peek();
-		myExpression.setComparaison_expression(myComparaison_expression);		
+		Comparaison_expressionList myComparaison_expressionList = myExpression.getComparaison_expressionList();
+		myComparaison_expressionList.add(myComparaison_expression);
+		myExpression.setComparaison_expressionList(myComparaison_expressionList);		
 	 }
 }
 
@@ -479,9 +481,10 @@ void logical_connector():
 	 {
 	   myLogical_connector = (Logical_connector)stack.pop();
 	   myLogical_connector.setConnector(t.toString());
-
 	   Expression myExpression = (Expression)stack.peek();
-	   myExpression.setLogical_connector(myLogical_connector);	
+	   Logical_connectorList myLogical_connectorList = myExpression.getLogical_connectorList();
+	   myLogical_connectorList.add(myLogical_connector);
+	   myExpression.setLogical_connectorList(myLogical_connectorList);	
 	 }
 }
 

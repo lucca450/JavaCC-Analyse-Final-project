@@ -59,7 +59,13 @@ public class VisitorPrint {
         AssignmentList myAssignmentListList = variable_declaration.getAssignment_list();
         for (Assignment a : myAssignmentListList.getAssignmentList()) 
         { 	 
-        		returnString += a.getIdentifier() + " " + a.getAssign() + " " + a.getExpression().getComparaison_expression() + ";\n";
+        	    Comparaison_expressionList myComparaisonExpressionList = a.getExpression().getComparaison_expressionList();
+        	    String comparaisonString = "";
+        	    for(Comparaison_expression ce : myComparaisonExpressionList.getComparaison_expressionList()) {
+        	    	comparaisonString += ce.getValue() + " " + ce.getComparaison_operator() + " " +  ce.getValue2() ;
+        	    }
+
+        		returnString += a.getIdentifier() + " " + a.getAssign() + " " + comparaisonString/*.replace("null", "").replace(" ", "")*/ + ";\n";
         } 
         
         System.out.println(returnString);
@@ -78,8 +84,45 @@ public class VisitorPrint {
     	//System.out.println("Expression ");
     }
     
+    
+    
+    
+    public void visit(Comparaison_expressionList comparaison_expressionList, Logical_connectorList logical_connectorList, int nbrOfSpaces) {
+    	
+    	for(Comparaison_expression ce : comparaison_expressionList.getComparaison_expressionList()) {
+    		ce.accept(this, nbrOfSpaces);
+    		
+    	}
+    	
+    	//System.out.println(spacesGenerator(nbrOfSpaces) +"test :" + comparaison_expressionList.getConnector());	
+    }
+    
+    
+    
+    public void visit(Comparaison_expressionList comparaison_expressionList, int nbrOfSpaces) {
+    	
+    	for(Comparaison_expression ce : comparaison_expressionList.getComparaison_expressionList()) {
+    		ce.accept(this, nbrOfSpaces);
+    		
+    	}
+    }
+    
+    public void visit(Logical_connectorList logical_connectorList, int nbrOfSpaces) {
+    	
+    	for(Logical_connector lc : logical_connectorList.getLogical_connectorList()) {
+    		lc.accept(this, nbrOfSpaces);
+    	}
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     public void visit(Logical_connector logical_connector, int nbrOfSpaces) {
-    	System.out.println(spacesGenerator(nbrOfSpaces) +"test :" + logical_connector.getConnector());	
+    	System.out.println(spacesGenerator(nbrOfSpaces) +"Connecteur logique : " + logical_connector.getConnector());	
     }
     
     public void visit(Comparaison_expression comparaison_expression, int nbrOfSpaces) {

@@ -4,12 +4,14 @@ public class Comparaison_expression extends ASTNode {
 	private Value value;
 	private Comparaison_operator comparaison_operator;
 	private Value value2;
+
 	
 	
 	public Comparaison_expression(Value value, Comparaison_operator comparaison_operator, Value value2) {
 		this.value = value;
 		this.comparaison_operator = comparaison_operator;
 		this.value2 = value2;
+
 	}
 	
 	public Comparaison_expression() {
@@ -42,7 +44,7 @@ public class Comparaison_expression extends ASTNode {
 
 	@Override
 	public String toString() {
-		return "" + value + " " + comparaison_operator + " " + value2 ;
+		return "" + value + " " + comparaison_operator  + " " + value2  ;
 	}
 
 	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
@@ -50,7 +52,7 @@ public class Comparaison_expression extends ASTNode {
 		comparaison_operator.accept(visitor);
 		value2.accept(visitor);*/
 		
-		visitor.visit(this,nbrOfSpaces+1);
+		visitor.visit(this,nbrOfSpaces);
 	}
 
 

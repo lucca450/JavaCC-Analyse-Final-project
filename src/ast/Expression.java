@@ -4,53 +4,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Expression extends ASTNode {
-	private Comparaison_expression comparaison_expression;
-	private Logical_connector logical_connector;
+	
+	private Comparaison_expressionList comparaison_expressionList;
+	private Logical_connectorList logical_connectorList;
 
 	
 	
-	public Expression(Comparaison_expression comparaison_expression, Logical_connector logical_connector) {
-		this.comparaison_expression = comparaison_expression;
-		this.logical_connector = logical_connector;
+	public Expression(Comparaison_expressionList comparaison_expressionList, Logical_connectorList logical_connectorList ) {
+		this.comparaison_expressionList = comparaison_expressionList;
+		this.logical_connectorList = logical_connectorList;
+		
 	}
-
-
 	
 	public Expression() {
 		
 	}
-
-	public Comparaison_expression getComparaison_expression() {
-		return comparaison_expression;
-	}
-
-	public void setComparaison_expression(Comparaison_expression comparaison_expression) {
-		this.comparaison_expression = comparaison_expression;
-	}
 	
-	
-
-	public Logical_connector getLogical_connector() {
-		return logical_connector;
+	public Comparaison_expressionList getComparaison_expressionList() {
+		return comparaison_expressionList;
 	}
 
-	public void setLogical_connector(Logical_connector logical_connector) {
-		this.logical_connector = logical_connector;
+	public void setComparaison_expressionList(Comparaison_expressionList comparaison_expressionList) {
+		this.comparaison_expressionList = comparaison_expressionList;
+	}
+
+	public Logical_connectorList getLogical_connectorList() {
+		return logical_connectorList;
+	}
+
+	public void setLogical_connectorList(Logical_connectorList logical_connectorList) {
+		this.logical_connectorList = logical_connectorList;
 	}
 
 	@Override
 	public String toString() {
-		return ""+comparaison_expression + " " + logical_connector;
+		return ""+ comparaison_expressionList  + " " +  logical_connectorList;
 	}
 	
 	public void accept(VisitorPrint visitor,int nbrOfSpaces) {
 		visitor.visit(this);
+
 		
-		comparaison_expression.accept(visitor, nbrOfSpaces);
 		
-		logical_connector.accept(visitor,  nbrOfSpaces);
 		
-		comparaison_expression.accept(visitor, nbrOfSpaces);
+		logical_connectorList.accept(visitor,  nbrOfSpaces);
+		comparaison_expressionList.accept(visitor, nbrOfSpaces);
+		
 	}
 	
 }
