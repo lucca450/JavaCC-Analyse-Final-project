@@ -255,7 +255,14 @@ void statement() :
 		stack.push(myStatement);
 	}
 	(		(
-			LOOKAHEAD(2)			assignment() | function_call()
+			LOOKAHEAD(2)			assignment()
+			{
+			   Assignment myAssignment = (Assignment)stack.pop();
+			   myStatement = (Statement)stack.peek();
+			   myStatement.setAssignment(myAssignment);
+			  
+			}
+			| function_call()
 		) ";"
 		| conditional_statement()
 		| while_loop()
@@ -283,7 +290,20 @@ void variable_declaration():
 		AssignmentList myAssignmentList = new AssignmentList();
 		stack.push(myAssignmentList);
 	}
-	t = type() assignment()	("," assignment())*
+	t = type() assignment()
+		{
+		Assignment myAssignment = (Assignment)stack.pop();
+		myAssignmentList = (AssignmentList)stack.peek();
+	  	myAssignmentList.add(myAssignment); 
+		}
+	( 
+		{
+		myAssignment = (Assignment)stack.pop();
+		myAssignmentList = (AssignmentList)stack.peek();
+	  	myAssignmentList.add(myAssignment); 
+		}
+
+	  	"," assignment())*
 	{
 		myAssignmentList = (AssignmentList)stack.pop();
 		
@@ -570,8 +590,9 @@ void assignment():
     identifier = < IDENTIFIER > assign = < ASSIGN > expression()
     {
       Expression myExpression = (Expression)stack.pop();
-      
-      myAssignment = (Assignment)stack.pop();
+
+      //lucca
+      /*myAssignment = (Assignment)stack.pop();
       
       myAssignment.setIdentifier(identifier.toString());
       myAssignment.setAssign(assign.toString());
@@ -579,7 +600,12 @@ void assignment():
 
 	  AssignmentList myAssignmentList = new AssignmentList();
 	  myAssignmentList = (AssignmentList)stack.peek();
-	  myAssignmentList.add(myAssignment);
+	  myAssignmentList.add(myAssignment);*/
+	  myAssignment = (Assignment)stack.peek();
+      
+      myAssignment.setIdentifier(identifier.toString());
+      myAssignment.setAssign(assign.toString());
+	  myAssignment.setExpression(myExpression);
 	}
 }
 

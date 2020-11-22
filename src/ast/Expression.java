@@ -44,9 +44,6 @@ public class Expression extends ASTNode {
 	public void accept(VisitorPrint visitor,int nbrOfSpaces) {
 		visitor.visit(this);
 
-		
-		
-		
 		logical_connectorList.accept(visitor,  nbrOfSpaces);
 		comparaison_expressionList.accept(visitor, nbrOfSpaces);
 		

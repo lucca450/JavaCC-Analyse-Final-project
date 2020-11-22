@@ -242,6 +242,9 @@ public class Grammaire implements GrammaireConstants {
     case IDENTIFIER:
       if (jj_2_1(2)) {
         assignment();
+                           Assignment myAssignment = (Assignment)stack.pop();
+                           myStatement = (Statement)stack.peek();
+                           myStatement.setAssignment(myAssignment);
       } else {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case IDENTIFIER:
@@ -283,6 +286,9 @@ public class Grammaire implements GrammaireConstants {
                 stack.push(myAssignmentList);
     t = type();
     assignment();
+                Assignment myAssignment = (Assignment)stack.pop();
+                myAssignmentList = (AssignmentList)stack.peek();
+                myAssignmentList.add(myAssignment);
     label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -293,6 +299,9 @@ public class Grammaire implements GrammaireConstants {
         jj_la1[9] = jj_gen;
         break label_5;
       }
+                myAssignment = (Assignment)stack.pop();
+                myAssignmentList = (AssignmentList)stack.peek();
+                myAssignmentList.add(myAssignment);
       jj_consume_token(43);
       assignment();
     }
@@ -753,15 +762,21 @@ public class Grammaire implements GrammaireConstants {
     expression();
       Expression myExpression = (Expression)stack.pop();
 
-      myAssignment = (Assignment)stack.pop();
+      //lucca
+      /*myAssignment = (Assignment)stack.pop();
+      
+      myAssignment.setIdentifier(identifier.toString());
+      myAssignment.setAssign(assign.toString());
+	  myAssignment.setExpression(myExpression);
+
+	  AssignmentList myAssignmentList = new AssignmentList();
+	  myAssignmentList = (AssignmentList)stack.peek();
+	  myAssignmentList.add(myAssignment);*/
+          myAssignment = (Assignment)stack.peek();
 
       myAssignment.setIdentifier(identifier.toString());
       myAssignment.setAssign(assign.toString());
           myAssignment.setExpression(myExpression);
-
-          AssignmentList myAssignmentList = new AssignmentList();
-          myAssignmentList = (AssignmentList)stack.peek();
-          myAssignmentList.add(myAssignment);
   }
 
   final public void while_loop() throws ParseException {
@@ -872,14 +887,14 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3_2() {
-    if (jj_scan_token(46)) return true;
-    if (jj_scan_token(ELSE)) return true;
+  private boolean jj_3_1() {
+    if (jj_3R_16()) return true;
     return false;
   }
 
-  private boolean jj_3_1() {
-    if (jj_3R_16()) return true;
+  private boolean jj_3_2() {
+    if (jj_scan_token(46)) return true;
+    if (jj_scan_token(ELSE)) return true;
     return false;
   }
 

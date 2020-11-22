@@ -38,5 +38,9 @@ public class Assignment extends ASTNode {
 	public void setExpression(Expression expression) {
 		this.expression = expression;
 	}
+	
+	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
+		visitor.visit(this,nbrOfSpaces);
+	}
 
 }

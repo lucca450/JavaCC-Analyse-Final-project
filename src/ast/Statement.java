@@ -37,7 +37,14 @@ public class Statement extends ASTNode {
 	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
 		visitor.visit(this);
 		
-        conditional_statement.accept(visitor,nbrOfSpaces+1);
+		
+        try {
+            conditional_statement.accept(visitor,nbrOfSpaces+1);
+        }
+        catch(Exception e) {
+        	assignment.accept(visitor,nbrOfSpaces+1);
+        }
+
         //PAS IMPLEMENT/ ENCORE  assignment.accept(visitor);
 	}
 }

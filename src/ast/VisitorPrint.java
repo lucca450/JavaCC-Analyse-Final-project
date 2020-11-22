@@ -79,6 +79,21 @@ public class VisitorPrint {
     	System.out.println(spacesGenerator(nbrOfSpaces) +"Expression conditionnelle");
     }
     
+    public void visit(Assignment assignment, int nbrOfSpaces) {
+    	
+    	String returnString = "";
+    	
+    	Comparaison_expressionList myComparaisonExpressionList = assignment.getExpression().getComparaison_expressionList();
+	    String comparaisonString = "";
+	    for(Comparaison_expression ce : myComparaisonExpressionList.getComparaison_expressionList()) {
+	    	comparaisonString += ce.getValue() + " " + ce.getComparaison_operator() + " " +  ce.getValue2() ;
+	    }
+		returnString += assignment.getIdentifier() + " " + assignment.getAssign() + " " + comparaisonString/*.replace("null", "").replace(" ", "")*/ + ";\n";
+    	
+		System.out.println(spacesGenerator(nbrOfSpaces) + returnString);
+	
+    }
+    
     public void visit(Expression expression) {
     	//System.out.println("Expression ");
     }

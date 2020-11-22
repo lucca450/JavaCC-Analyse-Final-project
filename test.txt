@@ -3,8 +3,6 @@ void test (bool a, double b, int c) {
 	double c = a;
 	bool d = true;
 	if (a > 0 || b == 0) {
-		if (a > 0 && b <> 0) {
-
-		}
+	b = 2 + 5;
 	}
 }
