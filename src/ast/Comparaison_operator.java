@@ -1,9 +1,10 @@
 package ast;
 
-public class Comparaison_operator extends ASTNode {
+public class Comparaison_operator extends Expr {
 	private String comparaison_operator;
 
 	public Comparaison_operator(String comparaison_operator) {
+		super();
 		this.comparaison_operator = comparaison_operator;
 	}
 	

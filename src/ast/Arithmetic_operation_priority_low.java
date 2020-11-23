@@ -1,13 +1,13 @@
 package ast;
 
-public class Arithmetic_operation_piority_low extends ASTNode{
+public class Arithmetic_operation_priority_low extends Expr{
 	private String operation;
 
-	public Arithmetic_operation_piority_low(String operation) {
+	public Arithmetic_operation_priority_low(String operation) {
 		this.operation = operation;
 	}
 
-	public Arithmetic_operation_piority_low() {
+	public Arithmetic_operation_priority_low() {
 	}
 
 	public String getOperation() {

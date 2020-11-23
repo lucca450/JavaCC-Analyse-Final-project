@@ -3,12 +3,13 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Unary_expression  extends ASTNode{
+public class Unary_expression  extends Expr{
 
 	private Unary_operator unary_operator;
 	private Term term;
 	
 	public Unary_expression(Unary_operator unary_operator, Term term) {
+		super();
 		this.unary_operator = unary_operator;
 		this.term = term;
 	}

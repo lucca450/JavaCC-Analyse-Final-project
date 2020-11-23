@@ -435,16 +435,9 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void expression() throws ParseException {
-          Expression myExpression = new Expression();
+            Expression myExpression = new Expression();
+            stack.push(myExpression);
 
-
-          Comparaison_expressionList myComparaison_expressionList = new Comparaison_expressionList();
-          Logical_connectorList myLogical_connectorList = new Logical_connectorList();
-
-          myExpression.setComparaison_expressionList(myComparaison_expressionList);
-          myExpression.setLogical_connectorList(myLogical_connectorList);
-
-          stack.push(myExpression);
     comparaison_expression();
     label_8:
     while (true) {
@@ -463,8 +456,6 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void comparaison_expression() throws ParseException {
-                Comparaison_expression myComparaison_expression = new Comparaison_expression();
-                stack.push(myComparaison_expression);
     arithmetic_expression_priority_low();
     label_9:
     while (true) {
@@ -481,19 +472,21 @@ public class Grammaire implements GrammaireConstants {
         jj_la1[16] = jj_gen;
         break label_9;
       }
+                    Expr myExpr = (Expr)stack.pop();
+                        Comparaison_expression myComparaison_expression = new Comparaison_expression();
+                        myComparaison_expression.setExpr_gauche(myExpr);
+                        stack.push(myComparaison_expression);
       comparaison_operator();
       arithmetic_expression_priority_low();
-    }
+                myExpr = (Expr)stack.pop();
                 myComparaison_expression = (Comparaison_expression)stack.pop();
+                myComparaison_expression.setExpr_droite(myExpr);
                 Expression myExpression = (Expression)stack.peek();
-                Comparaison_expressionList myComparaison_expressionList = myExpression.getComparaison_expressionList();
-                myComparaison_expressionList.add(myComparaison_expression);
-                myExpression.setComparaison_expressionList(myComparaison_expressionList);
+                myExpression.setExpr_gauche(myComparaison_expression);
+    }
   }
 
   final public void arithmetic_expression_priority_low() throws ParseException {
-                Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
-                stack.push(myArithmetic_expression_priority_low);
     arithmetic_expression();
     label_10:
     while (true) {
@@ -506,19 +499,17 @@ public class Grammaire implements GrammaireConstants {
         jj_la1[17] = jj_gen;
         break label_10;
       }
+                Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
+                stack.push(myArithmetic_expression_priority_low);
       arithmetic_operation_piority_low();
       arithmetic_expression();
-    }
                 myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.pop();
                 Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-                List<Arithmetic_expression_priority_low> arithmetic_expression_priority_lowList = myComparaison_expression.getArithmetic_expression_priority_lowList();
-                arithmetic_expression_priority_lowList.add(myArithmetic_expression_priority_low);
-                myComparaison_expression.setArithmetic_expression_priority_lowList(arithmetic_expression_priority_lowList);
+                myComparaison_expression.setExpr_droite(myArithmetic_expression_priority_low);
+    }
   }
 
   final public void arithmetic_expression() throws ParseException {
-                Arithmetic_expression myArithmetic_expression = new Arithmetic_expression ();
-                stack.push(myArithmetic_expression);
     unary_expression();
     label_11:
     while (true) {
@@ -532,35 +523,31 @@ public class Grammaire implements GrammaireConstants {
         jj_la1[18] = jj_gen;
         break label_11;
       }
+                Arithmetic_expression myArithmetic_expression = new Arithmetic_expression ();
+                stack.push(myArithmetic_expression);
       arithmetic_operation();
       unary_expression();
-    }
                 myArithmetic_expression = (Arithmetic_expression)stack.pop();
                 Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();
-                List<Arithmetic_expression> arithmetic_expressionList = myArithmetic_expression_priority_low.getArithmetic_expressionList();
-                arithmetic_expressionList.add(myArithmetic_expression);
-                myArithmetic_expression_priority_low.setArithmetic_expressionList(arithmetic_expressionList);
+                myArithmetic_expression_priority_low.setExpr_droite(myArithmetic_expression);
+    }
   }
 
   final public void unary_expression() throws ParseException {
-                Unary_expression myUnary_expression = new Unary_expression ();
-                stack.push(myUnary_expression);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NOT:
     case PREFIX_INCREMENT:
     case PREFIX_DECREMENT:
       unary_operator();
+                Unary_expression myUnary_expression = new Unary_expression();
+                stack.push(myUnary_expression);
       break;
     default:
       jj_la1[19] = jj_gen;
       ;
     }
     term();
-                myUnary_expression = (Unary_expression)stack.pop();
-                Arithmetic_expression myArithmetic_expression = (Arithmetic_expression)stack.peek();
-                List<Unary_expression> unary_expressionList = myArithmetic_expression.getUnary_expressionList();
-                unary_expressionList.add(myUnary_expression);
-                myArithmetic_expression.setUnary_expressionList(unary_expressionList);
+
   }
 
   final public void term() throws ParseException {
@@ -573,9 +560,7 @@ public class Grammaire implements GrammaireConstants {
                 Term myTerm = new Term ();
                 stack.push(myTerm);
       value();
-                         myTerm = (Term)stack.pop();
-                         Unary_expression myUnary_expression = (Unary_expression)stack.peek();
-                         myUnary_expression.setTerm(myTerm);
+
       break;
     case 42:
       jj_consume_token(42);
@@ -596,9 +581,10 @@ public class Grammaire implements GrammaireConstants {
                           myTerm.setExpression(myExpression);
 
 
-                         myTerm = (Term)stack.pop();
-                         myUnary_expression = (Unary_expression)stack.peek();
-                         myUnary_expression.setTerm(myTerm);
+                /*	 myTerm = (Term)stack.pop();
+	  		 myUnary_expression = (Unary_expression)stack.peek();
+			 myUnary_expression.setTerm(myTerm);*/
+
       jj_consume_token(44);
       break;
     default:
@@ -745,9 +731,7 @@ public class Grammaire implements GrammaireConstants {
                                 myOperator = (Comparaison_operator)stack.pop();
                                 myOperator.setComparaison_operator(comp_operator.toString());
                                 Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-                                List<Comparaison_operator> comparaison_operatorList = myComparaison_expression.getComparaison_operatorList();
-                                comparaison_operatorList.add(myOperator);
-                                myComparaison_expression.setComparaison_operatorList(comparaison_operatorList);
+                                myComparaison_expression.setComparaison_operator(myOperator);
   }
 
   final public void logical_connector() throws ParseException {
@@ -768,10 +752,8 @@ public class Grammaire implements GrammaireConstants {
     }
            myLogical_connector = (Logical_connector)stack.pop();
            myLogical_connector.setConnector(t.toString());
-           Expression myExpression = (Expression)stack.peek();
-           Logical_connectorList myLogical_connectorList = myExpression.getLogical_connectorList();
-           myLogical_connectorList.add(myLogical_connector);
-           myExpression.setLogical_connectorList(myLogical_connectorList);
+           Expression myExpression = (Expr)stack.peek();
+           myExpression.setLogical_connector(myLogical_connector);
   }
 
   final public void function_call() throws ParseException {
@@ -938,20 +920,8 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3R_17() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(42)) return true;
-    return false;
-  }
-
   private boolean jj_3_3() {
     if (jj_3R_17()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_16() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 
@@ -963,6 +933,18 @@ public class Grammaire implements GrammaireConstants {
   private boolean jj_3_2() {
     if (jj_scan_token(46)) return true;
     if (jj_scan_token(ELSE)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_17() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(42)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_16() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 

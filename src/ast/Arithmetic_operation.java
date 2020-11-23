@@ -1,6 +1,6 @@
 package ast;
 
-public class Arithmetic_operation extends ASTNode{
+public class Arithmetic_operation extends Expr{
 	private String operation;
 
 	public Arithmetic_operation(String operation) {

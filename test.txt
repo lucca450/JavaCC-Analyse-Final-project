@@ -1,14 +1,7 @@
-void test (bool a, double b, int c) {
-	int b = 0;
-	double c = a;
-	bool d = true;
-	
-	if (a > 0 || b == 0 && c < 0) {
-		b = 2 + (5 - 1);
+void test (bool a) {
+	if (a > 0) {
+
 
 	}
 
-	if (a > 0 || b == 0 && c < 0) {
-		b = 2 + (5 - 1);
-	}
 }

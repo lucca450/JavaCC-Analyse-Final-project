@@ -1,10 +1,11 @@
 package ast;
 
-public class Term extends ASTNode{
+public class Term extends Expr{
 	private Value value;
 	private Expression expression;
 	
 	public Term(Value value, Expression expression) {
+		super();
 		this.value = value;
 		this.expression = expression;
 	}

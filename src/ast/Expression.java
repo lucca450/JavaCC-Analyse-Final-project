@@ -3,44 +3,51 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Expression extends ASTNode {
+public class Expression extends Expr {
 	
-	private Comparaison_expressionList comparaison_expressionList;
-	private Logical_connectorList logical_connectorList;
+	private Expr expr_gauche;
+	private Logical_connector logical_connector;
+	private Expr expr_droite;
 
-	
-	
-	public Expression(Comparaison_expressionList comparaison_expressionList, Logical_connectorList logical_connectorList ) {
-		this.comparaison_expressionList = comparaison_expressionList;
-		this.logical_connectorList = logical_connectorList;
-		
-	}
-	
+
 	public Expression() {
 		
 	}
 	
-	public Comparaison_expressionList getComparaison_expressionList() {
-		return comparaison_expressionList;
+	public Expression(Expr expr_gauche, Logical_connector logical_connector, Expr expr_droite) {
+		super();
+		this.expr_gauche = expr_gauche;
+		this.logical_connector = logical_connector;
+		this.expr_droite = expr_droite;
 	}
 
-	public void setComparaison_expressionList(Comparaison_expressionList comparaison_expressionList) {
-		this.comparaison_expressionList = comparaison_expressionList;
+
+	public Expr getExpr_gauche() {
+		return expr_gauche;
 	}
 
-	public Logical_connectorList getLogical_connectorList() {
-		return logical_connectorList;
+	public void setExpr_gauche(Expr expr_gauche) {
+		this.expr_gauche = expr_gauche;
 	}
 
-	public void setLogical_connectorList(Logical_connectorList logical_connectorList) {
-		this.logical_connectorList = logical_connectorList;
+	public Expr getExpr_droite() {
+		return expr_droite;
 	}
 
-	@Override
-	public String toString() {
-		return ""+ comparaison_expressionList  + " " +  logical_connectorList;
+	public void setExpr_droite(Expr expr_droite) {
+		this.expr_droite = expr_droite;
 	}
-	
+
+	public Logical_connector getLogical_connector() {
+		return logical_connector;
+	}
+
+	public void setLogical_connector(Logical_connector logical_connector) {
+		this.logical_connector = logical_connector;
+	}
+
+
+
 	public void accept(VisitorPrint visitor,int nbrOfSpaces) {
 		visitor.visit(this,nbrOfSpaces);
 	}

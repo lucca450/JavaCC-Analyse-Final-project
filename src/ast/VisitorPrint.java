@@ -122,7 +122,7 @@ public class VisitorPrint {
     public void visit(Expression expression, int nbrOfSpaces) {   	
 
 
-    	
+    	/*
     	for(int i = 0; i < expression.getComparaison_expressionList().getComparaison_expressionList().size() ; i++) {
            	expression.getComparaison_expressionList().getComparaison_expressionList().get(i).accept(this, nbrOfSpaces); 
         	for(int j = 0; j < expression.getLogical_connectorList().getLogical_connectorList().size() ; j++) {
@@ -131,7 +131,7 @@ public class VisitorPrint {
         		}
         	}
     	}
-    	
+    	*/
     /*	for(Comparaison_expression ce : expression.getComparaison_expressionList().getComparaison_expressionList()) {
     		ce.accept(this, nbrOfSpaces);   			
     	}
@@ -141,7 +141,7 @@ public class VisitorPrint {
     	}*/
     } 
     
-    
+    /*
     public void visit(Comparaison_expressionList comparaison_expressionList, int nbrOfSpaces) {
     	nbrOfSpaces++;
     	for(Comparaison_expression ce : comparaison_expressionList.getComparaison_expressionList()) {
@@ -154,13 +154,13 @@ public class VisitorPrint {
     		lc.accept(this, nbrOfSpaces);
     	}
     }
-
+*/
     public void visit(Logical_connector logical_connector, int nbrOfSpaces) {
     	System.out.print(logical_connector.getConnector() + " ");	
     }
     
     public void visit(Comparaison_expression comparaison_expression, int nbrOfSpaces) {
-    	
+    	/*
 
     	for(int i = 0; i < comparaison_expression.getArithmetic_expression_priority_lowList().size() ; i++) {
     		comparaison_expression.getArithmetic_expression_priority_lowList().get(i).accept(this, nbrOfSpaces); 
@@ -169,7 +169,7 @@ public class VisitorPrint {
         			comparaison_expression.getComparaison_operatorList().get(j).accept(this, nbrOfSpaces);  
         		}
         	}
-    	}
+    	}*/
     	
     	
     	/*
@@ -211,14 +211,14 @@ public class VisitorPrint {
 
 	public void visit(Arithmetic_expression_priority_low arithmetic_expression_priority_low, int nbrOfSpaces) {
 		
-    	for(int i = 0; i < arithmetic_expression_priority_low.getArithmetic_expressionList().size() ; i++) {
+    /*	for(int i = 0; i < arithmetic_expression_priority_low.getArithmetic_expressionList().size() ; i++) {
     		arithmetic_expression_priority_low.getArithmetic_expressionList().get(i).accept(this, nbrOfSpaces); 
         	for(int j = 0; j < arithmetic_expression_priority_low.getArithmetic_operation_piority_lowList().size() ; j++) {
         		if(i == j) {
         			arithmetic_expression_priority_low.getArithmetic_operation_piority_lowList().get(j).accept(this, nbrOfSpaces);  
         		}
         	}
-    	}
+    	}*/
 		
     	/*	
     	for(Arithmetic_expression ae : arithmetic_expression_priority_low.getArithmetic_expressionList()) {
@@ -233,17 +233,17 @@ public class VisitorPrint {
 	}
 
 	public void visit(Arithmetic_expression arithmetic_expression, int nbrOfSpaces) {
-    	for(Arithmetic_operation ao : arithmetic_expression.getArithmetic_operationList()) {
+    /*	for(Arithmetic_operation ao : arithmetic_expression.getArithmetic_operationList()) {
     		ao.accept(this, nbrOfSpaces);
 
     	}
     	
     	for(Unary_expression ue : arithmetic_expression.getUnary_expressionList()) {
     		ue.accept(this, nbrOfSpaces);
-    	}
+    	}*/
 	}
 
-	public void visit(Arithmetic_operation_piority_low arithmetic_operation_piority_low, int nbrOfSpaces) {		
+	public void visit(Arithmetic_operation_priority_low arithmetic_operation_piority_low, int nbrOfSpaces) {		
 		System.out.print(" " + arithmetic_operation_piority_low.getOperation());	
 	}
 

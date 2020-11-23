@@ -1,6 +1,6 @@
 package ast;
 
-public class Unary_operator extends ASTNode{
+public class Unary_operator extends Expr{
 	private String operator;
 
 	public Unary_operator() {

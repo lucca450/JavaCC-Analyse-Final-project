@@ -3,36 +3,62 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Comparaison_expression extends ASTNode {
+public class Comparaison_expression extends Expr {
 	
-	List<Arithmetic_expression_priority_low> arithmetic_expression_priority_lowList = new ArrayList<Arithmetic_expression_priority_low>();
-	List<Comparaison_operator> comparaison_operatorList = new ArrayList<Comparaison_operator>();
+	private Expr expr_gauche;
+	private Comparaison_operator comparaison_operator;
+	private Expr expr_droite;
+
 
 	public Comparaison_expression() {
 
 	}
+
 	
-	public Comparaison_expression(List<Arithmetic_expression_priority_low> arithmetic_expression_priority_lowList,List<Comparaison_operator> comparaison_operatorList) {
-		this.arithmetic_expression_priority_lowList = arithmetic_expression_priority_lowList;
-		this.comparaison_operatorList = comparaison_operatorList;
+
+	public Comparaison_expression(Expr expr_gauche, Comparaison_operator comparaison_operator, Expr expr_droite) {
+		super();
+		this.expr_gauche = expr_gauche;
+		this.comparaison_operator = comparaison_operator;
+		this.expr_droite = expr_droite;
 	}
 
 
-	public List<Arithmetic_expression_priority_low> getArithmetic_expression_priority_lowList() {
-		return arithmetic_expression_priority_lowList;
+
+	public Expr getExpr_gauche() {
+		return expr_gauche;
 	}
 
-	public void setArithmetic_expression_priority_lowList(List<Arithmetic_expression_priority_low> arithmetic_expression_priority_lowList) {
-		this.arithmetic_expression_priority_lowList = arithmetic_expression_priority_lowList;
+
+
+	public void setExpr_gauche(Expr expr_gauche) {
+		this.expr_gauche = expr_gauche;
 	}
 
-	public List<Comparaison_operator> getComparaison_operatorList() {
-		return comparaison_operatorList;
+
+
+	public Expr getExpr_droite() {
+		return expr_droite;
 	}
 
-	public void setComparaison_operatorList(List<Comparaison_operator> comparaison_operatorList) {
-		this.comparaison_operatorList = comparaison_operatorList;
+
+
+	public void setExpr_droite(Expr expr_droite) {
+		this.expr_droite = expr_droite;
 	}
+
+
+
+	public Comparaison_operator getComparaison_operator() {
+		return comparaison_operator;
+	}
+
+
+	public void setComparaison_operator(Comparaison_operator comparaison_operator) {
+		this.comparaison_operator = comparaison_operator;
+	}
+
+
 
 	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
 	
