@@ -438,39 +438,124 @@ void arithmetic_expression_priority_low():
 {
 }
 {
+  	 {
+  		Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
+		stack.push(myArithmetic_expression_priority_low);
+	 }
+	 
+	 arithmetic_expression() ( arithmetic_operation_piority_low() arithmetic_expression() )*
 
-	arithmetic_expression() ( arithmetic_operation_piority_low() arithmetic_expression() )*
+	 {
+  		myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.pop();
+  		Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
+  		List<Arithmetic_expression_priority_low> arithmetic_expression_priority_lowList = myComparaison_expression.getArithmetic_expression_priority_lowList();
+  		arithmetic_expression_priority_lowList.add(myArithmetic_expression_priority_low);
+  		myComparaison_expression.setArithmetic_expression_priority_lowList(arithmetic_expression_priority_lowList);
+	 }
 }
 
 void arithmetic_expression():
 {
 }
-{ 
+{
+   	{
+  		Arithmetic_expression myArithmetic_expression = new Arithmetic_expression ();
+		stack.push(myArithmetic_expression);
+	}
+	
 	unary_expression() ( arithmetic_operation() unary_expression() )*
+
+	{
+  		myArithmetic_expression = (Arithmetic_expression)stack.pop();
+  		Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();
+  		List<Arithmetic_expression> arithmetic_expressionList = myArithmetic_expression_priority_low.getArithmetic_expressionList();
+  		arithmetic_expressionList.add(myArithmetic_expression);
+  		myArithmetic_expression_priority_low.setArithmetic_expressionList(arithmetic_expressionList);
+	}
 }
 
 void unary_expression():
 {
 }
 {
+    {
+  		Unary_expression myUnary_expression = new Unary_expression ();
+		stack.push(myUnary_expression);
+	}
+	
 	( unary_operator() )? term()
+
+	{
+  		myUnary_expression = (Unary_expression)stack.pop();
+  		Arithmetic_expression myArithmetic_expression = (Arithmetic_expression)stack.peek();
+  		List<Unary_expression> unary_expressionList = myArithmetic_expression.getUnary_expressionList();
+  		unary_expressionList.add(myUnary_expression);		
+  		myArithmetic_expression.setUnary_expressionList(unary_expressionList);
+	}
 }
 
 void term():
 {
 }
 {
-	value() | "(" expression() ")"
+    {
+  		Term myTerm = new Term ();
+		stack.push(myTerm);
+	}
+	
+	value()
+		{
+			 myTerm = (Term)stack.pop();
+	  		 Unary_expression myUnary_expression = (Unary_expression)stack.peek();
+			 myUnary_expression.setTerm(myTerm);
+		}
+		 | "(" expression()
+		{
+
+			  Expression myExpression = (Expression)stack.pop();
+
+			  try
+		  	 {
+			  myTerm = (Term)stack.peek();
+		     }
+		     catch(Exception e)
+		     {
+		      myTerm = new Term ();
+		      stack.push(myTerm);
+		     }
+		     
+			  myTerm = (Term)stack.peek();
+			  myTerm.setExpression(myExpression);
+  
+
+			 myTerm = (Term)stack.pop();
+	  		 myUnary_expression = (Unary_expression)stack.peek();
+			 myUnary_expression.setTerm(myTerm);
+		}
+	")"
+
+
 }
 
 void unary_operator():
 {
+  Token t = null;
 }
 {
-	(		< PREFIX_INCREMENT >
-		| < PREFIX_DECREMENT >
-		| < NOT >
+    {
+  		Unary_operator myUnary_operator = new Unary_operator ();
+		stack.push(myUnary_operator);
+	}
+	(		t = < PREFIX_INCREMENT >
+		| t = < PREFIX_DECREMENT >
+		| t = < NOT >
 	)
+	{
+  		myUnary_operator = (Unary_operator)stack.pop();
+  		myUnary_operator.setOperator(t.toString());
+  		Unary_expression myUnary_expression = (Unary_expression)stack.peek();
+		myUnary_expression.setUnary_operator(myUnary_operator);
+	}
 }
 
 void value():
@@ -493,42 +578,61 @@ void value():
 
 
 	{
-
-				myValue = (Value)stack.pop();
-				Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-				
-					    if(myComparaison_expression.getValue() == null)
-					    {
-					      		 myValue.setIdentificateur(t.toString());
-					      		 //myValue.setType();
-					     		 myComparaison_expression.setValue(myValue);
-					    }
-					    else if(myComparaison_expression.getValue2() == null)
-					    {
-					      		 myValue.setIdentificateur(t.toString());
-					      		 //myValue.setType();
-					     		 myComparaison_expression.setValue2(myValue);
-					  	}  	
+		myValue = (Value)stack.pop();
+		Term myTerm = (Term)stack.peek();				  
+		myValue.setIdentificateur(t.toString());
+		myTerm.setValue(myValue);
 	}	
 }
 
 void arithmetic_operation():
 {
+  Token t = null;
 }
 {
-	( < MULTIPLY > | < DIVIDE > | < MODULO > )
+  	{
+  	    Arithmetic_operation myArithmetic_operation = new Arithmetic_operation();
+		stack.push(myArithmetic_operation);
+	}
+	
+	( t = < MULTIPLY > | t = < DIVIDE > | t = < MODULO > )
+	
+	{
+		myArithmetic_operation = (Arithmetic_operation)stack.pop();
+		myArithmetic_operation.setOperation(t.toString());	
+  		Arithmetic_expression myArithmetic_expression = (Arithmetic_expression)stack.peek();
+  		List<Arithmetic_operation> Arithmetic_operationList = myArithmetic_expression.getArithmetic_operationList(); 		
+  		Arithmetic_operationList.add(myArithmetic_operation);		
+  		myArithmetic_expression.setArithmetic_operationList(Arithmetic_operationList);
+	}
 }
 
 void arithmetic_operation_piority_low():
 {
+    Token t = null;
 }
 {
-	( < PLUS > | < MINUS > )
+    {
+  	    Arithmetic_operation_piority_low myArithmetic_operation_piority_low = new Arithmetic_operation_piority_low();
+		stack.push(myArithmetic_operation_piority_low);
+	}
+	
+	( t = < PLUS > | t = < MINUS > )
+
+	{
+		myArithmetic_operation_piority_low = (Arithmetic_operation_piority_low)stack.pop();
+		myArithmetic_operation_piority_low.setOperation(t.toString());		
+  		Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();		
+  		List<Arithmetic_operation_piority_low> Arithmetic_operation_piority_lowList = myArithmetic_expression_priority_low.getArithmetic_operation_piority_lowList();
+  		 		
+  		Arithmetic_operation_piority_lowList.add(myArithmetic_operation_piority_low);		
+  		myArithmetic_expression_priority_low.setArithmetic_operation_piority_lowList(Arithmetic_operation_piority_lowList);
+	}
 }
 
 void comparaison_operator():
 {
-  Token comp_operator=null;
+  	Token comp_operator=null;
 }
 {
 
@@ -537,14 +641,15 @@ void comparaison_operator():
   		stack.push(myOperator);
 	}
 	
-  	(comp_operator= < EQUAL > | comp_operator= < NOT_EQUAL > | comp_operator= < GREATER > | comp_operator = < GREATER_OR_EQUAL > | comp_operator = < LOWER > | comp_operator= < LOWER_OR_EQUAL > 	)
+  	(comp_operator= < EQUAL > | comp_operator= < NOT_EQUAL > | comp_operator= < GREATER > | comp_operator = < GREATER_OR_EQUAL > | comp_operator = < LOWER > | comp_operator= < LOWER_OR_EQUAL > )
   	
   	{
 				myOperator = (Comparaison_operator)stack.pop();
-				Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-
 				myOperator.setComparaison_operator(comp_operator.toString());
-				myComparaison_expression.setComparaison_operator(myOperator);
+				Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
+				List<Comparaison_operator> comparaison_operatorList = myComparaison_expression.getComparaison_operatorList();				
+				comparaison_operatorList.add(myOperator);
+				myComparaison_expression.setComparaison_operatorList(comparaison_operatorList);
   	}
 }
 
@@ -591,16 +696,6 @@ void assignment():
     {
       Expression myExpression = (Expression)stack.pop();
 
-      //lucca
-      /*myAssignment = (Assignment)stack.pop();
-      
-      myAssignment.setIdentifier(identifier.toString());
-      myAssignment.setAssign(assign.toString());
-	  myAssignment.setExpression(myExpression);
-
-	  AssignmentList myAssignmentList = new AssignmentList();
-	  myAssignmentList = (AssignmentList)stack.peek();
-	  myAssignmentList.add(myAssignment);*/
 	  myAssignment = (Assignment)stack.peek();
       
       myAssignment.setIdentifier(identifier.toString());

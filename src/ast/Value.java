@@ -2,11 +2,9 @@ package ast;
 
 public class Value extends ASTNode {
 	String identificateur;
-	String type;
 
-	public Value(String identificateur, String type) {
+	public Value(String identificateur) {
 		this.identificateur = identificateur;
-		this.type = type;
 	}
 
 	public Value() {
@@ -17,18 +15,6 @@ public class Value extends ASTNode {
 		return identificateur;
 	}
 
-	
-	
-	public String getType() {
-		return type;
-	}
-
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-
 	public void setIdentificateur(String identificateur) {
 		this.identificateur = identificateur;
 	}
@@ -37,6 +23,10 @@ public class Value extends ASTNode {
 	@Override
 	public String toString() {
 		return identificateur.toString() ;
+	}
+
+	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
+		visitor.visit(this,nbrOfSpaces);
 	}
 
 

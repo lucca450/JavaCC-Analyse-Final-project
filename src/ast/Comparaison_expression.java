@@ -1,61 +1,42 @@
 package ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Comparaison_expression extends ASTNode {
-	private Value value;
-	private Comparaison_operator comparaison_operator;
-	private Value value2;
+	
+	List<Arithmetic_expression_priority_low> arithmetic_expression_priority_lowList = new ArrayList<Arithmetic_expression_priority_low>();
+	List<Comparaison_operator> comparaison_operatorList = new ArrayList<Comparaison_operator>();
 
-	
-	
-	public Comparaison_expression(Value value, Comparaison_operator comparaison_operator, Value value2) {
-		this.value = value;
-		this.comparaison_operator = comparaison_operator;
-		this.value2 = value2;
-
-	}
-	
 	public Comparaison_expression() {
 
 	}
-
-	public Value getValue() {
-		return value;
+	
+	public Comparaison_expression(List<Arithmetic_expression_priority_low> arithmetic_expression_priority_lowList,List<Comparaison_operator> comparaison_operatorList) {
+		this.arithmetic_expression_priority_lowList = arithmetic_expression_priority_lowList;
+		this.comparaison_operatorList = comparaison_operatorList;
 	}
 
-	public void setValue(Value value) {
-		this.value = value;
+
+	public List<Arithmetic_expression_priority_low> getArithmetic_expression_priority_lowList() {
+		return arithmetic_expression_priority_lowList;
 	}
 
-	public Value getValue2() {
-		return value2;
+	public void setArithmetic_expression_priority_lowList(List<Arithmetic_expression_priority_low> arithmetic_expression_priority_lowList) {
+		this.arithmetic_expression_priority_lowList = arithmetic_expression_priority_lowList;
 	}
 
-	public void setValue2(Value value2) {
-		this.value2 = value2;
+	public List<Comparaison_operator> getComparaison_operatorList() {
+		return comparaison_operatorList;
 	}
 
-	public Comparaison_operator getComparaison_operator() {
-		return comparaison_operator;
-	}
-
-	public void setComparaison_operator(Comparaison_operator comparaison_operator) {
-		this.comparaison_operator = comparaison_operator;
-	}
-
-	@Override
-	public String toString() {
-		return "" + value + " " + comparaison_operator  + " " + value2  ;
+	public void setComparaison_operatorList(List<Comparaison_operator> comparaison_operatorList) {
+		this.comparaison_operatorList = comparaison_operatorList;
 	}
 
 	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
-		/*value.accept(visitor);
-		comparaison_operator.accept(visitor);
-		value2.accept(visitor);*/
-		
+	
 		visitor.visit(this,nbrOfSpaces);
 	}
-
-
-
 	
 }

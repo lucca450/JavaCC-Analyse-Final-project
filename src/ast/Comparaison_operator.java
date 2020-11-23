@@ -23,6 +23,10 @@ public class Comparaison_operator extends ASTNode {
 	public String toString() {
 		return comparaison_operator.toString();
 	}
+
+	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
+		visitor.visit(this,nbrOfSpaces);
+	}
 	
 	
 	

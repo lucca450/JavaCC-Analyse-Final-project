@@ -41,6 +41,8 @@ public class Assignment extends ASTNode {
 	
 	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
 		visitor.visit(this,nbrOfSpaces);
+		
+		expression.accept(visitor,nbrOfSpaces);
 	}
 
 }

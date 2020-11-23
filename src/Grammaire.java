@@ -492,6 +492,8 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void arithmetic_expression_priority_low() throws ParseException {
+                Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
+                stack.push(myArithmetic_expression_priority_low);
     arithmetic_expression();
     label_10:
     while (true) {
@@ -507,9 +509,16 @@ public class Grammaire implements GrammaireConstants {
       arithmetic_operation_piority_low();
       arithmetic_expression();
     }
+                myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.pop();
+                Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
+                List<Arithmetic_expression_priority_low> arithmetic_expression_priority_lowList = myComparaison_expression.getArithmetic_expression_priority_lowList();
+                arithmetic_expression_priority_lowList.add(myArithmetic_expression_priority_low);
+                myComparaison_expression.setArithmetic_expression_priority_lowList(arithmetic_expression_priority_lowList);
   }
 
   final public void arithmetic_expression() throws ParseException {
+                Arithmetic_expression myArithmetic_expression = new Arithmetic_expression ();
+                stack.push(myArithmetic_expression);
     unary_expression();
     label_11:
     while (true) {
@@ -526,9 +535,16 @@ public class Grammaire implements GrammaireConstants {
       arithmetic_operation();
       unary_expression();
     }
+                myArithmetic_expression = (Arithmetic_expression)stack.pop();
+                Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();
+                List<Arithmetic_expression> arithmetic_expressionList = myArithmetic_expression_priority_low.getArithmetic_expressionList();
+                arithmetic_expressionList.add(myArithmetic_expression);
+                myArithmetic_expression_priority_low.setArithmetic_expressionList(arithmetic_expressionList);
   }
 
   final public void unary_expression() throws ParseException {
+                Unary_expression myUnary_expression = new Unary_expression ();
+                stack.push(myUnary_expression);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NOT:
     case PREFIX_INCREMENT:
@@ -540,6 +556,11 @@ public class Grammaire implements GrammaireConstants {
       ;
     }
     term();
+                myUnary_expression = (Unary_expression)stack.pop();
+                Arithmetic_expression myArithmetic_expression = (Arithmetic_expression)stack.peek();
+                List<Unary_expression> unary_expressionList = myArithmetic_expression.getUnary_expressionList();
+                unary_expressionList.add(myUnary_expression);
+                myArithmetic_expression.setUnary_expressionList(unary_expressionList);
   }
 
   final public void term() throws ParseException {
@@ -549,11 +570,35 @@ public class Grammaire implements GrammaireConstants {
     case INTEGER:
     case DECIMAL:
     case IDENTIFIER:
+                Term myTerm = new Term ();
+                stack.push(myTerm);
       value();
+                         myTerm = (Term)stack.pop();
+                         Unary_expression myUnary_expression = (Unary_expression)stack.peek();
+                         myUnary_expression.setTerm(myTerm);
       break;
     case 42:
       jj_consume_token(42);
       expression();
+                          Expression myExpression = (Expression)stack.pop();
+
+                          try
+                         {
+                          myTerm = (Term)stack.peek();
+                     }
+                     catch(Exception e)
+                     {
+                      myTerm = new Term ();
+                      stack.push(myTerm);
+                     }
+
+                          myTerm = (Term)stack.peek();
+                          myTerm.setExpression(myExpression);
+
+
+                         myTerm = (Term)stack.pop();
+                         myUnary_expression = (Unary_expression)stack.peek();
+                         myUnary_expression.setTerm(myTerm);
       jj_consume_token(44);
       break;
     default:
@@ -564,21 +609,28 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void unary_operator() throws ParseException {
+  Token t = null;
+                Unary_operator myUnary_operator = new Unary_operator ();
+                stack.push(myUnary_operator);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case PREFIX_INCREMENT:
-      jj_consume_token(PREFIX_INCREMENT);
+      t = jj_consume_token(PREFIX_INCREMENT);
       break;
     case PREFIX_DECREMENT:
-      jj_consume_token(PREFIX_DECREMENT);
+      t = jj_consume_token(PREFIX_DECREMENT);
       break;
     case NOT:
-      jj_consume_token(NOT);
+      t = jj_consume_token(NOT);
       break;
     default:
       jj_la1[21] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+                myUnary_operator = (Unary_operator)stack.pop();
+                myUnary_operator.setOperator(t.toString());
+                Unary_expression myUnary_expression = (Unary_expression)stack.peek();
+                myUnary_expression.setUnary_operator(myUnary_operator);
   }
 
   final public void value() throws ParseException {
@@ -604,58 +656,66 @@ public class Grammaire implements GrammaireConstants {
         throw new ParseException();
       }
     }
-                                myValue = (Value)stack.pop();
-                                Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-
-                                            if(myComparaison_expression.getValue() == null)
-                                            {
-                                                         myValue.setIdentificateur(t.toString());
-                                                         //myValue.setType();
-                                                         myComparaison_expression.setValue(myValue);
-                                            }
-                                            else if(myComparaison_expression.getValue2() == null)
-                                            {
-                                                         myValue.setIdentificateur(t.toString());
-                                                         //myValue.setType();
-                                                         myComparaison_expression.setValue2(myValue);
-                                                }
+                myValue = (Value)stack.pop();
+                Term myTerm = (Term)stack.peek();
+                myValue.setIdentificateur(t.toString());
+                myTerm.setValue(myValue);
   }
 
   final public void arithmetic_operation() throws ParseException {
+  Token t = null;
+            Arithmetic_operation myArithmetic_operation = new Arithmetic_operation();
+                stack.push(myArithmetic_operation);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case MULTIPLY:
-      jj_consume_token(MULTIPLY);
+      t = jj_consume_token(MULTIPLY);
       break;
     case DIVIDE:
-      jj_consume_token(DIVIDE);
+      t = jj_consume_token(DIVIDE);
       break;
     case MODULO:
-      jj_consume_token(MODULO);
+      t = jj_consume_token(MODULO);
       break;
     default:
       jj_la1[23] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+                myArithmetic_operation = (Arithmetic_operation)stack.pop();
+                myArithmetic_operation.setOperation(t.toString());
+                Arithmetic_expression myArithmetic_expression = (Arithmetic_expression)stack.peek();
+                List<Arithmetic_operation> Arithmetic_operationList = myArithmetic_expression.getArithmetic_operationList();
+                Arithmetic_operationList.add(myArithmetic_operation);
+                myArithmetic_expression.setArithmetic_operationList(Arithmetic_operationList);
   }
 
   final public void arithmetic_operation_piority_low() throws ParseException {
+    Token t = null;
+            Arithmetic_operation_piority_low myArithmetic_operation_piority_low = new Arithmetic_operation_piority_low();
+                stack.push(myArithmetic_operation_piority_low);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case PLUS:
-      jj_consume_token(PLUS);
+      t = jj_consume_token(PLUS);
       break;
     case MINUS:
-      jj_consume_token(MINUS);
+      t = jj_consume_token(MINUS);
       break;
     default:
       jj_la1[24] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+                myArithmetic_operation_piority_low = (Arithmetic_operation_piority_low)stack.pop();
+                myArithmetic_operation_piority_low.setOperation(t.toString());
+                Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();
+                List<Arithmetic_operation_piority_low> Arithmetic_operation_piority_lowList = myArithmetic_expression_priority_low.getArithmetic_operation_piority_lowList();
+
+                Arithmetic_operation_piority_lowList.add(myArithmetic_operation_piority_low);
+                myArithmetic_expression_priority_low.setArithmetic_operation_piority_lowList(Arithmetic_operation_piority_lowList);
   }
 
   final public void comparaison_operator() throws ParseException {
-  Token comp_operator=null;
+        Token comp_operator=null;
                 Comparaison_operator myOperator = new Comparaison_operator();
                 stack.push(myOperator);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -683,10 +743,11 @@ public class Grammaire implements GrammaireConstants {
       throw new ParseException();
     }
                                 myOperator = (Comparaison_operator)stack.pop();
-                                Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-
                                 myOperator.setComparaison_operator(comp_operator.toString());
-                                myComparaison_expression.setComparaison_operator(myOperator);
+                                Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
+                                List<Comparaison_operator> comparaison_operatorList = myComparaison_expression.getComparaison_operatorList();
+                                comparaison_operatorList.add(myOperator);
+                                myComparaison_expression.setComparaison_operatorList(comparaison_operatorList);
   }
 
   final public void logical_connector() throws ParseException {
@@ -762,16 +823,6 @@ public class Grammaire implements GrammaireConstants {
     expression();
       Expression myExpression = (Expression)stack.pop();
 
-      //lucca
-      /*myAssignment = (Assignment)stack.pop();
-      
-      myAssignment.setIdentifier(identifier.toString());
-      myAssignment.setAssign(assign.toString());
-	  myAssignment.setExpression(myExpression);
-
-	  AssignmentList myAssignmentList = new AssignmentList();
-	  myAssignmentList = (AssignmentList)stack.peek();
-	  myAssignmentList.add(myAssignment);*/
           myAssignment = (Assignment)stack.peek();
 
       myAssignment.setIdentifier(identifier.toString());
@@ -887,20 +938,14 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3_1() {
-    if (jj_3R_16()) return true;
-    return false;
-  }
-
-  private boolean jj_3_2() {
-    if (jj_scan_token(46)) return true;
-    if (jj_scan_token(ELSE)) return true;
-    return false;
-  }
-
   private boolean jj_3R_17() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(42)) return true;
+    return false;
+  }
+
+  private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
     return false;
   }
 
@@ -910,8 +955,14 @@ public class Grammaire implements GrammaireConstants {
     return false;
   }
 
-  private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
+  private boolean jj_3_1() {
+    if (jj_3R_16()) return true;
+    return false;
+  }
+
+  private boolean jj_3_2() {
+    if (jj_scan_token(46)) return true;
+    if (jj_scan_token(ELSE)) return true;
     return false;
   }
 
