@@ -52,7 +52,7 @@ public class VisitorPrint {
     public void visit(Variable_declaration variable_declaration, int nbrOfSpaces) {
     	String returnString = "";
     	
-        System.out.println(spacesGenerator(nbrOfSpaces) +"Déclaration de variable");
+        System.out.println("\n" + spacesGenerator(nbrOfSpaces) +"Déclaration de variable");
         
         
       
@@ -82,6 +82,10 @@ public class VisitorPrint {
     }
     
     public void visit(Statement statement,int nbrOfSpaces) {
+    	
+    	System.out.print("\n");
+    	
+    	
         if(statement.getConditional_statement() != null) {
         	statement.getConditional_statement().accept(this,nbrOfSpaces+1);
         }
@@ -93,13 +97,14 @@ public class VisitorPrint {
     }
     
     public void visit(Conditional_statement conditional_statement, int nbrOfSpaces) {
-    	System.out.println(spacesGenerator(nbrOfSpaces) +"Expression conditionnelle");
+    	System.out.println("\n" + spacesGenerator(nbrOfSpaces) +"Expression conditionnelle");
+		System.out.print(spacesGenerator(nbrOfSpaces));
     }
     
     public void visit(Assignment assignment, int nbrOfSpaces) {
     	
-
-    	System.out.println(" " + assignment.getIdentifier()+ " " + assignment.getAssign() + " " +assignment.getExpression());
+    	System.out.print(spacesGenerator(nbrOfSpaces-1));
+    	System.out.print(assignment.getIdentifier() + assignment.getAssign());
     	
     	/*String returnString = "";
     	
@@ -115,13 +120,25 @@ public class VisitorPrint {
     }
     
     public void visit(Expression expression, int nbrOfSpaces) {   	
-    	for(Comparaison_expression ce : expression.getComparaison_expressionList().getComparaison_expressionList()) {
-    		ce.accept(this, nbrOfSpaces);   		
+
+
+    	
+    	for(int i = 0; i < expression.getComparaison_expressionList().getComparaison_expressionList().size() ; i++) {
+           	expression.getComparaison_expressionList().getComparaison_expressionList().get(i).accept(this, nbrOfSpaces); 
+        	for(int j = 0; j < expression.getLogical_connectorList().getLogical_connectorList().size() ; j++) {
+        		if(i == j) {
+        			expression.getLogical_connectorList().getLogical_connectorList().get(j).accept(this, nbrOfSpaces);  
+        		}
+        	}
     	}
     	
-    	for(Logical_connector lc : expression.getLogical_connectorList().getLogical_connectorList()) {
-    		lc.accept(this, nbrOfSpaces);   		
+    /*	for(Comparaison_expression ce : expression.getComparaison_expressionList().getComparaison_expressionList()) {
+    		ce.accept(this, nbrOfSpaces);   			
     	}
+    	
+        for(Logical_connector lc : expression.getLogical_connectorList().getLogical_connectorList()) {
+    		lc.accept(this, nbrOfSpaces);   		
+    	}*/
     } 
     
     
@@ -139,54 +156,71 @@ public class VisitorPrint {
     }
 
     public void visit(Logical_connector logical_connector, int nbrOfSpaces) {
-    	System.out.println(spacesGenerator(nbrOfSpaces) +"Connecteur logique : " + logical_connector.getConnector());	
+    	System.out.print(logical_connector.getConnector() + " ");	
     }
     
     public void visit(Comparaison_expression comparaison_expression, int nbrOfSpaces) {
     	
+
+    	for(int i = 0; i < comparaison_expression.getArithmetic_expression_priority_lowList().size() ; i++) {
+    		comparaison_expression.getArithmetic_expression_priority_lowList().get(i).accept(this, nbrOfSpaces); 
+        	for(int j = 0; j < comparaison_expression.getComparaison_operatorList().size() ; j++) {
+        		if(i == j) {
+        			comparaison_expression.getComparaison_operatorList().get(j).accept(this, nbrOfSpaces);  
+        		}
+        	}
+    	}
+    	
+    	
+    	/*
     	for(Comparaison_operator co : comparaison_expression.getComparaison_operatorList()) {
     		co.accept(this, nbrOfSpaces);
     	}
     	
     	for(Arithmetic_expression_priority_low aepl : comparaison_expression.getArithmetic_expression_priority_lowList()) {
     		aepl.accept(this, nbrOfSpaces);
-    	}
-    	
-
-
-    	/*
-    	if(comparaison_expression.getComparaison_operator().toString() == ">") {		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_GRAND, " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
-    	}
-    	
-    	if(comparaison_expression.getComparaison_operator().toString() == "<") {  		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_PETIT , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
-    	}
-    		
-    	if(comparaison_expression.getComparaison_operator().toString() == ">=") {  		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_GRAND_EGAL , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
-    	}
-    	
-    	if(comparaison_expression.getComparaison_operator().toString() == "<=") {  		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_PETIT_EGAL , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
-    	}
-    	
-    	if(comparaison_expression.getComparaison_operator().toString() == "==") {  		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition EGAL , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
-    	}
-    	
-    	if(comparaison_expression.getComparaison_operator().toString() == "<>") {  		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PAS_EGAL , " + comparaison_expression.getValue().toString() + ", " + comparaison_expression.getValue2().toString());	
-    	}
-    	*/
+    	}*/
     }
 
 	public void visit(Comparaison_operator comparaison_operator, int nbrOfSpaces) {
-		System.out.println(comparaison_operator.getComparaison_operator());
+    	/*if(comparaison_operator.getComparaison_operator().toString() == ">") {		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_GRAND, " );	
+    	}
+    	
+    	if(comparaison_operator.getComparaison_operator().toString() == "<") {  		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_PETIT , " );	
+    	}
+    		
+    	if(comparaison_operator.getComparaison_operator().toString() == ">=") {  		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_GRAND_EGAL , " );	
+    	}
+    	
+    	if(comparaison_operator.getComparaison_operator().toString() == "<=") {  		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_PETIT_EGAL , ");	
+    	}
+    	
+    	if(comparaison_operator.getComparaison_operator().toString() == "==") {  		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition EGAL , " );	
+    	}
+    	
+    	if(comparaison_operator.getComparaison_operator().toString() == "<>") {  		
+        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PAS_EGAL , " );	
+    	}*/
+		System.out.print(comparaison_operator.getComparaison_operator() + " ");
 	}
 
 	public void visit(Arithmetic_expression_priority_low arithmetic_expression_priority_low, int nbrOfSpaces) {
 		
+    	for(int i = 0; i < arithmetic_expression_priority_low.getArithmetic_expressionList().size() ; i++) {
+    		arithmetic_expression_priority_low.getArithmetic_expressionList().get(i).accept(this, nbrOfSpaces); 
+        	for(int j = 0; j < arithmetic_expression_priority_low.getArithmetic_operation_piority_lowList().size() ; j++) {
+        		if(i == j) {
+        			arithmetic_expression_priority_low.getArithmetic_operation_piority_lowList().get(j).accept(this, nbrOfSpaces);  
+        		}
+        	}
+    	}
+		
+    	/*	
     	for(Arithmetic_expression ae : arithmetic_expression_priority_low.getArithmetic_expressionList()) {
     		ae.accept(this, nbrOfSpaces);
     	}
@@ -194,12 +228,14 @@ public class VisitorPrint {
     	for(Arithmetic_operation_piority_low aopl : arithmetic_expression_priority_low.getArithmetic_operation_piority_lowList()) {
     		aopl.accept(this, nbrOfSpaces);
     	}
+    	*/
     	
 	}
 
 	public void visit(Arithmetic_expression arithmetic_expression, int nbrOfSpaces) {
     	for(Arithmetic_operation ao : arithmetic_expression.getArithmetic_operationList()) {
     		ao.accept(this, nbrOfSpaces);
+
     	}
     	
     	for(Unary_expression ue : arithmetic_expression.getUnary_expressionList()) {
@@ -208,11 +244,11 @@ public class VisitorPrint {
 	}
 
 	public void visit(Arithmetic_operation_piority_low arithmetic_operation_piority_low, int nbrOfSpaces) {		
-		System.out.println(arithmetic_operation_piority_low.getOperation());	
+		System.out.print(" " + arithmetic_operation_piority_low.getOperation());	
 	}
 
 	public void visit(Arithmetic_operation arithmetic_operation, int nbrOfSpaces) {
-		System.out.println(arithmetic_operation.getOperation());
+		System.out.print(arithmetic_operation.getOperation());
 	}
 
 	public void visit(Unary_expression unary_expression, int nbrOfSpaces) {
@@ -227,6 +263,8 @@ public class VisitorPrint {
 	}
 
 	public void visit(Term term, int nbrOfSpaces) {
+		
+
 		if(term.getExpression() != null) {
 			term.getExpression().accept(this, nbrOfSpaces);
 		}
@@ -238,6 +276,6 @@ public class VisitorPrint {
 	}
 
 	public void visit(Value value, int nbrOfSpaces) {
-		System.out.println(value.getIdentificateur());
+		System.out.print( value.getIdentificateur() + " " );
 	}
 }

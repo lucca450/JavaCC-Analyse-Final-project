@@ -74,14 +74,14 @@ public class Grammaire{
 	    InputStream inputStream = new FileInputStream(new File("test.txt"));	    Grammaire parser = new Grammaire(inputStream);
 	    parser.function();
 
-		System.out.println(stack.peek());
+		//System.out.println(stack.peek());
 
 
 		Function myFunction = (Function)stack.peek();
 		myArray = DataGenerator(myFunction);
 
 	
-			System.out.println("test   " );
+			
 
 		
 
@@ -407,8 +407,7 @@ void expression():
 	  stack.push(myExpression);
 	}
 	  
- 	comparaison_expression()
- 	( logical_connector() comparaison_expression())*
+ 	comparaison_expression() ( logical_connector() comparaison_expression())*
 
 
 }

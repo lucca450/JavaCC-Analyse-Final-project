@@ -74,14 +74,14 @@ public class Grammaire implements GrammaireConstants {
 
             parser.function();
 
-                System.out.println(stack.peek());
+                //System.out.println(stack.peek());
 
 
                 Function myFunction = (Function)stack.peek();
                 myArray = DataGenerator(myFunction);
 
 
-                        System.out.println("test   " );
+
 
 
 
