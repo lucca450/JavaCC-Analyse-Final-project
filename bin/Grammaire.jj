@@ -264,7 +264,7 @@ void statement() :
 			}
 			| function_call()
 		) ";"
-		| conditional_statement()
+		| conditional_statement()	
 		| while_loop()
 		| for_loop()
 	)
@@ -382,6 +382,7 @@ void conditional_statement():
 	    StatementList myStatementList = new StatementList();
 	    stack.push(myStatementList);
 	  }
+	  
 	     statement()
 
 	     )*
@@ -394,6 +395,14 @@ void conditional_statement():
 		    StatementList myStatementList = (StatementList)stack.pop();
 			myConditional_statement = (Conditional_statement)stack.pop();
 			myConditional_statement.setStatement_list(myStatementList);
+
+//
+			Statement myStatement = (Statement)stack.peek();/*.pop();*/
+			myStatement.setConditional_statement(myConditional_statement);
+			/*myStatementList = (StatementList)stack.peek();
+			myStatementList.add(myStatement);*/
+//
+			
 		}catch(Exception e) {
 			Statement myStatement = (Statement)stack.peek();
 			myStatement.setConditional_statement(myConditional_statement);

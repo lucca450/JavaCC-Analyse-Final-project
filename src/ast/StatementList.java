@@ -25,6 +25,11 @@ public class StatementList {
 	public void add(Statement s) {
 		statement_list.add(s);
 	}
-	
-	
+
+	public void accept(VisitorPrint visitor) {
+		for(Statement s : statement_list) {
+			s.accept(visitor);
+		}
+
+	}
 }

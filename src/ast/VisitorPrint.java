@@ -96,9 +96,18 @@ public class VisitorPrint {
        	
     }
     
+
+
+    
     public void visit(Conditional_statement conditional_statement) {
     	System.out.println("Expression conditionnelle");
     	conditional_statement.getExpression().accept(this);
+    	
+    	if(conditional_statement.getStatement_list() != null) {
+    	conditional_statement.getStatement_list().accept(this);
+    	}
+
+
     }
     
     public void visit(Assignment assignment) {
@@ -289,7 +298,32 @@ public class VisitorPrint {
 	}
 
 	public void visit(Value value) {
-		System.out.print( " " + value.getIdentificateur() + " " );
+		String strType = "";
+
+		try {
+			int a = Integer.parseInt(value.getIdentificateur());
+			strType = "INTEGER";
+		}
+		catch(Exception e1){
+			try {
+				double b = Double.parseDouble(value.getIdentificateur());
+				strType = "DOUBLE";
+			}
+			catch(Exception e2){
+					if(value.getIdentificateur().trim().equals("true") || value.getIdentificateur().trim().equals("false")){
+						strType = "BOOLEAN";
+					}else {
+						strType = "IDENTIFIER";
+					}
+			}
+		}
+
+		
+		
+		
+		value.getIdentificateur();
+		
+		System.out.print( " " + value.getIdentificateur() + " : " + strType + " " );
 		
 		
 	}

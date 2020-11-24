@@ -429,6 +429,14 @@ public class Grammaire implements GrammaireConstants {
                     StatementList myStatementList = (StatementList)stack.pop();
                         myConditional_statement = (Conditional_statement)stack.pop();
                         myConditional_statement.setStatement_list(myStatementList);
+
+//
+                        Statement myStatement = (Statement)stack.peek();/*.pop();*/
+                        myStatement.setConditional_statement(myConditional_statement);
+                        /*myStatementList = (StatementList)stack.peek();
+			myStatementList.add(myStatement);*/
+//
+
                 }catch(Exception e) {
                         Statement myStatement = (Statement)stack.peek();
                         myStatement.setConditional_statement(myConditional_statement);
@@ -940,6 +948,11 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
+  private boolean jj_3_1() {
+    if (jj_3R_16()) return true;
+    return false;
+  }
+
   private boolean jj_3R_17() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(42)) return true;
@@ -949,11 +962,6 @@ public class Grammaire implements GrammaireConstants {
   private boolean jj_3R_16() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(ASSIGN)) return true;
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_3R_16()) return true;
     return false;
   }
 
