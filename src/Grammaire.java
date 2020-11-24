@@ -380,10 +380,33 @@ public class Grammaire implements GrammaireConstants {
           stack.push(myConditional_statement);
     expression();
     jj_consume_token(44);
-                Expression      myExpression = (Expression)stack.pop();
+          Expression myExpression = new Expression();
+                          try {
 
-                myConditional_statement = (Conditional_statement)stack.peek();
+                            myExpression = (Expression)stack.peek();
+                            myExpression = (Expression)stack.pop();
+
+                            myConditional_statement = (Conditional_statement)stack.peek();
                 myConditional_statement.setExpression(myExpression);
+
+                          }catch(Exception e)
+                          {
+                                Term myTerm = (Term)stack.pop();
+                                myExpression = myTerm.getExpression();
+
+                                Expression myExpr2 = (Expression)stack.peek();
+                                Expr test = myExpression;
+                myExpr2.setExpr_droite(test);
+
+                          }
+
+                //Expression	myExpression = (Expression)stack.pop();
+/*
+lucca
+		myConditional_statement = (Conditional_statement)stack.peek();
+		myConditional_statement.setExpression(myExpression);
+*/
+
     jj_consume_token(45);
     label_6:
     while (true) {
@@ -450,6 +473,14 @@ public class Grammaire implements GrammaireConstants {
               stack.push(myExpression);
                 }
                 catch(Exception e){
+                                try { //lucca
+                                        Expression myExpression = (Expression)stack.peek();
+                                        /*Conditional_statement myConditional_statement = new Conditional_statement();
+ 	      			stack.push(myConditional_statement);*/
+                                        myExpression = new Expression();
+                                stack.push(myExpression);
+                                        }
+                                        catch(Exception e2){ }
 
                 }
 
@@ -593,9 +624,18 @@ public class Grammaire implements GrammaireConstants {
     case 42:
       jj_consume_token(42);
       expression();
-                          Expression myExpression = (Expression)stack.pop();
+                //ICI	  
+Expression myExpression = new Expression();
+                          try {
+                             myExpression = (Expression)stack.peek();
+                            myExpression = (Expression)stack.pop();
+                          }catch(Exception e) {
+                                myTerm = (Term)stack.pop();
+                                myExpression = myTerm.getExpression();
+                          }
 
-                          try
+
+                         try
                          {
                           myTerm = (Term)stack.peek();
                      }
@@ -953,15 +993,8 @@ public class Grammaire implements GrammaireConstants {
     return false;
   }
 
-  private boolean jj_3R_17() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(42)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_16() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(ASSIGN)) return true;
+  private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
     return false;
   }
 
@@ -971,8 +1004,15 @@ public class Grammaire implements GrammaireConstants {
     return false;
   }
 
-  private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
+  private boolean jj_3R_17() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(42)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_16() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 

@@ -368,12 +368,34 @@ void conditional_statement():
 	}
 	 expression()	")"
 	{
-		Expression	myExpression = (Expression)stack.pop();
 
+	  Expression myExpression = new Expression();
+			  try {
+			    
+			    myExpression = (Expression)stack.peek();
+			    myExpression = (Expression)stack.pop();
+
+			    myConditional_statement = (Conditional_statement)stack.peek();
+                myConditional_statement.setExpression(myExpression);
+ 
+			  }catch(Exception e)
+			  {			    
+				Term myTerm = (Term)stack.pop();
+				myExpression = myTerm.getExpression();
+
+				Expression myExpr2 = (Expression)stack.peek();
+				Expr test = myExpression;
+                myExpr2.setExpr_droite(test);
+				
+			  }
+
+		//Expression	myExpression = (Expression)stack.pop();
+/*
+lucca
 		myConditional_statement = (Conditional_statement)stack.peek();
 		myConditional_statement.setExpression(myExpression);
+*/
 
-	  
 
 	}
 	"{" (
@@ -423,7 +445,15 @@ void expression():
  	      stack.push(myExpression);
 		}
 		catch(Exception e){
-
+		  		try { //lucca
+		  			Expression myExpression = (Expression)stack.peek();
+		  			/*Conditional_statement myConditional_statement = new Conditional_statement();
+ 	      			stack.push(myConditional_statement);*/
+					myExpression = new Expression();
+ 	    			stack.push(myExpression);
+					}
+					catch(Exception e2){ }
+		
 		}
 
  	  }
@@ -612,9 +642,18 @@ void term():
 		 | "(" expression()
 		{
 
-			  Expression myExpression = (Expression)stack.pop();
+		//ICI	  
+Expression myExpression = new Expression();
+			  try {
+			     myExpression = (Expression)stack.peek();
+			    myExpression = (Expression)stack.pop();
+			  }catch(Exception e) {
+				myTerm = (Term)stack.pop();
+				myExpression = myTerm.getExpression();
+			  }
+			 
 
-			  try
+			 try
 		  	 {
 			  myTerm = (Term)stack.peek();
 		     }
