@@ -1,5 +1,6 @@
-void test (int a) {
-	int c = 0;
+void test (bool a) {
+	double c = 2.6;
 	if (a > 0 && b < 1) {
+
 	}
 }

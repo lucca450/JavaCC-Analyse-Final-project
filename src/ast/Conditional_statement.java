@@ -18,7 +18,7 @@ public class Conditional_statement extends Statement {
 		
 	}
 
-	public Expr getExpression() {
+	public Expression getExpression() {
 		return expression;
 	}
 
@@ -45,9 +45,7 @@ public class Conditional_statement extends Statement {
 	
 	public void accept(VisitorPrint visitor) {
 		visitor.visit(this);
-		
-		expression.accept(visitor);
-
+	
 		/*if( statement_list.getStatement_list().size() != 0) {
 	        for (Statement s : statement_list.getStatement_list()) {
 	            s.accept(visitor);

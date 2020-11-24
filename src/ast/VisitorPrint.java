@@ -58,7 +58,7 @@ public class VisitorPrint {
       
         for (Assignment a : variable_declaration.getAssignment_list().getAssignmentList()) 
         { 	 
-            System.out.print( variable_declaration.getType());
+            System.out.print( variable_declaration.getType() + " ");
         	 a.accept(this);
         } 
         
@@ -98,14 +98,15 @@ public class VisitorPrint {
     
     public void visit(Conditional_statement conditional_statement) {
     	System.out.println("Expression conditionnelle");
-
     	conditional_statement.getExpression().accept(this);
     }
     
     public void visit(Assignment assignment) {
     	
 
-    	System.out.print(assignment.getIdentifier() + assignment.getAssign());
+    	System.out.print(assignment.getIdentifier() + " " + assignment.getAssign());
+    	
+    	assignment.getExpr().accept(this);
     	
     	/*String returnString = "";
     	
@@ -122,7 +123,12 @@ public class VisitorPrint {
     
     public void visit(Expression expression) {   	
 
-
+    	expression.getLogical_connector().accept(this);
+    	//System.out.println(
+    	expression.getExpr_gauche().accept(this);
+    	//);
+    	
+    	expression.getExpr_droite().accept(this);
 	
     	/*
     	for(int i = 0; i < expression.getComparaison_expressionList().getComparaison_expressionList().size() ; i++) {
@@ -158,10 +164,16 @@ public class VisitorPrint {
     }
 */
     public void visit(Logical_connector logical_connector) {
-    	System.out.print(logical_connector.getConnector() + " ");	
+    	System.out.println("Logical connector: " + logical_connector.getConnector());	
     }
     
     public void visit(Comparaison_expression comparaison_expression) {
+    	
+    	System.out.print("Condition ");
+    	comparaison_expression.getComparaison_operator().accept(this);
+    	comparaison_expression.getExpr_gauche().accept(this);
+    	comparaison_expression.getExpr_droite().accept(this);
+    	System.out.print("\n");
     	/*
 
     	for(int i = 0; i < comparaison_expression.getArithmetic_expression_priority_lowList().size() ; i++) {
@@ -185,30 +197,30 @@ public class VisitorPrint {
     }
 
 	public void visit(Comparaison_operator comparaison_operator) {
-    	/*if(comparaison_operator.getComparaison_operator().toString() == ">") {		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_GRAND, " );	
+    	if(comparaison_operator.getComparaison_operator().toString() == ">") {		
+        	System.out.print("PLUS_GRAND," );	
     	}
     	
     	if(comparaison_operator.getComparaison_operator().toString() == "<") {  		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_PETIT , " );	
+        	System.out.print("PLUS_PETIT," );	
     	}
     		
     	if(comparaison_operator.getComparaison_operator().toString() == ">=") {  		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_GRAND_EGAL , " );	
+        	System.out.print("PLUS_GRAND_EGAL," );	
     	}
     	
     	if(comparaison_operator.getComparaison_operator().toString() == "<=") {  		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PLUS_PETIT_EGAL , ");	
+        	System.out.print("PLUS_PETIT_EGAL,");	
     	}
     	
     	if(comparaison_operator.getComparaison_operator().toString() == "==") {  		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition EGAL , " );	
+        	System.out.print("EGAL," );	
     	}
     	
     	if(comparaison_operator.getComparaison_operator().toString() == "<>") {  		
-        	System.out.println(spacesGenerator(nbrOfSpaces) +"Condition PAS_EGAL , " );	
-    	}*/
-		System.out.print(comparaison_operator.getComparaison_operator() + " ");
+        	System.out.print("PAS_EGAL," );	
+    	}
+		/*System.out.print(comparaison_operator.getComparaison_operator() + " ");*/
 	}
 
 	public void visit(Arithmetic_expression_priority_low arithmetic_expression_priority_low) {
@@ -265,7 +277,6 @@ public class VisitorPrint {
 	}
 
 	public void visit(Term term) {
-		
 
 		if(term.getExpression() != null) {
 			term.getExpression().accept(this);
@@ -278,7 +289,9 @@ public class VisitorPrint {
 	}
 
 	public void visit(Value value) {
-		System.out.print( value.getIdentificateur() + " " );
+		System.out.print( " " + value.getIdentificateur() + " " );
+		
+		
 	}
 
 	public void visit(Expr expr) {
