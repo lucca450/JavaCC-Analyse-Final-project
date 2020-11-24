@@ -374,20 +374,16 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void conditional_statement() throws ParseException {
-          Conditional_statement myConditional_statement = new Conditional_statement();
-          stack.push(myConditional_statement);
     jj_consume_token(IF);
     jj_consume_token(42);
+          Conditional_statement myConditional_statement = new Conditional_statement();
+          stack.push(myConditional_statement);
     expression();
     jj_consume_token(44);
                 Expression      myExpression = (Expression)stack.pop();
 
                 myConditional_statement = (Conditional_statement)stack.peek();
                 myConditional_statement.setExpression(myExpression);
-
-
-            StatementList myStatementList = new StatementList();
-            stack.push(myStatementList);
     jj_consume_token(45);
     label_6:
     while (true) {
@@ -402,6 +398,8 @@ public class Grammaire implements GrammaireConstants {
         jj_la1[13] = jj_gen;
         break label_6;
       }
+            StatementList myStatementList = new StatementList();
+            stack.push(myStatementList);
       statement();
     }
     if (jj_2_2(2)) {
@@ -427,16 +425,25 @@ public class Grammaire implements GrammaireConstants {
       ;
     }
     jj_consume_token(46);
-                        myStatementList = (StatementList)stack.pop();
+                try {
+                    StatementList myStatementList = (StatementList)stack.pop();
                         myConditional_statement = (Conditional_statement)stack.pop();
                         myConditional_statement.setStatement_list(myStatementList);
+                }catch(Exception e) {
                         Statement myStatement = (Statement)stack.peek();
                         myStatement.setConditional_statement(myConditional_statement);
+                }
   }
 
   final public void expression() throws ParseException {
-            Expression myExpression = new Expression();
-            stack.push(myExpression);
+                try {
+                  Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
+                  Expression myExpression = new Expression();
+              stack.push(myExpression);
+                }
+                catch(Exception e){
+
+                }
 
     comparaison_expression();
     label_8:
@@ -450,6 +457,7 @@ public class Grammaire implements GrammaireConstants {
         jj_la1[15] = jj_gen;
         break label_8;
       }
+
       logical_connector();
       comparaison_expression();
     }
@@ -481,7 +489,14 @@ public class Grammaire implements GrammaireConstants {
                 myExpr = (Expr)stack.pop();
                 myComparaison_expression = (Comparaison_expression)stack.pop();
                 myComparaison_expression.setExpr_droite(myExpr);
+
+
                 Expression myExpression = (Expression)stack.peek();
+
+            /*Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
+		myConditional_statement.setExpr((Expr)myComparaison_expression);*/
+
+
 
                 if(myExpression.getExpr_gauche() == null) {
                         myExpression.setExpr_gauche(myComparaison_expression);
@@ -808,13 +823,13 @@ public class Grammaire implements GrammaireConstants {
     identifier = jj_consume_token(IDENTIFIER);
     assign = jj_consume_token(ASSIGN);
     expression();
-      Expression myExpression = (Expression)stack.pop();
+      Expr myExpr = (Expr)stack.pop();
 
           myAssignment = (Assignment)stack.peek();
 
       myAssignment.setIdentifier(identifier.toString());
       myAssignment.setAssign(assign.toString());
-          myAssignment.setExpression(myExpression);
+          myAssignment.setExpr(myExpr);
   }
 
   final public void while_loop() throws ParseException {

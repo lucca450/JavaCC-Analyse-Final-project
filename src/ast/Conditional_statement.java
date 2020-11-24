@@ -9,6 +9,7 @@ public class Conditional_statement extends Statement {
 	private StatementList statement_list;
 	
 	public Conditional_statement(Expression expression, StatementList statement_list) {
+		super();
 		this.expression = expression;
 		this.statement_list = statement_list;
 	}
@@ -16,8 +17,8 @@ public class Conditional_statement extends Statement {
 	public Conditional_statement() {
 		
 	}
-	
-	public Expression getExpression() {
+
+	public Expr getExpression() {
 		return expression;
 	}
 
@@ -39,7 +40,7 @@ public class Conditional_statement extends Statement {
 
 	@Override
 	public String toString() {
-		return "Conditional_statement [expression=" + expression + ", statement_list=" + statement_list + "]";
+		return "Conditional_statement [expr=" + expression + ", statement_list=" + statement_list + "]";
 	}
 	
 	public void accept(VisitorPrint visitor) {
@@ -47,11 +48,11 @@ public class Conditional_statement extends Statement {
 		
 		expression.accept(visitor);
 
-		
-        for (Statement s : statement_list.getStatement_list()) {
-            s.accept(visitor);
-        }
-
+		/*if( statement_list.getStatement_list().size() != 0) {
+	        for (Statement s : statement_list.getStatement_list()) {
+	            s.accept(visitor);
+	        }
+		}*/
 	}
 	
 }

@@ -359,12 +359,14 @@ void conditional_statement():
 }
 {
 
+
+
+	< IF > "("
 	{
 	  Conditional_statement myConditional_statement = new Conditional_statement();
 	  stack.push(myConditional_statement);
 	}
-
-	< IF > "(" expression()	")"
+	 expression()	")"
 	{
 		Expression	myExpression = (Expression)stack.pop();
 
@@ -372,21 +374,33 @@ void conditional_statement():
 		myConditional_statement.setExpression(myExpression);
 
 	  
+
+	}
+	"{" (
+
+	  {
 	    StatementList myStatementList = new StatementList();
 	    stack.push(myStatementList);
-	}
-	"{" ( statement() )*
-	( LOOKAHEAD(2) "}" < ELSE > "{" ( statement() )* )? "}"
+	  }
+	     statement()
 
-	 {
+	     )*
+	( LOOKAHEAD(2) "}" < ELSE > "{" ( statement() )* )?
 
- 			myStatementList = (StatementList)stack.pop();
+	 "}"
+	 
+	  {
+		try {
+		    StatementList myStatementList = (StatementList)stack.pop();
 			myConditional_statement = (Conditional_statement)stack.pop();
 			myConditional_statement.setStatement_list(myStatementList);
+		}catch(Exception e) {
 			Statement myStatement = (Statement)stack.peek();
 			myStatement.setConditional_statement(myConditional_statement);
+		}
 
-	 }
+	  }
+
 }
 
 void expression():
@@ -394,8 +408,15 @@ void expression():
 }
 {
  	  {
- 	    Expression myExpression = new Expression();
- 	    stack.push(myExpression);
+		try {
+		  Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
+		  Expression myExpression = new Expression();
+ 	      stack.push(myExpression);
+		}
+		catch(Exception e){
+
+		}
+
  	  }
    	{
    	 /* Expression myExpression = new Expression();
@@ -412,7 +433,10 @@ void expression():
 	  
  	comparaison_expression()
  	(
-
+	  {
+ 	   /* Expression myExpression = new Expression();
+ 	    stack.push(myExpression);*/
+ 	  }
 	
  	  logical_connector() comparaison_expression())*
 
@@ -442,7 +466,14 @@ void comparaison_expression():
 		myExpr = (Expr)stack.pop();		
 	   	myComparaison_expression = (Comparaison_expression)stack.pop();
 	   	myComparaison_expression.setExpr_droite(myExpr);
+
+
 		Expression myExpression = (Expression)stack.peek();
+		
+	    /*Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
+		myConditional_statement.setExpr((Expr)myComparaison_expression);*/
+
+
 
 		if(myExpression.getExpr_gauche() == null) { 
 			myExpression.setExpr_gauche(myComparaison_expression);	
@@ -749,13 +780,13 @@ void assignment():
 	}
     identifier = < IDENTIFIER > assign = < ASSIGN > expression()
     {
-      Expression myExpression = (Expression)stack.pop();
+      Expr myExpr = (Expr)stack.pop();
 
 	  myAssignment = (Assignment)stack.peek();
       
       myAssignment.setIdentifier(identifier.toString());
       myAssignment.setAssign(assign.toString());
-	  myAssignment.setExpression(myExpression);
+	  myAssignment.setExpr(myExpr);
 	}
 }
 
