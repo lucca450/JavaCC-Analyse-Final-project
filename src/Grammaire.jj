@@ -175,7 +175,7 @@ void function() :
 	"}"
 
 	{
-	  myFunction.accept(new VisitorPrint(0));
+	  myFunction.accept(new VisitorPrint());
 	}
 	
 	(function())*
@@ -443,8 +443,13 @@ void comparaison_expression():
 	   	myComparaison_expression = (Comparaison_expression)stack.pop();
 	   	myComparaison_expression.setExpr_droite(myExpr);
 		Expression myExpression = (Expression)stack.peek();
-		myExpression.setExpr_gauche(myComparaison_expression);	
+
+		if(myExpression.getExpr_gauche() == null) { 
+			myExpression.setExpr_gauche(myComparaison_expression);	
+	 	}else if(myExpression.getExpr_droite() == null) { 
+			myExpression.setExpr_droite(myComparaison_expression);	
 	 	}
+		}
 
 	 )*
 
@@ -719,7 +724,7 @@ void logical_connector():
 	 {
 	   myLogical_connector = (Logical_connector)stack.pop();
 	   myLogical_connector.setConnector(t.toString());
-	   Expression myExpression = (Expr)stack.peek();
+	   Expression myExpression = (Expression)stack.peek();
 	   myExpression.setLogical_connector(myLogical_connector);	
 	 }
 }

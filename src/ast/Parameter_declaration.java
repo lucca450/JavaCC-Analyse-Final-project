@@ -33,8 +33,8 @@ public class Parameter_declaration extends ASTNode {
 		this.parameter_name = parameter_name;
 	}
 
-	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
-		visitor.visit(this, nbrOfSpaces);
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
 	}
 
 }

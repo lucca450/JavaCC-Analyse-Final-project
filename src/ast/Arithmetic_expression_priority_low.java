@@ -48,8 +48,8 @@ public class Arithmetic_expression_priority_low extends Expr{
 	}
 
 
-	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
-		visitor.visit(this,nbrOfSpaces);
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
 	}
 
 

@@ -24,8 +24,8 @@ public class Term extends Expr{
 	public void setExpression(Expression expression) {
 		this.expression = expression;
 	}
-	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
-		visitor.visit(this,nbrOfSpaces);
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
 	}
 	
 	

@@ -139,7 +139,7 @@ public class Grammaire implements GrammaireConstants {
     jj_consume_token(45);
     function_body();
     jj_consume_token(46);
-          myFunction.accept(new VisitorPrint(0));
+          myFunction.accept(new VisitorPrint());
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -482,7 +482,12 @@ public class Grammaire implements GrammaireConstants {
                 myComparaison_expression = (Comparaison_expression)stack.pop();
                 myComparaison_expression.setExpr_droite(myExpr);
                 Expression myExpression = (Expression)stack.peek();
-                myExpression.setExpr_gauche(myComparaison_expression);
+
+                if(myExpression.getExpr_gauche() == null) {
+                        myExpression.setExpr_gauche(myComparaison_expression);
+                }else if(myExpression.getExpr_droite() == null) {
+                        myExpression.setExpr_droite(myComparaison_expression);
+                }
     }
   }
 
@@ -752,7 +757,7 @@ public class Grammaire implements GrammaireConstants {
     }
            myLogical_connector = (Logical_connector)stack.pop();
            myLogical_connector.setConnector(t.toString());
-           Expression myExpression = (Expr)stack.peek();
+           Expression myExpression = (Expression)stack.peek();
            myExpression.setLogical_connector(myLogical_connector);
   }
 
@@ -920,8 +925,15 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
+  private boolean jj_3R_17() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(42)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_16() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 
@@ -936,15 +948,8 @@ public class Grammaire implements GrammaireConstants {
     return false;
   }
 
-  private boolean jj_3R_17() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(42)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_16() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(ASSIGN)) return true;
+  private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
     return false;
   }
 

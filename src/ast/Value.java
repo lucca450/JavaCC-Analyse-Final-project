@@ -25,8 +25,8 @@ public class Value extends ASTNode {
 		return identificateur.toString() ;
 	}
 
-	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
-		visitor.visit(this,nbrOfSpaces);
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
 	}
 
 

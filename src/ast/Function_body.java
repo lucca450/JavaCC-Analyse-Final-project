@@ -55,15 +55,15 @@ public class Function_body extends ASTNode{
 				+ statement_list + ", return_statement=" + return_statement + "]";
 	}
 	
-	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
-		visitor.visit(this,nbrOfSpaces);
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
 
         for (Variable_declaration vd : variable_declaration_list.getVariable_declarationList()) {
-            vd.accept(visitor, nbrOfSpaces+1);
+            vd.accept(visitor);
         }
         
         for (Statement sl : statement_list.getStatement_list()) {
-            sl.accept(visitor,nbrOfSpaces);
+            sl.accept(visitor);
         }
 
 	}

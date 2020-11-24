@@ -81,10 +81,10 @@ public class Function extends ASTNode{
 		visitor.visit(this);
 		
         for (Parameter_declaration pd : parameter_declaration_list) {
-            pd.accept(visitor, 1);
+            pd.accept(visitor);
         }
 		
-        function_body.accept(visitor,1);
+        function_body.accept(visitor);
 	}
 	
 }

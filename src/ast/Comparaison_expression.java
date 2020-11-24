@@ -60,9 +60,11 @@ public class Comparaison_expression extends Expr {
 
 
 
-	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
-	
-		visitor.visit(this,nbrOfSpaces);
+
+
+
+	public void accept(VisitorPrint visitor) {	
+		visitor.visit(this);
 	}
 	
 }

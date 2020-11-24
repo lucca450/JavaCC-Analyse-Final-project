@@ -39,10 +39,10 @@ public class Assignment extends ASTNode {
 		this.expression = expression;
 	}
 	
-	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
-		visitor.visit(this,nbrOfSpaces);
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
 		
-		expression.accept(visitor,nbrOfSpaces);
+		expression.accept(visitor);
 	}
 
 }

@@ -25,8 +25,8 @@ public class Comparaison_operator extends Expr {
 		return comparaison_operator.toString();
 	}
 
-	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
-		visitor.visit(this,nbrOfSpaces);
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
 	}
 	
 	

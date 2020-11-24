@@ -42,14 +42,14 @@ public class Conditional_statement extends Statement {
 		return "Conditional_statement [expression=" + expression + ", statement_list=" + statement_list + "]";
 	}
 	
-	public void accept(VisitorPrint visitor, int nbrOfSpaces) {
-		visitor.visit(this,nbrOfSpaces);
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
 		
-		expression.accept(visitor, nbrOfSpaces);
+		expression.accept(visitor);
 
 		
         for (Statement s : statement_list.getStatement_list()) {
-            s.accept(visitor,nbrOfSpaces);
+            s.accept(visitor);
         }
 
 	}

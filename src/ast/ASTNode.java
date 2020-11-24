@@ -21,8 +21,5 @@ public class ASTNode{
 		return ID;
 	}
 	
-	@Override
-	public String toString() {
-		return "ASTNode [ID=" + ID + "]";
-	}
+
 }
