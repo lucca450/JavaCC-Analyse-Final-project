@@ -394,9 +394,9 @@ public class Grammaire implements GrammaireConstants {
                                 Term myTerm = (Term)stack.pop();
                                 myExpression = myTerm.getExpression();
 
-                                Expression myExpr2 = (Expression)stack.peek();
+                                Expression myExpression2 = (Expression)stack.peek();
                                 Expr test = myExpression;
-                myExpr2.setExpr_droite(test);
+                myExpression2.setExpr_droite(test);
 
                           }
 
@@ -449,20 +449,57 @@ lucca
     }
     jj_consume_token(46);
                 try {
-                    StatementList myStatementList = (StatementList)stack.pop();
+                    StatementList myStatementList = (StatementList)stack.peek();
+                    try {
+                        myStatementList = (StatementList)stack.pop();
+                        myExpression = (Expression)stack.peek();
+                        myExpression = (Expression)stack.pop();
                         myConditional_statement = (Conditional_statement)stack.pop();
                         myConditional_statement.setStatement_list(myStatementList);
-
-//
-                        Statement myStatement = (Statement)stack.peek();/*.pop();*/
-                        myStatement.setConditional_statement(myConditional_statement);
-                        /*myStatementList = (StatementList)stack.peek();
-			myStatementList.add(myStatement);*/
-//
-
-                }catch(Exception e) {
                         Statement myStatement = (Statement)stack.peek();
-                        myStatement.setConditional_statement(myConditional_statement);
+                                myStatement.setConditional_statement(myConditional_statement);
+
+                    }catch(Exception e0) {
+                            myStatementList = (StatementList)stack.pop();
+                                myConditional_statement = (Conditional_statement)stack.pop();
+                                myConditional_statement.setStatement_list(myStatementList);
+
+//
+                                Statement myStatement = (Statement)stack.peek();/*.pop();*/
+                                myStatement.setConditional_statement(myConditional_statement);
+                                /*myStatementList = (StatementList)stack.peek();
+				myStatementList.add(myStatement);*/
+//
+                    }
+
+
+
+                }catch(Exception e)
+                {
+                    try
+                    {
+                                myExpression = (Expression)stack.peek();
+                                myExpression = (Expression)stack.pop();
+                                myConditional_statement = (Conditional_statement)stack.pop();
+                                Statement myStatement = (Statement)stack.peek();
+                                myConditional_statement.setExpression(myExpression);
+                                myStatement.setConditional_statement(myConditional_statement);
+                    }
+                    catch(Exception e2)
+                    {
+                      try
+                          {
+                                 myConditional_statement = (Conditional_statement)stack.peek();
+                                 myConditional_statement = (Conditional_statement)stack.pop();
+                                 Statement myStatement = (Statement)stack.peek();
+                                 myStatement.setConditional_statement(myConditional_statement);
+                           }
+                            catch(Exception e3)
+                           {
+                                 Statement myStatement = (Statement)stack.peek();
+                                 myStatement.setConditional_statement(myConditional_statement);
+                           }
+                        }
                 }
   }
 
@@ -988,25 +1025,25 @@ Expression myExpression = new Expression();
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3_1() {
-    if (jj_3R_16()) return true;
-    return false;
-  }
-
   private boolean jj_3_3() {
     if (jj_3R_17()) return true;
     return false;
   }
 
-  private boolean jj_3_2() {
-    if (jj_scan_token(46)) return true;
-    if (jj_scan_token(ELSE)) return true;
+  private boolean jj_3_1() {
+    if (jj_3R_16()) return true;
     return false;
   }
 
   private boolean jj_3R_17() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(42)) return true;
+    return false;
+  }
+
+  private boolean jj_3_2() {
+    if (jj_scan_token(46)) return true;
+    if (jj_scan_token(ELSE)) return true;
     return false;
   }
 

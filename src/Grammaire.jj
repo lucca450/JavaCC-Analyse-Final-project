@@ -383,9 +383,9 @@ void conditional_statement():
 				Term myTerm = (Term)stack.pop();
 				myExpression = myTerm.getExpression();
 
-				Expression myExpr2 = (Expression)stack.peek();
+				Expression myExpression2 = (Expression)stack.peek();
 				Expr test = myExpression;
-                myExpr2.setExpr_droite(test);
+                myExpression2.setExpr_droite(test);
 				
 			  }
 
@@ -414,20 +414,65 @@ lucca
 	 
 	  {
 		try {
-		    StatementList myStatementList = (StatementList)stack.pop();
-			myConditional_statement = (Conditional_statement)stack.pop();
-			myConditional_statement.setStatement_list(myStatementList);
+
+		    StatementList myStatementList = (StatementList)stack.peek();
+		    try {
+
+
+		      
+		         // rendu ici. je doit peek, si OK je pop le statementList ensuite peek pour verifier si cest une expression..,
+		         //mais si je pop ici ca plante car il ne pop pas un statementlist parfois, mais bien un Conditionnal statement.
+
+		         
+		        //myStatementList = (StatementList)stack.pop();
+		      	myExpression = (Expression)stack.peek();
+		      	myExpression = (Expression)stack.pop();
+		      	myConditional_statement = (Conditional_statement)stack.pop();
+		      	myConditional_statement.setStatement_list(myStatementList);
+		      	Statement myStatement = (Statement)stack.peek();
+				myStatement.setConditional_statement(myConditional_statement);
+		      	
+		    }catch(Exception e0) {
+		   	    myStatementList = (StatementList)stack.pop();
+				myConditional_statement = (Conditional_statement)stack.pop();
+				myConditional_statement.setStatement_list(myStatementList);
 
 //
-			Statement myStatement = (Statement)stack.peek();/*.pop();*/
-			myStatement.setConditional_statement(myConditional_statement);
-			/*myStatementList = (StatementList)stack.peek();
-			myStatementList.add(myStatement);*/
+				Statement myStatement = (Statement)stack.peek();/*.pop();*/
+				myStatement.setConditional_statement(myConditional_statement);
+				/*myStatementList = (StatementList)stack.peek();
+				myStatementList.add(myStatement);*/
 //
+		    }
+		    
+
 			
-		}catch(Exception e) {
-			Statement myStatement = (Statement)stack.peek();
-			myStatement.setConditional_statement(myConditional_statement);
+		}catch(Exception e)
+		{
+		    try
+		    {
+				myExpression = (Expression)stack.peek();
+				myExpression = (Expression)stack.pop();
+				myConditional_statement = (Conditional_statement)stack.pop();
+				Statement myStatement = (Statement)stack.peek();
+				myConditional_statement.setExpression(myExpression);
+				myStatement.setConditional_statement(myConditional_statement);
+		    }
+		    catch(Exception e2)
+		    {
+		      try
+		  	  {
+				 myConditional_statement = (Conditional_statement)stack.peek();
+				 myConditional_statement = (Conditional_statement)stack.pop();
+				 Statement myStatement = (Statement)stack.peek();
+				 myStatement.setConditional_statement(myConditional_statement);
+		 	   }
+			    catch(Exception e3)
+		 	   { 
+				 Statement myStatement = (Statement)stack.peek();
+				 myStatement.setConditional_statement(myConditional_statement);
+			   }
+			}
 		}
 
 	  }

@@ -101,7 +101,10 @@ public class VisitorPrint {
     
     public void visit(Conditional_statement conditional_statement) {
     	System.out.println("Expression conditionnelle");
-    	conditional_statement.getExpression().accept(this);
+
+    		conditional_statement.getExpression().accept(this);
+
+    	
     	
     	if(conditional_statement.getStatement_list() != null) {
     	conditional_statement.getStatement_list().accept(this);
@@ -132,12 +135,18 @@ public class VisitorPrint {
     
     public void visit(Expression expression) {   	
 
-    	expression.getLogical_connector().accept(this);
+    	if(expression.getLogical_connector() != null) {
+        	expression.getLogical_connector().accept(this);
+    	}
+
     	//System.out.println(
     	expression.getExpr_gauche().accept(this);
     	//);
     	
-    	expression.getExpr_droite().accept(this);
+    	if(expression.getExpr_droite() != null) {
+    		expression.getExpr_droite().accept(this);
+    	}
+    	
 	
     	/*
     	for(int i = 0; i < expression.getComparaison_expressionList().getComparaison_expressionList().size() ; i++) {
