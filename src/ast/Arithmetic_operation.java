@@ -1,6 +1,6 @@
 package ast;
 
-public class Arithmetic_operation extends Expr{
+public class Arithmetic_operation{
 	private String operation;
 
 	public Arithmetic_operation(String operation) {

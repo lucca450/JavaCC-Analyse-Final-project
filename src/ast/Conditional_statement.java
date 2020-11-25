@@ -6,12 +6,14 @@ import java.util.List;
 public class Conditional_statement extends Statement {
 	
 	private Expression expression;
-	private StatementList statement_list;
+	private StatementList ifBody;
+	private StatementList elseBody;
 	
-	public Conditional_statement(Expression expression, StatementList statement_list) {
+	public Conditional_statement(Expression expression, StatementList ifB, StatementList elseB) {
 		super();
 		this.expression = expression;
-		this.statement_list = statement_list;
+		this.ifBody = ifB;
+		this.elseBody = elseB;
 	}
 
 	public Conditional_statement() {
@@ -26,21 +28,24 @@ public class Conditional_statement extends Statement {
 		this.expression = expression;
 	}
 
-	public StatementList getStatement_list() {
-		return statement_list;
+	public StatementList getIfBody() {
+		return ifBody;
 	}
 
-	public void setStatement_list(StatementList statement_list) {
-		this.statement_list = statement_list;
+	public void setIfBody(StatementList ifBody) {
+		this.ifBody = ifBody;
+	}
+
+	public StatementList getElseBody() {
+		return elseBody;
+	}
+
+	public void setElseBody(StatementList elseBody) {
+		this.elseBody = elseBody;
 	}
 
 	public void ShowMessage() {
 		System.out.println("Expression conditionnelle"); 
-	}
-
-	@Override
-	public String toString() {
-		return "Conditional_statement [expr=" + expression + ", statement_list=" + statement_list + "]";
 	}
 	
 	public void accept(VisitorPrint visitor) {

@@ -1,57 +1,43 @@
 package ast;
 
-import java.util.ArrayList;
-import java.util.List;
+public abstract class Expression extends ASTNode{
 
-public class Expression extends Expr {
+	protected Expression gauche;
+	protected Expression droite;
 	
-	private Expr expr_gauche;
-	private Logical_connector logical_connector;
-	private Expr expr_droite;
-
-
 	public Expression() {
-		
+
 	}
+
+	public Expression(Expression expr_gauche, Expression expr_droite) {
+		gauche = expr_gauche;
+		droite = expr_droite;
+	}
+
+	public abstract void accept(VisitorPrint visitor);
+
+
+	public Expression getGauche() {
+		return gauche;
+	}
+
+
+	public void setGauche(Expression gauche) {
+		this.gauche = gauche;
+	}
+
+
+	public Expression getDroite() {
+		return droite;
+	}
+
+
+	public void setDroite(Expression droite) {
+		this.droite = droite;
+	}
+
 	
-	public Expression(Expr expr_gauche, Logical_connector logical_connector, Expr expr_droite) {
-		super();
-		this.expr_gauche = expr_gauche;
-		this.logical_connector = logical_connector;
-		this.expr_droite = expr_droite;
-	}
-
-
-	public Expr getExpr_gauche() {
-		return expr_gauche;
-	}
-
-	public void setExpr_gauche(Expr expr_gauche) {
-		this.expr_gauche = expr_gauche;
-	}
-
-	public Expr getExpr_droite() {
-		return expr_droite;
-	}
-
-	public void setExpr_droite(Expr expr_droite) {
-		this.expr_droite = expr_droite;
-	}
-
-	public Logical_connector getLogical_connector() {
-		return logical_connector;
-	}
-
-	public void setLogical_connector(Logical_connector logical_connector) {
-		this.logical_connector = logical_connector;
-	}
-
-
-
-
-
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
-	}
+	
+	
 	
 }

@@ -1,10 +1,10 @@
 package ast;
 
-public class Term extends Expr{
+public class Term extends Expression{
 	private Value value;
-	private Expression expression;
+	private LogExpression expression;
 	
-	public Term(Value value, Expression expression) {
+	public Term(Value value, LogExpression expression) {
 		super();
 		this.value = value;
 		this.expression = expression;
@@ -18,10 +18,10 @@ public class Term extends Expr{
 	public void setValue(Value value) {
 		this.value = value;
 	}
-	public Expression getExpression() {
+	public LogExpression getExpression() {
 		return expression;
 	}
-	public void setExpression(Expression expression) {
+	public void setExpression(LogExpression expression) {
 		this.expression = expression;
 	}
 	public void accept(VisitorPrint visitor) {

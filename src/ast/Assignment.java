@@ -4,9 +4,9 @@ public class Assignment extends ASTNode {
 	private String identifier;
 	private String assign;
 	//private Expression expression;
-	private Expr expr;
+	private Expression expr;
 	
-	public Assignment(String identifier, String assign, Expr expr/*Expression expression*/) {
+	public Assignment(String identifier, String assign, Expression expr/*Expression expression*/) {
 		super();
 		this.identifier = identifier;
 		this.assign = assign;
@@ -42,11 +42,11 @@ public class Assignment extends ASTNode {
 		this.expression = expression;
 	}*/
 	
-	public Expr getExpr() {
+	public Expression getExpr() {
 		return expr;
 	}
 
-	public void setExpr(Expr expr) {
+	public void setExpr(Expression expr) {
 		this.expr = expr;
 	}
 	

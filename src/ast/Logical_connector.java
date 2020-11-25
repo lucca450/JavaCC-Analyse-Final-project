@@ -1,6 +1,6 @@
 package ast;
 
-public class Logical_connector extends Expr {
+public class Logical_connector {
 	private String connector;
 
 	public Logical_connector(String connector) {

@@ -3,7 +3,7 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Unary_expression  extends Expr{
+public class Unary_expression  extends Expression{
 
 	private Unary_operator unary_operator;
 	private Term term;

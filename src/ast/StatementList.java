@@ -3,7 +3,7 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatementList {
+public class StatementList extends ASTNode{
 	List<Statement> statement_list = new ArrayList<Statement>();
 
 	public StatementList(List<Statement> statement_list) {

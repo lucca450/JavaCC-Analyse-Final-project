@@ -1,6 +1,6 @@
 package ast;
 
-public class Arithmetic_operation_priority_low extends Expr{
+public class Arithmetic_operation_priority_low{
 	private String operation;
 
 	public Arithmetic_operation_priority_low(String operation) {

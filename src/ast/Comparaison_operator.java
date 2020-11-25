@@ -1,6 +1,6 @@
 package ast;
 
-public class Comparaison_operator extends Expr {
+public class Comparaison_operator{
 	private String comparaison_operator;
 
 	public Comparaison_operator(String comparaison_operator) {

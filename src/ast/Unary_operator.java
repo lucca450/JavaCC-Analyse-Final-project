@@ -1,6 +1,6 @@
 package ast;
 
-public class Unary_operator extends Expr{
+public class Unary_operator{
 	private String operator;
 
 	public Unary_operator() {

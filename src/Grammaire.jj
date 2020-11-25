@@ -77,11 +77,15 @@ public class Grammaire{
 		//System.out.println(stack.peek());
 
 
+
+
+
 		Function myFunction = (Function)stack.peek();
 		myArray = DataGenerator(myFunction);
 
 	
-			
+
+		
 
 		
 
@@ -167,15 +171,18 @@ void function() :
 	)
 	ident = < IDENTIFIER >
 	{
-	  stack.push(new Function(f_type.toString() , ident.toString()));
-	  Function myFunction = (Function)stack.peek();
+	  Function func = new Function(f_type.toString() , ident.toString());
+	  stack.push(func);
 	}
 	"(" (parameter_declaration() ("," parameter_declaration())*)? ")" "{"
 		function_body()
 	"}"
 
 	{
-	  myFunction.accept(new VisitorPrint());
+	  Function_body funcB = (Function_body)stack.pop();
+	  func.setFunction_body(funcB);
+	  
+	  func.accept(new VisitorPrint());
 	}
 	
 	(function())*
@@ -191,22 +198,19 @@ void parameter_declaration():
 
 	{
 	  Parameter_declaration myParameter_declaration = new Parameter_declaration();
-	  stack.push(myParameter_declaration);
 	}
   
 	type = type() ident = < IDENTIFIER >
 	
 	{
-		myParameter_declaration = (Parameter_declaration)stack.pop();
 		myParameter_declaration.setParameter_name(ident.toString());
 		myParameter_declaration.setType(type.toString());
-			
-		Function myFunction = (Function)stack.peek();
 
-		List<Parameter_declaration> parameter_declaration_list = myFunction.getParameter_declaration_list();
+		Function func = (Function)stack.peek();
+		List<Parameter_declaration> parameter_declaration_list = func.getParameter_declaration_list();
 		parameter_declaration_list.add(myParameter_declaration);
 		
-		myFunction.setParameter_declaration_list(parameter_declaration_list);
+		func.setParameter_declaration_list(parameter_declaration_list);
 	}
 }
 
@@ -215,37 +219,41 @@ void function_body() :
 }
 {
 	{
-		    Function_body myFunction_body = new Function_body();
-		  	stack.push(myFunction_body);
-	
-		  	VariableDeclarationList myVariableDeclarationList = new VariableDeclarationList();
-		  	stack.push(myVariableDeclarationList);	}
-	
-    ( variable_declaration() ";")*
-	{
-	  
-		    myVariableDeclarationList = (VariableDeclarationList)stack.pop();
-		    myFunction_body = (Function_body)stack.peek();
-		    myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
-		
-		   	StatementList myStatementList = new StatementList();
-			stack.push(myStatementList);
-	}
-  	( statement() )*
-  	{
-		    myStatementList = (StatementList)stack.pop();
-			myFunction_body = (Function_body)stack.peek();
-			myFunction_body.setStatement_list(myStatementList);
-	}
-	( return_statement() )?
+	    Function_body myFunction_body = new Function_body();
 
+	  	VariableDeclarationList myVariableDeclarationList = new VariableDeclarationList();	}
 	
+    ( variable_declaration() ";"
+	{
+		Variable_declaration varD = (Variable_declaration)stack.pop();
+		myVariableDeclarationList.add(varD);
+	}
+    )*
+	{
+	    myVariableDeclarationList = (VariableDeclarationList)stack.pop();
+	    myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
 	
-		{
-			myFunction_body = (Function_body)stack.pop();
-			Function myFunction = (Function)stack.peek();
-			myFunction.setFunction_body(myFunction_body);
-		}}
+	   	StatementList myStatementList = new StatementList();
+	}
+  	( statement()
+	{
+		Statement statement = (Statement)stack.pop();
+	  	myStatementList.add(statement);
+	}
+  	)*
+  	{
+		myFunction_body.setStatement_list(myStatementList);
+	}
+	( return_statement()
+	{
+	  	Return_statement rStatement = (Return_statement)stack.pop();
+	  	myFunction_body.setReturn_statement(rStatement);
+	}
+	)?
+
+	{
+		stack.push(myFunction_body);
+	}}
 void statement() :
 {		
 }
@@ -269,7 +277,6 @@ void statement() :
 		| for_loop()
 	)
 
-
 	{
 		myStatement = (Statement)stack.pop();
 		StatementList myStatementList = (StatementList)stack.peek();
@@ -285,34 +292,32 @@ void variable_declaration():
 {
   	{
 		Variable_declaration myVariable_declaration = new Variable_declaration();
-		stack.push(myVariable_declaration);
 
 		AssignmentList myAssignmentList = new AssignmentList();
 		stack.push(myAssignmentList);
 	}
 	t = type() assignment()
-		{
+	{
 		Assignment myAssignment = (Assignment)stack.pop();
 		myAssignmentList = (AssignmentList)stack.peek();
 	  	myAssignmentList.add(myAssignment); 
-		}
-	( 
-		{
-		myAssignment = (Assignment)stack.pop();
+	}
+	("," assignment()
+	{
+	  	myAssignment = (Assignment)stack.pop();
 		myAssignmentList = (AssignmentList)stack.peek();
 	  	myAssignmentList.add(myAssignment); 
-		}
-
-	  	"," assignment())*
+	}
+	)*
 	{
 		myAssignmentList = (AssignmentList)stack.pop();
 		
-		myVariable_declaration = (Variable_declaration)stack.pop();
 		myVariable_declaration.setAssignment_list(myAssignmentList);
 		myVariable_declaration.setType(t.toString());
 		
 		VariableDeclarationList myVariableDeclarationList = (VariableDeclarationList)stack.peek();
 		myVariableDeclarationList.add(myVariable_declaration);
+		stack.push(myVariable_declaration);
 	}
 }
 
@@ -358,226 +363,128 @@ void conditional_statement():
 {
 }
 {
-
-
-
 	< IF > "("
 	{
 	  Conditional_statement myConditional_statement = new Conditional_statement();
-	  stack.push(myConditional_statement);
 	}
 	 expression()	")"
 	{
-
-	  Expression myExpression = new Expression();
-			  try {
-			    
-			    myExpression = (Expression)stack.peek();
-			    myExpression = (Expression)stack.pop();
-
-			    myConditional_statement = (Conditional_statement)stack.peek();
-                myConditional_statement.setExpression(myExpression);
- 
-			  }catch(Exception e)
-			  {			    
-				Term myTerm = (Term)stack.pop();
-				myExpression = myTerm.getExpression();
-
-				Expression myExpression2 = (Expression)stack.peek();
-				Expr test = myExpression;
-                myExpression2.setExpr_droite(test);
-				
-			  }
-
-		//Expression	myExpression = (Expression)stack.pop();
-/*
-lucca
-		myConditional_statement = (Conditional_statement)stack.peek();
-		myConditional_statement.setExpression(myExpression);
-*/
-
-
+		Expression exp = (Expression)stack.pop();
+		myConditional_statement.setExpression(exp);  
 	}
 	"{" (
-
-	  {
-	    StatementList myStatementList = new StatementList();
-	    stack.push(myStatementList);
-	  }
-	  
 	     statement()
 
 	     )*
 	( LOOKAHEAD(2) "}" < ELSE > "{" ( statement() )* )?
 
 	 "}"
-	 
-	  {
-		try {
 
-		    StatementList myStatementList = (StatementList)stack.peek();
-		    try {
-
-
-		      
-		         // rendu ici. je doit peek, si OK je pop le statementList ensuite peek pour verifier si cest une expression..,
-		         //mais si je pop ici ca plante car il ne pop pas un statementlist parfois, mais bien un Conditionnal statement.
-
-		         
-		        //myStatementList = (StatementList)stack.pop();
-		      	myExpression = (Expression)stack.peek();
-		      	myExpression = (Expression)stack.pop();
-		      	myConditional_statement = (Conditional_statement)stack.pop();
-		      	myConditional_statement.setStatement_list(myStatementList);
-		      	Statement myStatement = (Statement)stack.peek();
-				myStatement.setConditional_statement(myConditional_statement);
-		      	
-		    }catch(Exception e0) {
-		   	    myStatementList = (StatementList)stack.pop();
-				myConditional_statement = (Conditional_statement)stack.pop();
-				myConditional_statement.setStatement_list(myStatementList);
-
-//
-				Statement myStatement = (Statement)stack.peek();/*.pop();*/
-				myStatement.setConditional_statement(myConditional_statement);
-				/*myStatementList = (StatementList)stack.peek();
-				myStatementList.add(myStatement);*/
-//
-		    }
-		    
-
-			
-		}catch(Exception e)
+	{
+		
+		stack.push(myConditional_statement);
+	  	int i = 0;
+		/*node = (ASTNode)stack.peek();
+		Expression myExpression;
+		if(node instanceof StatementList)
 		{
-		    try
-		    {
-				myExpression = (Expression)stack.peek();
-				myExpression = (Expression)stack.pop();
-				myConditional_statement = (Conditional_statement)stack.pop();
-				Statement myStatement = (Statement)stack.peek();
-				myConditional_statement.setExpression(myExpression);
+		  	StatementList myStateList = (StatementList)stack.pop();
+		
+		  	node = (ASTNode)stack.peek();
+		  	if(node instanceof Expression)
+		  	{
+		  	  	myExpression = (Expression)stack.pop();
+		  	  	myConditional_statement = (Conditional_statement)stack.pop();
+		  	  	myConditional_statement.setStatement_list(myStateList);
+		  	  	Statement myStatement = (Statement)stack.peek();
 				myStatement.setConditional_statement(myConditional_statement);
-		    }
-		    catch(Exception e2)
-		    {
-		      try
-		  	  {
-				 myConditional_statement = (Conditional_statement)stack.peek();
-				 myConditional_statement = (Conditional_statement)stack.pop();
-				 Statement myStatement = (Statement)stack.peek();
-				 myStatement.setConditional_statement(myConditional_statement);
-		 	   }
-			    catch(Exception e3)
-		 	   { 
-				 Statement myStatement = (Statement)stack.peek();
-				 myStatement.setConditional_statement(myConditional_statement);
-			   }
-			}
-		}
-
-	  }
+		  	}else
+		  	{
+		  	  	myConditional_statement = (Conditional_statement)stack.pop();
+				myConditional_statement.setStatement_list(myStateList);
+		
+				Statement myStatement = (Statement)stack.peek();
+				myStatement.setConditional_statement(myConditional_statement);
+		  	}
+		}else if(node instanceof Expression)
+		{
+		  	myExpression = (Expression)stack.pop();
+		  	myConditional_statement = (Conditional_statement)stack.pop();
+			Statement myStatement = (Statement)stack.peek();
+			myConditional_statement.setExpression(myExpression);
+			myStatement.setConditional_statement(myConditional_statement);
+		  	
+		}else if(node instanceof Conditional_statement)
+		{
+			myConditional_statement = (Conditional_statement)stack.pop();
+			Statement myStatement = (Statement)stack.peek();
+			myStatement.setConditional_statement(myConditional_statement);
+		}else if(node instanceof Statement)
+		{
+		  	Statement myStatement = (Statement)stack.peek();
+		    myStatement.setConditional_statement(myConditional_statement);
+		}*/
+	}
 
 }
 
 void expression():
 {
+  	LogExpression lExp = new LogExpression();
+  	Expression exp;
 }
 {
- 	  {
-		try {
-		  Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
-		  Expression myExpression = new Expression();
- 	      stack.push(myExpression);
-		}
-		catch(Exception e){
-		  		try { //lucca
-		  			Expression myExpression = (Expression)stack.peek();
-		  			/*Conditional_statement myConditional_statement = new Conditional_statement();
- 	      			stack.push(myConditional_statement);*/
-					myExpression = new Expression();
- 	    			stack.push(myExpression);
-					}
-					catch(Exception e2){ }
-		
-		}
-
- 	  }
-   	{
-   	 /* Expression myExpression = new Expression();
-
-
-	  Comparaison_expression myComparaison_expression = new Comparaison_expression();
-	  Logical_connector myLogical_connector = new Logical_connector();
-
-	  myExpression.setComparaison_expression(myComparaison_expression);
-	  myExpression.setLogical_connector(myLogical_connectorList);
-	  
-	  stack.push(myExpression);*/
-	}
-	  
- 	comparaison_expression()
+ 	comparaison_expression() // A > B
  	(
-	  {
- 	   /* Expression myExpression = new Expression();
- 	    stack.push(myExpression);*/
- 	  }
-	
- 	  logical_connector() comparaison_expression())*
+		{
+	 	   exp = (Expression)stack.pop();
+	 	   lExp.setGauche(exp);
+	 	}
+		
+	 	logical_connector()
+	 	{
+			Logical_connector lCon = (Logical_connector)stack.pop();
+			lExp.setLogical_connector(lCon);	
+	 	}
+	 	
+	 	comparaison_expression()
+		{
+	  		exp = (Expression)stack.pop();
+	 	  	lExp.setDroite(exp);
+	 	  	stack.push(lExp);
+		}
 
-	
+ 	 )* // (a > b) || (b > a)
 }
 
 void comparaison_expression():
 {
+  	Comparaison_expression myComparaison_expression = new Comparaison_expression();
 }
 {
-  	/* {
-  		Comparaison_expression myComparaison_expression = new Comparaison_expression();
-		stack.push(myComparaison_expression);
-	 }*/
-	
-	 arithmetic_expression_priority_low()
+	 arithmetic_expression_priority_low() // a ou a+b ou a-b ou a*b ou a/b
 	 (
-	  	 {
-	  	    Expr myExpr = (Expr)stack.pop();
-	  		Comparaison_expression myComparaison_expression = new Comparaison_expression();
-	  		myComparaison_expression.setExpr_gauche(myExpr);
-			stack.push(myComparaison_expression);
-		 }
-	   comparaison_operator() arithmetic_expression_priority_low()
-
-		{
-		myExpr = (Expr)stack.pop();		
-	   	myComparaison_expression = (Comparaison_expression)stack.pop();
-	   	myComparaison_expression.setExpr_droite(myExpr);
-
-
-		Expression myExpression = (Expression)stack.peek();
-		
-	    /*Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
-		myConditional_statement.setExpr((Expr)myComparaison_expression);*/
-
-
-
-		if(myExpression.getExpr_gauche() == null) { 
-			myExpression.setExpr_gauche(myComparaison_expression);	
-	 	}else if(myExpression.getExpr_droite() == null) { 
-			myExpression.setExpr_droite(myComparaison_expression);	
-	 	}
+	  	{ 	  
+	  	    Expression expGauche = (Expression)stack.pop();
+	  		myComparaison_expression.setGauche(expGauche);
 		}
-
+		
+	   	comparaison_operator()
+	   	{
+	     	Comparaison_operator operator = (Comparaison_operator)stack.pop();
+	     	myComparaison_expression.setComparaison_operator(operator);
+	   	}
+	   	
+	   	arithmetic_expression_priority_low() // a > b ou a+b < a/b etc.
+		{
+			Expression expDroite = (Expression)stack.pop();		
+	   		myComparaison_expression.setDroite(expDroite);  
+		}
 	 )*
 
-
-	
-	 
-	/* {
-	   	myComparaison_expression = (Comparaison_expression)stack.pop();	
-		Expression myExpression = (Expression)stack.peek();
-		Comparaison_expressionList myComparaison_expressionList = myExpression.getComparaison_expressionList();
-		myComparaison_expressionList.add(myComparaison_expression);
-		myExpression.setComparaison_expressionList(myComparaison_expressionList);		
-	 }*/
+	{
+	  	stack.push(myComparaison_expression);
+	}
 }
 
 
@@ -590,18 +497,19 @@ void arithmetic_expression_priority_low():
 		stack.push(myArithmetic_expression_priority_low);
 	 }*/
 	 
-	 arithmetic_expression()
+	 arithmetic_expression() // a/b ou a*b ou a
 	 (
 	    {
-  		Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
-		stack.push(myArithmetic_expression_priority_low);
-	    }	
-	   arithmetic_operation_piority_low() arithmetic_expression()
+  			Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
+			stack.push(myArithmetic_expression_priority_low);
+	    }
+	    
+	   	arithmetic_operation_piority_low() arithmetic_expression() // a/b + a*b ou a/b - a*b
 
 	   {
   		myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.pop();
 		Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-		myComparaison_expression.setExpr_droite(myArithmetic_expression_priority_low);	
+		myComparaison_expression.setDroite(myArithmetic_expression_priority_low);	
 	 	}
 
 	 )*
@@ -624,19 +532,19 @@ void arithmetic_expression():
 		stack.push(myArithmetic_expression);
 	}*/
 	
-	unary_expression()
+	unary_expression() // a
 	(
 	    {
   		Arithmetic_expression myArithmetic_expression = new Arithmetic_expression ();
 		stack.push(myArithmetic_expression);
 	    }
 	    
-	  	arithmetic_operation() unary_expression()
+	  	arithmetic_operation() unary_expression() // a/b ou a*b
 	  	
 	  	{
   		myArithmetic_expression = (Arithmetic_expression)stack.pop();
 		Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();
-		myArithmetic_expression_priority_low.setExpr_droite(myArithmetic_expression);	
+		myArithmetic_expression_priority_low.setDroite(myArithmetic_expression);	
 	 	}
 	)*
 
@@ -655,17 +563,14 @@ void unary_expression():
 {
 
 	
-	(unary_operator()
+	(unary_operator() // a++ ou a-- ou !a
 	{
   		Unary_expression myUnary_expression = new Unary_expression();
 		stack.push(myUnary_expression);
 	}
-	)? term()
+	)? term() // a
 
 	{
-  		/*myUnary_expression = (Unary_expression)stack.pop();
-  		Arithmetic_expression myArithmetic_expression = (Arithmetic_expression)stack.peek();
-		myArithmetic_expression.setExpr_droite(myUnary_expression);	*/
 	}
 }
 
@@ -675,44 +580,47 @@ void term():
 {
     {
   		Term myTerm = new Term ();
-		stack.push(myTerm);
 	}
 	
 	value()
-		{
-			/* myTerm = (Term)stack.peek();
-	  		 Expr myExpr = (Expr)stack.pop();
-			 myExpr.setExpr_droite(myTerm);*/
-		}
-		 | "(" expression()
+	
+	{
+		Value val = (Value)stack.pop();
+		myTerm.setValue(val);
+		stack.push(myTerm);
+	}
+	| "(" expression()
 		{
 
 		//ICI	  
-Expression myExpression = new Expression();
-			  try {
-			     myExpression = (Expression)stack.peek();
-			    myExpression = (Expression)stack.pop();
-			  }catch(Exception e) {
+			/*Expression myExpression = new Expression();
+			Term myTerm = new Term();
+
+			ASTNode node = (ASTNode)stack.peek();
+
+			if(node instanceof Expression)
+			{
+				myExpression = (Expression)stack.pop();
+			}else
+			{
 				myTerm = (Term)stack.pop();
 				myExpression = myTerm.getExpression();
-			  }
-			 
+			}
 
-			 try
-		  	 {
-			  myTerm = (Term)stack.peek();
-		     }
-		     catch(Exception e)
-		     {
-		      myTerm = new Term ();
-		      stack.push(myTerm);
-		     }
-		     
-			  myTerm = (Term)stack.peek();
-			  myTerm.setExpression(myExpression);
-  
-
-		/*	 myTerm = (Term)stack.pop();
+			node = (ASTNode)stack.peek();
+			if(node instanceof Term)
+			{
+			  	myTerm = (Term)stack.peek();
+			}else
+			{
+		    	myTerm = new Term();
+		      	stack.push(myTerm);
+			}
+			  
+			 myTerm = (Term)stack.peek();
+			 myTerm.setExpression(myExpression);
+			
+			 /*	 myTerm = (Term)stack.pop();
 	  		 myUnary_expression = (Unary_expression)stack.peek();
 			 myUnary_expression.setTerm(myTerm);*/
 		}
@@ -749,7 +657,6 @@ void value():
 {
 	{
   		Value myValue = new Value();
-  		stack.push(myValue);
 	}
 
 
@@ -761,11 +668,9 @@ void value():
 	)
 
 
-	{
-		myValue = (Value)stack.pop();
-		Term myTerm = (Term)stack.peek();				  
+	{			  
 		myValue.setIdentificateur(t.toString());
-		myTerm.setValue(myValue);
+		stack.push(myValue);
 	}	
 }
 
@@ -807,10 +712,10 @@ void arithmetic_operation_piority_low():
 		myArithmetic_operation_piority_low = (Arithmetic_operation_piority_low)stack.pop();
 		myArithmetic_operation_piority_low.setOperation(t.toString());		
   		Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();		
-  		List<Arithmetic_operation_piority_low> Arithmetic_operation_piority_lowList = myArithmetic_expression_priority_low.getArithmetic_operation_piority_lowList();
+  		List<Arithmetic_operation_piority_low> Arithmetic_operation_piority_lowList = myArithmetic_expression_priority_low.getArithmetic_operation_priority_lowList();
   		 		
   		Arithmetic_operation_piority_lowList.add(myArithmetic_operation_piority_low);		
-  		myArithmetic_expression_priority_low.setArithmetic_operation_piority_lowList(Arithmetic_operation_piority_lowList);
+  		myArithmetic_expression_priority_low.setArithmetic_operation_piority_lowList(Arithmetic_operation_priority_lowList);
 	}
 }
 
@@ -822,16 +727,13 @@ void comparaison_operator():
 
  	{
   		Comparaison_operator myOperator = new Comparaison_operator();
-  		stack.push(myOperator);
 	}
 	
   	(comp_operator= < EQUAL > | comp_operator= < NOT_EQUAL > | comp_operator= < GREATER > | comp_operator = < GREATER_OR_EQUAL > | comp_operator = < LOWER > | comp_operator= < LOWER_OR_EQUAL > )
   	
   	{
-				myOperator = (Comparaison_operator)stack.pop();
 				myOperator.setComparaison_operator(comp_operator.toString());
-				Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-				myComparaison_expression.setComparaison_operator(myOperator);
+				stack.push(myOperator);
   	}
 }
 
@@ -849,7 +751,7 @@ void logical_connector():
 	   myLogical_connector = (Logical_connector)stack.pop();
 	   myLogical_connector.setConnector(t.toString());
 	   Expression myExpression = (Expression)stack.peek();
-	   myExpression.setLogical_connector(myLogical_connector);	
+	   //myExpression.setLogical_connector(myLogical_connector);	
 	 }
 }
 
@@ -869,17 +771,16 @@ void assignment():
 {
 	{
 	  Assignment myAssignment = new Assignment();
-	  stack.push(myAssignment);
 	}
     identifier = < IDENTIFIER > assign = < ASSIGN > expression()
     {
-      Expr myExpr = (Expr)stack.pop();
-
-	  myAssignment = (Assignment)stack.peek();
-      
+      Expression myExpr = (Expression)stack.pop();
+            
       myAssignment.setIdentifier(identifier.toString());
       myAssignment.setAssign(assign.toString());
 	  myAssignment.setExpr(myExpr);
+
+	  stack.push(myAssignment);
 	}
 }
 
@@ -899,7 +800,14 @@ void for_loop():
 
 void return_statement():
 {
+ 	Return_statement rStatement = new Return_statement();
 }
 {
 	< RETURN > expression() ";"
+	{
+		Expression exp = (Expression)stack.pop();
+		rStatement.setExpression(exp);
+		stack.push(rStatement);
+		
+	}
 }

@@ -1,7 +1,6 @@
 void test (bool a) {
-	double c = 2.6;
-
-	if (b > 8 || (a > 0 && z > 0)){
+	double c = 0;
+	if (c > 2){
 	  c = 2.6;
 	}
 }

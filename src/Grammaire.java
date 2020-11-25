@@ -77,8 +77,12 @@ public class Grammaire implements GrammaireConstants {
                 //System.out.println(stack.peek());
 
 
+
+
+
                 Function myFunction = (Function)stack.peek();
                 myArray = DataGenerator(myFunction);
+
 
 
 
@@ -109,8 +113,8 @@ public class Grammaire implements GrammaireConstants {
       throw new ParseException();
     }
     ident = jj_consume_token(IDENTIFIER);
-          stack.push(new Function(f_type.toString() , ident.toString()));
-          Function myFunction = (Function)stack.peek();
+          Function func = new Function(f_type.toString() , ident.toString());
+          stack.push(func);
     jj_consume_token(42);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER_TYPE:
@@ -139,7 +143,10 @@ public class Grammaire implements GrammaireConstants {
     jj_consume_token(45);
     function_body();
     jj_consume_token(46);
-          myFunction.accept(new VisitorPrint());
+          Function_body funcB = (Function_body)stack.pop();
+          func.setFunction_body(funcB);
+
+          func.accept(new VisitorPrint());
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -162,27 +169,22 @@ public class Grammaire implements GrammaireConstants {
     Token ident = null;
     Token type = null;
           Parameter_declaration myParameter_declaration = new Parameter_declaration();
-          stack.push(myParameter_declaration);
     type = type();
     ident = jj_consume_token(IDENTIFIER);
-                myParameter_declaration = (Parameter_declaration)stack.pop();
                 myParameter_declaration.setParameter_name(ident.toString());
                 myParameter_declaration.setType(type.toString());
 
-                Function myFunction = (Function)stack.peek();
-
-                List<Parameter_declaration> parameter_declaration_list = myFunction.getParameter_declaration_list();
+                Function func = (Function)stack.peek();
+                List<Parameter_declaration> parameter_declaration_list = func.getParameter_declaration_list();
                 parameter_declaration_list.add(myParameter_declaration);
 
-                myFunction.setParameter_declaration_list(parameter_declaration_list);
+                func.setParameter_declaration_list(parameter_declaration_list);
   }
 
   final public void function_body() throws ParseException {
-                    Function_body myFunction_body = new Function_body();
-                        stack.push(myFunction_body);
+            Function_body myFunction_body = new Function_body();
 
-                        VariableDeclarationList myVariableDeclarationList = new VariableDeclarationList();
-                        stack.push(myVariableDeclarationList);
+                VariableDeclarationList myVariableDeclarationList = new VariableDeclarationList();
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -197,13 +199,13 @@ public class Grammaire implements GrammaireConstants {
       }
       variable_declaration();
       jj_consume_token(47);
+                Variable_declaration varD = (Variable_declaration)stack.pop();
+                myVariableDeclarationList.add(varD);
     }
-                    myVariableDeclarationList = (VariableDeclarationList)stack.pop();
-                    myFunction_body = (Function_body)stack.peek();
-                    myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
+            myVariableDeclarationList = (VariableDeclarationList)stack.pop();
+            myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
 
-                        StatementList myStatementList = new StatementList();
-                        stack.push(myStatementList);
+                StatementList myStatementList = new StatementList();
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -218,21 +220,21 @@ public class Grammaire implements GrammaireConstants {
         break label_4;
       }
       statement();
+                Statement statement = (Statement)stack.pop();
+                myStatementList.add(statement);
     }
-                    myStatementList = (StatementList)stack.pop();
-                        myFunction_body = (Function_body)stack.peek();
-                        myFunction_body.setStatement_list(myStatementList);
+                myFunction_body.setStatement_list(myStatementList);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RETURN:
       return_statement();
+                Return_statement rStatement = (Return_statement)stack.pop();
+                myFunction_body.setReturn_statement(rStatement);
       break;
     default:
       jj_la1[6] = jj_gen;
       ;
     }
-                        myFunction_body = (Function_body)stack.pop();
-                        Function myFunction = (Function)stack.peek();
-                        myFunction.setFunction_body(myFunction_body);
+                stack.push(myFunction_body);
   }
 
   final public void statement() throws ParseException {
@@ -280,7 +282,6 @@ public class Grammaire implements GrammaireConstants {
   final public void variable_declaration() throws ParseException {
   Token t = null;
                 Variable_declaration myVariable_declaration = new Variable_declaration();
-                stack.push(myVariable_declaration);
 
                 AssignmentList myAssignmentList = new AssignmentList();
                 stack.push(myAssignmentList);
@@ -299,20 +300,20 @@ public class Grammaire implements GrammaireConstants {
         jj_la1[9] = jj_gen;
         break label_5;
       }
+      jj_consume_token(43);
+      assignment();
                 myAssignment = (Assignment)stack.pop();
                 myAssignmentList = (AssignmentList)stack.peek();
                 myAssignmentList.add(myAssignment);
-      jj_consume_token(43);
-      assignment();
     }
                 myAssignmentList = (AssignmentList)stack.pop();
 
-                myVariable_declaration = (Variable_declaration)stack.pop();
                 myVariable_declaration.setAssignment_list(myAssignmentList);
                 myVariable_declaration.setType(t.toString());
 
                 VariableDeclarationList myVariableDeclarationList = (VariableDeclarationList)stack.peek();
                 myVariableDeclarationList.add(myVariable_declaration);
+                stack.push(myVariable_declaration);
   }
 
   final public Token litteral_value() throws ParseException {
@@ -377,36 +378,10 @@ public class Grammaire implements GrammaireConstants {
     jj_consume_token(IF);
     jj_consume_token(42);
           Conditional_statement myConditional_statement = new Conditional_statement();
-          stack.push(myConditional_statement);
     expression();
     jj_consume_token(44);
-          Expression myExpression = new Expression();
-                          try {
-
-                            myExpression = (Expression)stack.peek();
-                            myExpression = (Expression)stack.pop();
-
-                            myConditional_statement = (Conditional_statement)stack.peek();
-                myConditional_statement.setExpression(myExpression);
-
-                          }catch(Exception e)
-                          {
-                                Term myTerm = (Term)stack.pop();
-                                myExpression = myTerm.getExpression();
-
-                                Expression myExpression2 = (Expression)stack.peek();
-                                Expr test = myExpression;
-                myExpression2.setExpr_droite(test);
-
-                          }
-
-                //Expression	myExpression = (Expression)stack.pop();
-/*
-lucca
-		myConditional_statement = (Conditional_statement)stack.peek();
-		myConditional_statement.setExpression(myExpression);
-*/
-
+                Expression exp = (Expression)stack.pop();
+                myConditional_statement.setExpression(exp);
     jj_consume_token(45);
     label_6:
     while (true) {
@@ -421,8 +396,6 @@ lucca
         jj_la1[13] = jj_gen;
         break label_6;
       }
-            StatementList myStatementList = new StatementList();
-            stack.push(myStatementList);
       statement();
     }
     if (jj_2_2(2)) {
@@ -448,79 +421,54 @@ lucca
       ;
     }
     jj_consume_token(46);
-                try {
-                    StatementList myStatementList = (StatementList)stack.peek();
-                    try {
-                        myStatementList = (StatementList)stack.pop();
-                        myExpression = (Expression)stack.peek();
-                        myExpression = (Expression)stack.pop();
-                        myConditional_statement = (Conditional_statement)stack.pop();
-                        myConditional_statement.setStatement_list(myStatementList);
-                        Statement myStatement = (Statement)stack.peek();
-                                myStatement.setConditional_statement(myConditional_statement);
+                stack.push(myConditional_statement);
+                int i = 0;
+                /*node = (ASTNode)stack.peek();
+		Expression myExpression;
+		if(node instanceof StatementList)
+		{
+		  	StatementList myStateList = (StatementList)stack.pop();
+		
+		  	node = (ASTNode)stack.peek();
+		  	if(node instanceof Expression)
+		  	{
+		  	  	myExpression = (Expression)stack.pop();
+		  	  	myConditional_statement = (Conditional_statement)stack.pop();
+		  	  	myConditional_statement.setStatement_list(myStateList);
+		  	  	Statement myStatement = (Statement)stack.peek();
+				myStatement.setConditional_statement(myConditional_statement);
+		  	}else
+		  	{
+		  	  	myConditional_statement = (Conditional_statement)stack.pop();
+				myConditional_statement.setStatement_list(myStateList);
+		
+				Statement myStatement = (Statement)stack.peek();
+				myStatement.setConditional_statement(myConditional_statement);
+		  	}
+		}else if(node instanceof Expression)
+		{
+		  	myExpression = (Expression)stack.pop();
+		  	myConditional_statement = (Conditional_statement)stack.pop();
+			Statement myStatement = (Statement)stack.peek();
+			myConditional_statement.setExpression(myExpression);
+			myStatement.setConditional_statement(myConditional_statement);
+		  	
+		}else if(node instanceof Conditional_statement)
+		{
+			myConditional_statement = (Conditional_statement)stack.pop();
+			Statement myStatement = (Statement)stack.peek();
+			myStatement.setConditional_statement(myConditional_statement);
+		}else if(node instanceof Statement)
+		{
+		  	Statement myStatement = (Statement)stack.peek();
+		    myStatement.setConditional_statement(myConditional_statement);
+		}*/
 
-                    }catch(Exception e0) {
-                            myStatementList = (StatementList)stack.pop();
-                                myConditional_statement = (Conditional_statement)stack.pop();
-                                myConditional_statement.setStatement_list(myStatementList);
-
-//
-                                Statement myStatement = (Statement)stack.peek();/*.pop();*/
-                                myStatement.setConditional_statement(myConditional_statement);
-                                /*myStatementList = (StatementList)stack.peek();
-				myStatementList.add(myStatement);*/
-//
-                    }
-
-
-
-                }catch(Exception e)
-                {
-                    try
-                    {
-                                myExpression = (Expression)stack.peek();
-                                myExpression = (Expression)stack.pop();
-                                myConditional_statement = (Conditional_statement)stack.pop();
-                                Statement myStatement = (Statement)stack.peek();
-                                myConditional_statement.setExpression(myExpression);
-                                myStatement.setConditional_statement(myConditional_statement);
-                    }
-                    catch(Exception e2)
-                    {
-                      try
-                          {
-                                 myConditional_statement = (Conditional_statement)stack.peek();
-                                 myConditional_statement = (Conditional_statement)stack.pop();
-                                 Statement myStatement = (Statement)stack.peek();
-                                 myStatement.setConditional_statement(myConditional_statement);
-                           }
-                            catch(Exception e3)
-                           {
-                                 Statement myStatement = (Statement)stack.peek();
-                                 myStatement.setConditional_statement(myConditional_statement);
-                           }
-                        }
-                }
   }
 
   final public void expression() throws ParseException {
-                try {
-                  Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
-                  Expression myExpression = new Expression();
-              stack.push(myExpression);
-                }
-                catch(Exception e){
-                                try { //lucca
-                                        Expression myExpression = (Expression)stack.peek();
-                                        /*Conditional_statement myConditional_statement = new Conditional_statement();
- 	      			stack.push(myConditional_statement);*/
-                                        myExpression = new Expression();
-                                stack.push(myExpression);
-                                        }
-                                        catch(Exception e2){ }
-
-                }
-
+        LogExpression lExp = new LogExpression();
+        Expression exp;
     comparaison_expression();
     label_8:
     while (true) {
@@ -533,13 +481,20 @@ lucca
         jj_la1[15] = jj_gen;
         break label_8;
       }
-
+                   exp = (Expression)stack.pop();
+                   lExp.setGauche(exp);
       logical_connector();
+                        Logical_connector lCon = (Logical_connector)stack.pop();
+                        lExp.setLogical_connector(lCon);
       comparaison_expression();
+                        exp = (Expression)stack.pop();
+                        lExp.setDroite(exp);
+                        stack.push(lExp);
     }
   }
 
   final public void comparaison_expression() throws ParseException {
+        Comparaison_expression myComparaison_expression = new Comparaison_expression();
     arithmetic_expression_priority_low();
     label_9:
     while (true) {
@@ -556,30 +511,16 @@ lucca
         jj_la1[16] = jj_gen;
         break label_9;
       }
-                    Expr myExpr = (Expr)stack.pop();
-                        Comparaison_expression myComparaison_expression = new Comparaison_expression();
-                        myComparaison_expression.setExpr_gauche(myExpr);
-                        stack.push(myComparaison_expression);
+                    Expression expGauche = (Expression)stack.pop();
+                        myComparaison_expression.setGauche(expGauche);
       comparaison_operator();
+                Comparaison_operator operator = (Comparaison_operator)stack.pop();
+                myComparaison_expression.setComparaison_operator(operator);
       arithmetic_expression_priority_low();
-                myExpr = (Expr)stack.pop();
-                myComparaison_expression = (Comparaison_expression)stack.pop();
-                myComparaison_expression.setExpr_droite(myExpr);
-
-
-                Expression myExpression = (Expression)stack.peek();
-
-            /*Conditional_statement myConditional_statement = (Conditional_statement)stack.peek();
-		myConditional_statement.setExpr((Expr)myComparaison_expression);*/
-
-
-
-                if(myExpression.getExpr_gauche() == null) {
-                        myExpression.setExpr_gauche(myComparaison_expression);
-                }else if(myExpression.getExpr_droite() == null) {
-                        myExpression.setExpr_droite(myComparaison_expression);
-                }
+                        Expression expDroite = (Expression)stack.pop();
+                        myComparaison_expression.setDroite(expDroite);
     }
+                stack.push(myComparaison_expression);
   }
 
   final public void arithmetic_expression_priority_low() throws ParseException {
@@ -595,13 +536,13 @@ lucca
         jj_la1[17] = jj_gen;
         break label_10;
       }
-                Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
-                stack.push(myArithmetic_expression_priority_low);
+                        Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
+                        stack.push(myArithmetic_expression_priority_low);
       arithmetic_operation_piority_low();
       arithmetic_expression();
                 myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.pop();
                 Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-                myComparaison_expression.setExpr_droite(myArithmetic_expression_priority_low);
+                myComparaison_expression.setDroite(myArithmetic_expression_priority_low);
     }
   }
 
@@ -625,7 +566,7 @@ lucca
       unary_expression();
                 myArithmetic_expression = (Arithmetic_expression)stack.pop();
                 Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();
-                myArithmetic_expression_priority_low.setExpr_droite(myArithmetic_expression);
+                myArithmetic_expression_priority_low.setDroite(myArithmetic_expression);
     }
   }
 
@@ -654,41 +595,14 @@ lucca
     case DECIMAL:
     case IDENTIFIER:
                 Term myTerm = new Term ();
-                stack.push(myTerm);
       value();
-
+                Value val = (Value)stack.pop();
+                myTerm.setValue(val);
+                stack.push(myTerm);
       break;
     case 42:
       jj_consume_token(42);
       expression();
-                //ICI	  
-Expression myExpression = new Expression();
-                          try {
-                             myExpression = (Expression)stack.peek();
-                            myExpression = (Expression)stack.pop();
-                          }catch(Exception e) {
-                                myTerm = (Term)stack.pop();
-                                myExpression = myTerm.getExpression();
-                          }
-
-
-                         try
-                         {
-                          myTerm = (Term)stack.peek();
-                     }
-                     catch(Exception e)
-                     {
-                      myTerm = new Term ();
-                      stack.push(myTerm);
-                     }
-
-                          myTerm = (Term)stack.peek();
-                          myTerm.setExpression(myExpression);
-
-
-                /*	 myTerm = (Term)stack.pop();
-	  		 myUnary_expression = (Unary_expression)stack.peek();
-			 myUnary_expression.setTerm(myTerm);*/
 
       jj_consume_token(44);
       break;
@@ -727,7 +641,6 @@ Expression myExpression = new Expression();
   final public void value() throws ParseException {
   Token t = null ;
                 Value myValue = new Value();
-                stack.push(myValue);
     if (jj_2_3(2)) {
       function_call();
     } else {
@@ -747,10 +660,8 @@ Expression myExpression = new Expression();
         throw new ParseException();
       }
     }
-                myValue = (Value)stack.pop();
-                Term myTerm = (Term)stack.peek();
                 myValue.setIdentificateur(t.toString());
-                myTerm.setValue(myValue);
+                stack.push(myValue);
   }
 
   final public void arithmetic_operation() throws ParseException {
@@ -799,16 +710,15 @@ Expression myExpression = new Expression();
                 myArithmetic_operation_piority_low = (Arithmetic_operation_piority_low)stack.pop();
                 myArithmetic_operation_piority_low.setOperation(t.toString());
                 Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();
-                List<Arithmetic_operation_piority_low> Arithmetic_operation_piority_lowList = myArithmetic_expression_priority_low.getArithmetic_operation_piority_lowList();
+                List<Arithmetic_operation_piority_low> Arithmetic_operation_piority_lowList = myArithmetic_expression_priority_low.getArithmetic_operation_priority_lowList();
 
                 Arithmetic_operation_piority_lowList.add(myArithmetic_operation_piority_low);
-                myArithmetic_expression_priority_low.setArithmetic_operation_piority_lowList(Arithmetic_operation_piority_lowList);
+                myArithmetic_expression_priority_low.setArithmetic_operation_piority_lowList(Arithmetic_operation_priority_lowList);
   }
 
   final public void comparaison_operator() throws ParseException {
         Token comp_operator=null;
                 Comparaison_operator myOperator = new Comparaison_operator();
-                stack.push(myOperator);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case EQUAL:
       comp_operator = jj_consume_token(EQUAL);
@@ -833,10 +743,8 @@ Expression myExpression = new Expression();
       jj_consume_token(-1);
       throw new ParseException();
     }
-                                myOperator = (Comparaison_operator)stack.pop();
                                 myOperator.setComparaison_operator(comp_operator.toString());
-                                Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-                                myComparaison_expression.setComparaison_operator(myOperator);
+                                stack.push(myOperator);
   }
 
   final public void logical_connector() throws ParseException {
@@ -858,7 +766,8 @@ Expression myExpression = new Expression();
            myLogical_connector = (Logical_connector)stack.pop();
            myLogical_connector.setConnector(t.toString());
            Expression myExpression = (Expression)stack.peek();
-           myExpression.setLogical_connector(myLogical_connector);
+           //myExpression.setLogical_connector(myLogical_connector);	
+
   }
 
   final public void function_call() throws ParseException {
@@ -904,17 +813,16 @@ Expression myExpression = new Expression();
   Token identifier = null;
   Token assign = null;
           Assignment myAssignment = new Assignment();
-          stack.push(myAssignment);
     identifier = jj_consume_token(IDENTIFIER);
     assign = jj_consume_token(ASSIGN);
     expression();
-      Expr myExpr = (Expr)stack.pop();
-
-          myAssignment = (Assignment)stack.peek();
+      Expression myExpr = (Expression)stack.pop();
 
       myAssignment.setIdentifier(identifier.toString());
       myAssignment.setAssign(assign.toString());
           myAssignment.setExpr(myExpr);
+
+          stack.push(myAssignment);
   }
 
   final public void while_loop() throws ParseException {
@@ -999,9 +907,13 @@ Expression myExpression = new Expression();
   }
 
   final public void return_statement() throws ParseException {
+        Return_statement rStatement = new Return_statement();
     jj_consume_token(RETURN);
     expression();
     jj_consume_token(47);
+                Expression exp = (Expression)stack.pop();
+                rStatement.setExpression(exp);
+                stack.push(rStatement);
   }
 
   private boolean jj_2_1(int xla) {
@@ -1025,8 +937,9 @@ Expression myExpression = new Expression();
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
+  private boolean jj_3_2() {
+    if (jj_scan_token(46)) return true;
+    if (jj_scan_token(ELSE)) return true;
     return false;
   }
 
@@ -1041,15 +954,14 @@ Expression myExpression = new Expression();
     return false;
   }
 
-  private boolean jj_3_2() {
-    if (jj_scan_token(46)) return true;
-    if (jj_scan_token(ELSE)) return true;
-    return false;
-  }
-
   private boolean jj_3R_16() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(ASSIGN)) return true;
+    return false;
+  }
+
+  private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
     return false;
   }
 

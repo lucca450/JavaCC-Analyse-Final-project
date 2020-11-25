@@ -3,11 +3,9 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Comparaison_expression extends Expr {
+public class Comparaison_expression extends Expression {
 	
-	private Expr expr_gauche;
 	private Comparaison_operator comparaison_operator;
-	private Expr expr_droite;
 
 
 	public Comparaison_expression() {
@@ -16,38 +14,10 @@ public class Comparaison_expression extends Expr {
 
 	
 
-	public Comparaison_expression(Expr expr_gauche, Comparaison_operator comparaison_operator, Expr expr_droite) {
-		super();
-		this.expr_gauche = expr_gauche;
+	public Comparaison_expression(Expression expr_gauche, Comparaison_operator comparaison_operator, Expression expr_droite) {
+		super(expr_gauche, expr_droite);
 		this.comparaison_operator = comparaison_operator;
-		this.expr_droite = expr_droite;
 	}
-
-
-
-	public Expr getExpr_gauche() {
-		return expr_gauche;
-	}
-
-
-
-	public void setExpr_gauche(Expr expr_gauche) {
-		this.expr_gauche = expr_gauche;
-	}
-
-
-
-	public Expr getExpr_droite() {
-		return expr_droite;
-	}
-
-
-
-	public void setExpr_droite(Expr expr_droite) {
-		this.expr_droite = expr_droite;
-	}
-
-
 
 	public Comparaison_operator getComparaison_operator() {
 		return comparaison_operator;
@@ -57,11 +27,6 @@ public class Comparaison_expression extends Expr {
 	public void setComparaison_operator(Comparaison_operator comparaison_operator) {
 		this.comparaison_operator = comparaison_operator;
 	}
-
-
-
-
-
 
 	public void accept(VisitorPrint visitor) {	
 		visitor.visit(this);

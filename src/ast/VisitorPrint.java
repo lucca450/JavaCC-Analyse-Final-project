@@ -106,8 +106,8 @@ public class VisitorPrint {
 
     	
     	
-    	if(conditional_statement.getStatement_list() != null) {
-    	conditional_statement.getStatement_list().accept(this);
+    	if(conditional_statement.getIfBody() != null) {
+    	conditional_statement.getIfBody().accept(this);
     	}
 
 
@@ -133,18 +133,18 @@ public class VisitorPrint {
 	
     }
     
-    public void visit(Expression expression) {   	
+    public void visit(LogExpression logExpression) {   	
 
-    	if(expression.getLogical_connector() != null) {
-        	expression.getLogical_connector().accept(this);
+    	if(logExpression.getLogical_connector() != null) {
+        	logExpression.getLogical_connector().accept(this);
     	}
 
     	//System.out.println(
-    	expression.getExpr_gauche().accept(this);
+    	logExpression.getGauche().accept(this);
     	//);
     	
-    	if(expression.getExpr_droite() != null) {
-    		expression.getExpr_droite().accept(this);
+    	if(logExpression.getDroite() != null) {
+    		logExpression.getDroite().accept(this);
     	}
     	
 	
@@ -189,8 +189,8 @@ public class VisitorPrint {
     	
     	System.out.print("Condition ");
     	comparaison_expression.getComparaison_operator().accept(this);
-    	comparaison_expression.getExpr_gauche().accept(this);
-    	comparaison_expression.getExpr_droite().accept(this);
+    	comparaison_expression.getGauche().accept(this);
+    	comparaison_expression.getDroite().accept(this);
     	System.out.print("\n");
     	/*
 
@@ -337,7 +337,7 @@ public class VisitorPrint {
 		
 	}
 
-	public void visit(Expr expr) {
+	public void visit(Expression expr) {
 		System.out.println("JE SUIS DANS VISIT EXPR");
 	}
 }
