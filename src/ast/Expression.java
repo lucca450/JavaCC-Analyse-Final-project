@@ -13,8 +13,8 @@ public abstract class Expression extends ASTNode{
 		gauche = expr_gauche;
 		droite = expr_droite;
 	}
-
-	public abstract void accept(VisitorPrint visitor);
+	
+	public abstract void accept(VisitorPrint visitor, int nbTab);
 
 
 	public Expression getGauche() {

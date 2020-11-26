@@ -50,8 +50,8 @@ public class Assignment extends ASTNode {
 		this.expr = expr;
 	}
 	
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 		
 		//expression.accept(visitor);
 	}

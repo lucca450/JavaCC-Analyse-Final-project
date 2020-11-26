@@ -26,9 +26,9 @@ public class StatementList extends ASTNode{
 		statement_list.add(s);
 	}
 
-	public void accept(VisitorPrint visitor) {
+	public void accept(VisitorPrint visitor, int nbTab) {
 		for(Statement s : statement_list) {
-			s.accept(visitor);
+			s.accept(visitor, nbTab);
 		}
 
 	}

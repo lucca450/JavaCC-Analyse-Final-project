@@ -26,8 +26,8 @@ public class LogExpression extends Expression {
 		this.logical_connector = logical_connector;
 	}
 
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 	}
 	
 }

@@ -18,8 +18,8 @@ public class Unary_operator{
 		this.operator = operator;
 	}
 
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 	}
 	
 	

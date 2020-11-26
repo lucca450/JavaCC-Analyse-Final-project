@@ -182,7 +182,7 @@ void function() :
 	  Function_body funcB = (Function_body)stack.pop();
 	  func.setFunction_body(funcB);
 	  
-	  func.accept(new VisitorPrint());
+	  func.accept(new VisitorPrint(), 0);
 	}
 	
 	(function())*
@@ -233,15 +233,11 @@ void function_body() :
 	    myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
 	
 	   	StatementList myStatementList = new StatementList();
+	   	stack.push(myStatementList);
 	}
-  	( statement()
-	{
-		Statement statement = (Statement)stack.pop();
-	  	myStatementList.add(statement);
-	}
-  	)*
+  	( statement())*
   	{
-		myFunction_body.setStatement_list(myStatementList);
+		myFunction_body.setStatement_list((StatementList)stack.pop());
 	}
 	( return_statement()
 	{
@@ -259,27 +255,28 @@ void statement() :
 {
 	{
 		Statement myStatement = new Statement();
-		stack.push(myStatement);
 	}
 	(		(
 			LOOKAHEAD(2)			assignment()
 			{
 			   Assignment myAssignment = (Assignment)stack.pop();
-			   myStatement = (Statement)stack.peek();
 			   myStatement.setAssignment(myAssignment);
 			  
 			}
 			| function_call()
 		) ";"
-		| conditional_statement()	
+		| conditional_statement()
+		{
+			Conditional_statement cStatement = (Conditional_statement)stack.pop();
+			myStatement.setConditional_statement(cStatement);
+		}
 		| while_loop()
 		| for_loop()
 	)
 
 	{
-		myStatement = (Statement)stack.pop();
-		StatementList myStatementList = (StatementList)stack.peek();
-		myStatementList.add(myStatement);
+	  	StatementList statementList = (StatementList)stack.peek();
+		statementList.add(myStatement);
 	}
 
 }
@@ -362,15 +359,17 @@ void conditional_statement():
 {
 	< IF > "("
 	{
-	  Conditional_statement myConditional_statement = new Conditional_statement();
+	  Conditional_statement cStatement = new Conditional_statement();
+	  StatementList ifBody = new StatementList();
+	  stack.push(ifBody);
 	}
-	 expression()	")"
+	expression()	")"
 	{
 		Expression exp = (Expression)stack.pop();
-		myConditional_statement.setExpression(exp);  
+		cStatement.setExpression(exp);
 	}
 	"{" (
-	     statement()
+	statement()
 
 	     )*
 	( LOOKAHEAD(2) "}" < ELSE > "{" ( statement() )* )?
@@ -378,49 +377,9 @@ void conditional_statement():
 	 "}"
 
 	{
-		
-		stack.push(myConditional_statement);
-	  	int i = 0;
-		/*node = (ASTNode)stack.peek();
-		Expression myExpression;
-		if(node instanceof StatementList)
-		{
-		  	StatementList myStateList = (StatementList)stack.pop();
-		
-		  	node = (ASTNode)stack.peek();
-		  	if(node instanceof Expression)
-		  	{
-		  	  	myExpression = (Expression)stack.pop();
-		  	  	myConditional_statement = (Conditional_statement)stack.pop();
-		  	  	myConditional_statement.setStatement_list(myStateList);
-		  	  	Statement myStatement = (Statement)stack.peek();
-				myStatement.setConditional_statement(myConditional_statement);
-		  	}else
-		  	{
-		  	  	myConditional_statement = (Conditional_statement)stack.pop();
-				myConditional_statement.setStatement_list(myStateList);
-		
-				Statement myStatement = (Statement)stack.peek();
-				myStatement.setConditional_statement(myConditional_statement);
-		  	}
-		}else if(node instanceof Expression)
-		{
-		  	myExpression = (Expression)stack.pop();
-		  	myConditional_statement = (Conditional_statement)stack.pop();
-			Statement myStatement = (Statement)stack.peek();
-			myConditional_statement.setExpression(myExpression);
-			myStatement.setConditional_statement(myConditional_statement);
-		  	
-		}else if(node instanceof Conditional_statement)
-		{
-			myConditional_statement = (Conditional_statement)stack.pop();
-			Statement myStatement = (Statement)stack.peek();
-			myStatement.setConditional_statement(myConditional_statement);
-		}else if(node instanceof Statement)
-		{
-		  	Statement myStatement = (Statement)stack.peek();
-		    myStatement.setConditional_statement(myConditional_statement);
-		}*/
+	  	ifBody = (StatementList)stack.pop();
+	  	cStatement.setIfBody(ifBody);
+		stack.push(cStatement);
 	}
 
 }

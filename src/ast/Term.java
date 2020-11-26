@@ -24,8 +24,8 @@ public class Term extends Expression{
 	public void setExpression(LogExpression expression) {
 		this.expression = expression;
 	}
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 	}
 	
 	

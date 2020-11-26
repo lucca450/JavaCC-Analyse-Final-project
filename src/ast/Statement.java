@@ -34,8 +34,8 @@ public class Statement extends ASTNode {
 		return "Statement [conditional_statement=" + conditional_statement + ", assignment=" + assignment + "]";
 	}
 	
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab + 1);
 		
 		/*
         try {

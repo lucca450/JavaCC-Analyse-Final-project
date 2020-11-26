@@ -37,29 +37,40 @@ public class VisitorPrint {
 	
 	
 
-	public void visit(Function function) {
+	public void visit(Function function, int nbTab) {
         System.out.println("Fonction : « " + function.getFunction_name() + " »");
     }
     
-    public void visit(Parameter_declaration parameter_declaration) {
-        System.out.println("Paramètre " + parameter_declaration.getParameter_name() + " : " + parameter_declaration.getType());
+    public void visit(Parameter_declaration parameter_declaration, int nbTab) {
+    	String tab = "";
+    	for(int i = 0; i< nbTab;i++) {
+    		tab += '\t';
+    	}
+        System.out.println(tab + "Paramètre " + parameter_declaration.getParameter_name() + " : " + parameter_declaration.getType());
     }
     
-    public void visit(Function_body function_body) {
-        System.out.println("Corps de la fonction");
+    public void visit(Function_body function_body, int nbTab) {
+    	String tab = "";
+    	for(int i = 0; i< nbTab;i++) {
+    		tab += '\t';
+    	}
+        System.out.println(tab + "Corps de la fonction");
     }
     
-    public void visit(Variable_declaration variable_declaration) {
-    	//String returnString = "";
+    public void visit(Variable_declaration variable_declaration, int nbTab) {
+    	String tab = "";
+    	for(int i = 0; i< nbTab;i++) {
+    		tab += '\t';
+    	}
     	
-        System.out.println("Déclaration de variable");
+        System.out.println(tab + "Déclaration de variable");
         
         
       
         for (Assignment a : variable_declaration.getAssignment_list().getAssignmentList()) 
         { 	 
-            System.out.print( variable_declaration.getType() + " ");
-        	 a.accept(this);
+            System.out.print(tab + '\t' + variable_declaration.getType() + " ");
+        	 a.accept(this, 0);
         } 
         
         
@@ -81,17 +92,16 @@ public class VisitorPrint {
         */
     }
     
-    public void visit(Statement statement) {
+    public void visit(Statement statement, int nbTab) {
     	
     	System.out.print("\n");
     	
-    	
         if(statement.getConditional_statement() != null) {
-        	statement.getConditional_statement().accept(this);
+        	statement.getConditional_statement().accept(this, nbTab - 1);
         }
             
         if(statement.getAssignment() != null) {
-        	statement.getAssignment().accept(this);
+        	statement.getAssignment().accept(this, nbTab + 1);
         }
        	
     }
@@ -99,26 +109,33 @@ public class VisitorPrint {
 
 
     
-    public void visit(Conditional_statement conditional_statement) {
-    	System.out.println("Expression conditionnelle");
+    public void visit(Conditional_statement conditional_statement, int nbTab) {
+    	String tab = "";
+    	for(int i = 0; i< nbTab;i++) {
+    		tab += '\t';
+    	}
+    	System.out.println(tab + "Expression conditionnelle");
 
-    		conditional_statement.getExpression().accept(this);
+    		conditional_statement.getExpression().accept(this, nbTab + 1);
 
     	
     	
     	if(conditional_statement.getIfBody() != null) {
-    	conditional_statement.getIfBody().accept(this);
+    	conditional_statement.getIfBody().accept(this, nbTab + 1);
     	}
 
 
     }
     
-    public void visit(Assignment assignment) {
-    	
+    public void visit(Assignment assignment, int nbTab) {
+    	String tab = "";
+    	for(int i = 0; i< nbTab;i++) {
+    		tab += '\t';
+    	}
 
-    	System.out.print(assignment.getIdentifier() + " " + assignment.getAssign());
+    	System.out.print(tab + assignment.getIdentifier() + " " + assignment.getAssign());
     	
-    	assignment.getExpr().accept(this);
+    	assignment.getExpr().accept(this, nbTab);
     	
     	/*String returnString = "";
     	
@@ -133,18 +150,18 @@ public class VisitorPrint {
 	
     }
     
-    public void visit(LogExpression logExpression) {   	
+    public void visit(LogExpression logExpression, int nbTab) {   	
 
     	if(logExpression.getLogical_connector() != null) {
-        	logExpression.getLogical_connector().accept(this);
+        	logExpression.getLogical_connector().accept(this, nbTab);
     	}
 
     	//System.out.println(
-    	logExpression.getGauche().accept(this);
+    	logExpression.getGauche().accept(this, nbTab + 1);
     	//);
     	
     	if(logExpression.getDroite() != null) {
-    		logExpression.getDroite().accept(this);
+    		logExpression.getDroite().accept(this, nbTab + 1);
     	}
     	
 	
@@ -181,17 +198,24 @@ public class VisitorPrint {
     	}
     }
 */
-    public void visit(Logical_connector logical_connector) {
-    	System.out.println("Logical connector: " + logical_connector.getConnector());	
+    public void visit(Logical_connector logical_connector, int nbTab) {
+    	String tab = "";
+    	for(int i = 0; i< nbTab;i++) {
+    		tab += '\t';
+    	}
+    	System.out.println(tab + "Logical connector: " + logical_connector.getConnector());	
     }
     
-    public void visit(Comparaison_expression comparaison_expression) {
-    	
-    	System.out.print("Condition ");
-    	comparaison_expression.getComparaison_operator().accept(this);
-    	comparaison_expression.getGauche().accept(this);
-    	comparaison_expression.getDroite().accept(this);
-    	System.out.print("\n");
+    public void visit(Comparaison_expression comparaison_expression, int nbTab) {
+    	String tab = "";
+    	for(int i = 0; i< nbTab;i++) {
+    		tab += '\t';
+    	}
+    	System.out.print(tab + "Condition ");
+    	comparaison_expression.getComparaison_operator().accept(this, 0);
+    	comparaison_expression.getGauche().accept(this, 0);
+    	comparaison_expression.getDroite().accept(this, 0);
+    	System.out.println();
     	/*
 
     	for(int i = 0; i < comparaison_expression.getArithmetic_expression_priority_lowList().size() ; i++) {
@@ -214,7 +238,7 @@ public class VisitorPrint {
     	}*/
     }
 
-	public void visit(Comparaison_operator comparaison_operator) {
+	public void visit(Comparaison_operator comparaison_operator, int nbTab) {
     	if(comparaison_operator.getComparaison_operator().toString() == ">") {		
         	System.out.print("PLUS_GRAND," );	
     	}
@@ -241,7 +265,7 @@ public class VisitorPrint {
 		/*System.out.print(comparaison_operator.getComparaison_operator() + " ");*/
 	}
 
-	public void visit(Arithmetic_expression_priority_low arithmetic_expression_priority_low) {
+	public void visit(Arithmetic_expression_priority_low arithmetic_expression_priority_low, int nbTab) {
 		
     /*	for(int i = 0; i < arithmetic_expression_priority_low.getArithmetic_expressionList().size() ; i++) {
     		arithmetic_expression_priority_low.getArithmetic_expressionList().get(i).accept(this, nbrOfSpaces); 
@@ -264,7 +288,7 @@ public class VisitorPrint {
     	
 	}
 
-	public void visit(Arithmetic_expression arithmetic_expression) {
+	public void visit(Arithmetic_expression arithmetic_expression, int nbTab) {
     /*	for(Arithmetic_operation ao : arithmetic_expression.getArithmetic_operationList()) {
     		ao.accept(this, nbrOfSpaces);
 
@@ -275,38 +299,38 @@ public class VisitorPrint {
     	}*/
 	}
 
-	public void visit(Arithmetic_operation_priority_low arithmetic_operation_piority_low) {		
+	public void visit(Arithmetic_operation_priority_low arithmetic_operation_piority_low, int nbTab) {		
 		System.out.print(" " + arithmetic_operation_piority_low.getOperation());	
 	}
 
-	public void visit(Arithmetic_operation arithmetic_operation) {
+	public void visit(Arithmetic_operation arithmetic_operation, int nbTab) {
 		System.out.print(arithmetic_operation.getOperation());
 	}
 
-	public void visit(Unary_expression unary_expression) {
+	public void visit(Unary_expression unary_expression, int nbTab) {
 		if(unary_expression.getUnary_operator() != null) {
-			unary_expression.getUnary_operator().accept(this);
+			unary_expression.getUnary_operator().accept(this, nbTab);
 		}
-		unary_expression.getTerm().accept(this);
+		unary_expression.getTerm().accept(this, nbTab);
 	}
 
-	public void visit(Unary_operator unary_operator) {
+	public void visit(Unary_operator unary_operator, int nbTab) {
 		System.out.println(unary_operator.getOperator());
 	}
 
-	public void visit(Term term) {
+	public void visit(Term term, int nbTab) {
 
 		if(term.getExpression() != null) {
-			term.getExpression().accept(this);
+			term.getExpression().accept(this, nbTab);
 		}
 		
 		if(term.getValue() != null) {
-			term.getValue().accept(this);
+			term.getValue().accept(this, nbTab);
 		}
 		
 	}
 
-	public void visit(Value value) {
+	public void visit(Value value, int nbTab) {
 		String strType = "";
 
 		try {
@@ -337,7 +361,7 @@ public class VisitorPrint {
 		
 	}
 
-	public void visit(Expression expr) {
+	public void visit(Expression expr, int nbTab) {
 		System.out.println("JE SUIS DANS VISIT EXPR");
 	}
 }

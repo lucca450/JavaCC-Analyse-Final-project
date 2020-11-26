@@ -146,7 +146,7 @@ public class Grammaire implements GrammaireConstants {
           Function_body funcB = (Function_body)stack.pop();
           func.setFunction_body(funcB);
 
-          func.accept(new VisitorPrint());
+          func.accept(new VisitorPrint(), 0);
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -205,6 +205,7 @@ public class Grammaire implements GrammaireConstants {
             myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
 
                 StatementList myStatementList = new StatementList();
+                stack.push(myStatementList);
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -219,10 +220,8 @@ public class Grammaire implements GrammaireConstants {
         break label_4;
       }
       statement();
-                Statement statement = (Statement)stack.pop();
-                myStatementList.add(statement);
     }
-                myFunction_body.setStatement_list(myStatementList);
+                myFunction_body.setStatement_list((StatementList)stack.pop());
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RETURN:
       return_statement();
@@ -238,13 +237,11 @@ public class Grammaire implements GrammaireConstants {
 
   final public void statement() throws ParseException {
                 Statement myStatement = new Statement();
-                stack.push(myStatement);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case IDENTIFIER:
       if (jj_2_1(2)) {
         assignment();
                            Assignment myAssignment = (Assignment)stack.pop();
-                           myStatement = (Statement)stack.peek();
                            myStatement.setAssignment(myAssignment);
       } else {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -261,6 +258,8 @@ public class Grammaire implements GrammaireConstants {
       break;
     case IF:
       conditional_statement();
+                        Conditional_statement cStatement = (Conditional_statement)stack.pop();
+                        myStatement.setConditional_statement(cStatement);
       break;
     case WHILE:
       while_loop();
@@ -273,9 +272,8 @@ public class Grammaire implements GrammaireConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-                myStatement = (Statement)stack.pop();
-                StatementList myStatementList = (StatementList)stack.peek();
-                myStatementList.add(myStatement);
+                StatementList statementList = (StatementList)stack.peek();
+                statementList.add(myStatement);
   }
 
   final public void variable_declaration() throws ParseException {
@@ -374,11 +372,13 @@ public class Grammaire implements GrammaireConstants {
   final public void conditional_statement() throws ParseException {
     jj_consume_token(IF);
     jj_consume_token(42);
-          Conditional_statement myConditional_statement = new Conditional_statement();
+          Conditional_statement cStatement = new Conditional_statement();
+          StatementList ifBody = new StatementList();
+          stack.push(ifBody);
     expression();
     jj_consume_token(44);
                 Expression exp = (Expression)stack.pop();
-                myConditional_statement.setExpression(exp);
+                cStatement.setExpression(exp);
     jj_consume_token(45);
     label_6:
     while (true) {
@@ -418,49 +418,9 @@ public class Grammaire implements GrammaireConstants {
       ;
     }
     jj_consume_token(46);
-                stack.push(myConditional_statement);
-                int i = 0;
-                /*node = (ASTNode)stack.peek();
-		Expression myExpression;
-		if(node instanceof StatementList)
-		{
-		  	StatementList myStateList = (StatementList)stack.pop();
-		
-		  	node = (ASTNode)stack.peek();
-		  	if(node instanceof Expression)
-		  	{
-		  	  	myExpression = (Expression)stack.pop();
-		  	  	myConditional_statement = (Conditional_statement)stack.pop();
-		  	  	myConditional_statement.setStatement_list(myStateList);
-		  	  	Statement myStatement = (Statement)stack.peek();
-				myStatement.setConditional_statement(myConditional_statement);
-		  	}else
-		  	{
-		  	  	myConditional_statement = (Conditional_statement)stack.pop();
-				myConditional_statement.setStatement_list(myStateList);
-		
-				Statement myStatement = (Statement)stack.peek();
-				myStatement.setConditional_statement(myConditional_statement);
-		  	}
-		}else if(node instanceof Expression)
-		{
-		  	myExpression = (Expression)stack.pop();
-		  	myConditional_statement = (Conditional_statement)stack.pop();
-			Statement myStatement = (Statement)stack.peek();
-			myConditional_statement.setExpression(myExpression);
-			myStatement.setConditional_statement(myConditional_statement);
-		  	
-		}else if(node instanceof Conditional_statement)
-		{
-			myConditional_statement = (Conditional_statement)stack.pop();
-			Statement myStatement = (Statement)stack.peek();
-			myStatement.setConditional_statement(myConditional_statement);
-		}else if(node instanceof Statement)
-		{
-		  	Statement myStatement = (Statement)stack.peek();
-		    myStatement.setConditional_statement(myConditional_statement);
-		}*/
-
+                ifBody = (StatementList)stack.pop();
+                cStatement.setIfBody(ifBody);
+                stack.push(cStatement);
   }
 
   final public void expression() throws ParseException {
@@ -935,6 +895,11 @@ public class Grammaire implements GrammaireConstants {
     return false;
   }
 
+  private boolean jj_3_1() {
+    if (jj_3R_16()) return true;
+    return false;
+  }
+
   private boolean jj_3R_17() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(42)) return true;
@@ -950,11 +915,6 @@ public class Grammaire implements GrammaireConstants {
   private boolean jj_3_2() {
     if (jj_scan_token(46)) return true;
     if (jj_scan_token(ELSE)) return true;
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_3R_16()) return true;
     return false;
   }
 

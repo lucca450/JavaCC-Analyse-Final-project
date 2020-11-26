@@ -28,8 +28,8 @@ public class Comparaison_expression extends Expression {
 		this.comparaison_operator = comparaison_operator;
 	}
 
-	public void accept(VisitorPrint visitor) {	
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {	
+		visitor.visit(this, nbTab);
 	}
 	
 }

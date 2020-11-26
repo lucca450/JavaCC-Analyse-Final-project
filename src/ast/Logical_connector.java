@@ -19,7 +19,7 @@ public class Logical_connector {
 		this.connector = connector;
 	}
 
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 	}
 }

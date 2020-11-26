@@ -34,8 +34,8 @@ public class Unary_expression  extends Expression{
 		this.term = term;
 	}
 
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 	}
 	
 	

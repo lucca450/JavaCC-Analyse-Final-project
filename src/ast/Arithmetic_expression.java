@@ -29,8 +29,8 @@ public class Arithmetic_expression extends Expression{
 
 
 
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 	}
 	
 	

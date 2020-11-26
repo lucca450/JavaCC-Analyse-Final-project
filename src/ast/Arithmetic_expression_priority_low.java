@@ -23,10 +23,12 @@ public class Arithmetic_expression_priority_low extends Expression{
 		this.arithmetic_operation_piority_low = arithmetic_operation_piority_low;
 	}
 
-
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	@Override
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
+		
 	}
+
 
 
 

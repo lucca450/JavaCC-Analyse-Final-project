@@ -18,8 +18,8 @@ public class Arithmetic_operation_priority_low{
 		this.operation = operation;
 	}
 
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 	}
 	
 	

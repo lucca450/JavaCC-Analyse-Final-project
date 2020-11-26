@@ -25,8 +25,8 @@ public class Comparaison_operator{
 		return comparaison_operator.toString();
 	}
 
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 	}
 	
 	

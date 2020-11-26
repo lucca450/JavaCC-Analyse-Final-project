@@ -77,14 +77,14 @@ public class Function extends ASTNode{
 	}
 
 
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 		
         for (Parameter_declaration pd : parameter_declaration_list) {
-            pd.accept(visitor);
+            pd.accept(visitor, nbTab + 1);
         }
 		
-        function_body.accept(visitor);
+        function_body.accept(visitor, nbTab + 1);
 	}
 	
 }

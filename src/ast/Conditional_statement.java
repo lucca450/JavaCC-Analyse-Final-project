@@ -48,8 +48,8 @@ public class Conditional_statement extends Statement {
 		System.out.println("Expression conditionnelle"); 
 	}
 	
-	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);
+	public void accept(VisitorPrint visitor, int nbTab) {
+		visitor.visit(this, nbTab);
 	
 		/*if( statement_list.getStatement_list().size() != 0) {
 	        for (Statement s : statement_list.getStatement_list()) {
