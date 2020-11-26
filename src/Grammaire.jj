@@ -230,7 +230,6 @@ void function_body() :
 	}
     )*
 	{
-	    myVariableDeclarationList = (VariableDeclarationList)stack.pop();
 	    myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
 	
 	   	StatementList myStatementList = new StatementList();
@@ -315,8 +314,6 @@ void variable_declaration():
 		myVariable_declaration.setAssignment_list(myAssignmentList);
 		myVariable_declaration.setType(t.toString());
 		
-		VariableDeclarationList myVariableDeclarationList = (VariableDeclarationList)stack.peek();
-		myVariableDeclarationList.add(myVariable_declaration);
 		stack.push(myVariable_declaration);
 	}
 }
@@ -478,13 +475,10 @@ void comparaison_expression():
 	   	arithmetic_expression_priority_low() // a > b ou a+b < a/b etc.
 		{
 			Expression expDroite = (Expression)stack.pop();		
-	   		myComparaison_expression.setDroite(expDroite);  
+	   		myComparaison_expression.setDroite(expDroite);
+	   		stack.push(myComparaison_expression);  
 		}
 	 )*
-
-	{
-	  	stack.push(myComparaison_expression);
-	}
 }
 
 

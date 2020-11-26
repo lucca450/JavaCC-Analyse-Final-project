@@ -202,7 +202,6 @@ public class Grammaire implements GrammaireConstants {
                 Variable_declaration varD = (Variable_declaration)stack.pop();
                 myVariableDeclarationList.add(varD);
     }
-            myVariableDeclarationList = (VariableDeclarationList)stack.pop();
             myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
 
                 StatementList myStatementList = new StatementList();
@@ -311,8 +310,6 @@ public class Grammaire implements GrammaireConstants {
                 myVariable_declaration.setAssignment_list(myAssignmentList);
                 myVariable_declaration.setType(t.toString());
 
-                VariableDeclarationList myVariableDeclarationList = (VariableDeclarationList)stack.peek();
-                myVariableDeclarationList.add(myVariable_declaration);
                 stack.push(myVariable_declaration);
   }
 
@@ -519,8 +516,8 @@ public class Grammaire implements GrammaireConstants {
       arithmetic_expression_priority_low();
                         Expression expDroite = (Expression)stack.pop();
                         myComparaison_expression.setDroite(expDroite);
+                        stack.push(myComparaison_expression);
     }
-                stack.push(myComparaison_expression);
   }
 
   final public void arithmetic_expression_priority_low() throws ParseException {
@@ -937,17 +934,6 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3_2() {
-    if (jj_scan_token(46)) return true;
-    if (jj_scan_token(ELSE)) return true;
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_3R_16()) return true;
-    return false;
-  }
-
   private boolean jj_3R_17() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(42)) return true;
@@ -962,6 +948,17 @@ public class Grammaire implements GrammaireConstants {
 
   private boolean jj_3_3() {
     if (jj_3R_17()) return true;
+    return false;
+  }
+
+  private boolean jj_3_2() {
+    if (jj_scan_token(46)) return true;
+    if (jj_scan_token(ELSE)) return true;
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_3R_16()) return true;
     return false;
   }
 
