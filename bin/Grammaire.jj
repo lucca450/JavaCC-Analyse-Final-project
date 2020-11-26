@@ -737,15 +737,12 @@ void logical_connector():
 }
 {
   	 {
-	   Logical_connector myLogical_connector = new Logical_connector();
-	   stack.push(myLogical_connector);
+	   Logical_connector lCon = new Logical_connector();
 	 }
 	    ( t = < AND > | t = < OR > )
 	 {
-	   myLogical_connector = (Logical_connector)stack.pop();
-	   myLogical_connector.setConnector(t.toString());
-	   Expression myExpression = (Expression)stack.peek();
-	   //myExpression.setLogical_connector(myLogical_connector);	
+	   lCon.setConnector(t.toString());
+	   stack.push(lCon);
 	 }
 }
 

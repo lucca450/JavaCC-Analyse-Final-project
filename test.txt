@@ -1,5 +1,5 @@
 void test (bool a) {
-	double c = 0;
+	bool c = a == 0;
 	if (c > 2){
 	  c = 2.6;
 	}

@@ -746,8 +746,7 @@ public class Grammaire implements GrammaireConstants {
 
   final public void logical_connector() throws ParseException {
   Token t = null;
-           Logical_connector myLogical_connector = new Logical_connector();
-           stack.push(myLogical_connector);
+           Logical_connector lCon = new Logical_connector();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case AND:
       t = jj_consume_token(AND);
@@ -760,11 +759,8 @@ public class Grammaire implements GrammaireConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-           myLogical_connector = (Logical_connector)stack.pop();
-           myLogical_connector.setConnector(t.toString());
-           Expression myExpression = (Expression)stack.peek();
-           //myExpression.setLogical_connector(myLogical_connector);	
-
+           lCon.setConnector(t.toString());
+           stack.push(lCon);
   }
 
   final public void function_call() throws ParseException {
@@ -934,6 +930,11 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
+  private boolean jj_3_3() {
+    if (jj_3R_17()) return true;
+    return false;
+  }
+
   private boolean jj_3R_17() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(42)) return true;
@@ -943,11 +944,6 @@ public class Grammaire implements GrammaireConstants {
   private boolean jj_3R_16() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(ASSIGN)) return true;
-    return false;
-  }
-
-  private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
     return false;
   }
 
