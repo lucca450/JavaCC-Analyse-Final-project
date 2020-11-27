@@ -1,10 +1,19 @@
-void test (bool a) {
-	bool c = a == 0;
-	if (a == 4 || c > 0){
-	  	c = 2.6;
-	 	a = 4.5;
-	  	if(a > b){
-	  		c = 8;
-	  	}
-	}
+void test (int a, int b, int c) {
+	int d = 0;
+	int e = 0;
+	
+	if (a > 0){
+	  	d = 1;
+	}elseif(b > 0)
+	{
+		d = 2;
+	}elseif(c > 0)
+	{
+		d = 3;
+	}else
+	{
+		d = 4;
+	}	
+	
+	e = 100;
 }

@@ -1,7 +1,5 @@
 package ast;
 
-
-
 public class Parameter_declaration extends ASTNode {
 	private String type;
 	private String parameter_name;
@@ -35,6 +33,12 @@ public class Parameter_declaration extends ASTNode {
 
 	public void accept(VisitorPrint visitor, int nbTab) {
 		visitor.visit(this, nbTab);
+	}
+
+	@Override
+	public Object interpret(Context context) {
+		System.out.println("Parameter_declaration ne devrait pas se faire interpreter");
+		return null;
 	}
 
 }

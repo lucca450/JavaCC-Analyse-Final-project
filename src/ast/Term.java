@@ -27,6 +27,17 @@ public class Term extends Expression{
 	public void accept(VisitorPrint visitor, int nbTab) {
 		visitor.visit(this, nbTab);
 	}
+	@Override
+	public Object interpret(Context context) {
+		if(value != null) {
+			return value.interpret(context);
+		}else if(expression != null)
+		{
+			return expression.interpret(context);
+		}
+		context.setHasError(new ExecutionError("Le terme n'a pas de valeur ni de Log Expression"));
+		return null;
+	}
 	
 	
 }

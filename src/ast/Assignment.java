@@ -3,14 +3,12 @@ package ast;
 public class Assignment extends ASTNode {
 	private String identifier;
 	private String assign;
-	//private Expression expression;
 	private Expression expr;
 	
-	public Assignment(String identifier, String assign, Expression expr/*Expression expression*/) {
+	public Assignment(String identifier, String assign, Expression expr) {
 		super();
 		this.identifier = identifier;
 		this.assign = assign;
-		//this.expression = expression;
 		this.expr = expr;
 	}
 	
@@ -33,15 +31,6 @@ public class Assignment extends ASTNode {
 	public void setAssign(String assign) {
 		this.assign = assign;
 	}
-
-	/*public Expression getExpression() {
-		return expression;
-	}
-
-	public void setExpression(Expression expression) {
-		this.expression = expression;
-	}*/
-	
 	public Expression getExpr() {
 		return expr;
 	}
@@ -52,8 +41,11 @@ public class Assignment extends ASTNode {
 	
 	public void accept(VisitorPrint visitor, int nbTab) {
 		visitor.visit(this, nbTab);
-		
-		//expression.accept(visitor);
+	}
+
+	@Override
+	public Object interpret(Context context) {
+		return expr.interpret(context);
 	}
 
 

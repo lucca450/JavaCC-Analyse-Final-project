@@ -81,5 +81,10 @@ public class Function extends ASTNode{
 		
         function_body.accept(visitor, nbTab + 1);
 	}
+
+	@Override
+	public Object interpret(Context context) {
+		return function_body.interpret(context);
+	}
 	
 }

@@ -119,14 +119,36 @@ void function() :
 	{
 		Function_body funcB = (Function_body)stack.pop();
 	  	func.setFunction_body(funcB);
-	  
-	  	func.accept(new VisitorPrint(), 0);
+
+
+		/*
+		Boolean ok = false;
+		while(!ok){
+        	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+
+         	System.out.println("Voulez-vous afficher l'AST ? (o/n)");
+        	String answer = reader.readLine(); 
+
+			ok = answer == "o" || answer == "n";
+			if(!ok) {
+				System.out.prinln("Entrée invalide");
+			}
+		}
+		
+		if(answer == "o") {
+			func.accept(new VisitorPrint(), 0);
+		}
+		*/
+
+		
 
 		DataGenerator dG = new DataGenerator(func);
-		ArrayList<Path> paths =	dG.GenerateData();
+		ArrayList<Execution> executions = dG.GenerateData();
 
-		for(Path p : paths) {
-		 	Context context = dG.GenerateContext(p);
+		for(Execution e : executions) {
+		 	Context context = dG.GenerateContext(e);
+
+			fuct.interpret(context);
 
 			int allo = 100;
 		}
@@ -211,7 +233,6 @@ void statement() :
 			{
 			   Assignment myAssignment = (Assignment)stack.pop();
 			   myStatement.setAssignment(myAssignment);
-			  
 			}
 			| function_call()
 		) ";"
@@ -221,7 +242,14 @@ void statement() :
 			myStatement.setConditional_statement(cStatement);
 		}
 		| while_loop()
+		{
+		  	
+		}
 		| for_loop()
+		{
+		  	
+		}
+		  
 	)
 
 	{
@@ -272,18 +300,22 @@ Token litteral_value() :
 {
 	(		t = < INTEGER >
 		| t = < DECIMAL >
-		| boolean_value()
+		| t = boolean_value()
 	)
 	{
   			  return t;
 	}	
 }
 
-void boolean_value() :
+Token boolean_value() :
 {
+  Token t = null;
 }
 {
-	( < TRUE > | < FALSE > )
+	( t = < TRUE > | t = < FALSE > )
+	{
+	  	return t;
+	}
 }
 
 Token type() :
@@ -492,42 +524,7 @@ void term():
 		myTerm.setValue(val);
 		stack.push(myTerm);
 	}
-	| "(" expression()
-		{
-
-		//ICI	  
-			/*Expression myExpression = new Expression();
-			Term myTerm = new Term();
-
-			ASTNode node = (ASTNode)stack.peek();
-
-			if(node instanceof Expression)
-			{
-				myExpression = (Expression)stack.pop();
-			}else
-			{
-				myTerm = (Term)stack.pop();
-				myExpression = myTerm.getExpression();
-			}
-
-			node = (ASTNode)stack.peek();
-			if(node instanceof Term)
-			{
-			  	myTerm = (Term)stack.peek();
-			}else
-			{
-		    	myTerm = new Term();
-		      	stack.push(myTerm);
-			}
-			  
-			 myTerm = (Term)stack.peek();
-			 myTerm.setExpression(myExpression);
-			
-			 /*	 myTerm = (Term)stack.pop();
-	  		 myUnary_expression = (Unary_expression)stack.peek();
-			 myUnary_expression.setTerm(myTerm);*/
-		}
-	")"
+	| "("expression()")"
 
 
 }
@@ -561,16 +558,14 @@ void value():
 	{
   		Value myValue = new Value();
 	}
-
-
-  
 	( 
 		LOOKAHEAD(2) function_call()
 		| t = < IDENTIFIER >
 		| t = litteral_value()
+
+
+		
 	)
-
-
 	{			  
 		myValue.setIdentificateur(t.toString());
 		stack.push(myValue);
@@ -659,7 +654,7 @@ void function_call():
 {
 }
 {
-	< IDENTIFIER > "(" (expression() ("," expression())*)* ")"
+	< IDENTIFIER > "(" (expression() ("," expression())*)* ")" // pouquoi y'a un 2e *
 }
 
 void assignment():

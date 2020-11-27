@@ -29,5 +29,10 @@ public class Value extends ASTNode {
 		visitor.visit(this, nbTab);
 	}
 
+	@Override
+	public Object interpret(Context context) {
+		return identificateur;
+	}
+
 
 }

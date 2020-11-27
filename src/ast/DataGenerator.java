@@ -13,11 +13,11 @@ public class DataGenerator {
     	function = f;
     }
     
-    public ArrayList<Path> GenerateData() {
-    	ArrayList<Path> paths = new ArrayList<Path>();
+    public ArrayList<Execution> GenerateData() {
+    	ArrayList<Execution> executions = new ArrayList<Execution>();
 		
     	for (int i = 0; i < 10; i++) {
-    		Path path = new Path();
+    		Execution execution = new Execution();
     	
 	    	for(Parameter_declaration pd : function.getParameter_declaration_list())
 	        {
@@ -29,14 +29,14 @@ public class DataGenerator {
     	    	else
     	    		randomValue = ((Math.random() * 2)) == 0;
     			
-    			path.AddRandomValues(new Variable(pd.getID(), pd.getParameter_name(), type, randomValue));	
+    			execution.AddRandomValues(new Variable(pd.getID(), pd.getParameter_name(), type, randomValue));	
 	        }
-	    	paths.add(path);
+	    	executions.add(execution);
     	}
-    	return paths;
+    	return executions;
     }
     
-    public Context GenerateContext(Path path) {
+    public Context GenerateContext(Execution path) {
     	Context context = new Context();
     	
     	for(Variable v : path.getRandomValues()) {	//Paramètres

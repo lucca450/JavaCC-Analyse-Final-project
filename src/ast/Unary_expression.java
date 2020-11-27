@@ -1,8 +1,5 @@
 package ast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Unary_expression  extends Expression{
 
 	private Unary_operator unary_operator;
@@ -36,6 +33,50 @@ public class Unary_expression  extends Expression{
 
 	public void accept(VisitorPrint visitor, int nbTab) {
 		visitor.visit(this, nbTab);
+	}
+
+	@Override
+	public Object interpret(Context context) {
+		Object o = term.interpret(context);
+		
+		switch(unary_operator.getOperator())
+		{
+		case "!":
+			if(o instanceof Boolean) {
+				return !(boolean)o;
+			}else
+			{
+				context.setHasError(new ExecutionError("Doit être un bouléen pour faire !"));
+				return null;
+			}
+		case "--":
+			if(o instanceof Integer) 
+			{
+				int i = (int)o;
+				return i-1;
+			}else if(o instanceof Double)
+			{
+				double d = (double)o;
+				return d-1;
+			}else {
+				context.setHasError(new ExecutionError("Doit être un nombre pour faire --"));
+			}
+		case "++":
+			if(o instanceof Integer) 
+			{
+				int i = (int)o;
+				return i+1;
+			}else if(o instanceof Double)
+			{
+				double d = (double)o;
+				return d+1;
+			}else {
+				context.setHasError(new ExecutionError("Doit être un nombre pour faire ++"));
+			}
+			default:
+				System.out.println("Something went wrong interpret Unary_expression");
+				return null;
+		}
 	}
 	
 	

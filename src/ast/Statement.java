@@ -47,4 +47,31 @@ public class Statement extends ASTNode {
 */
      
 	}
+
+	@Override
+	public Object interpret(Context context) {
+		if(conditional_statement != null) {
+			conditional_statement.interpret(context);			
+		}
+		
+		if(assignment != null){			
+			Variable v = context.FindVariable(assignment.getID());
+			if(v != null) 
+			{
+				Object o = assignment.interpret(context);
+				if(v.getType() == "int")
+				{
+					v.setValue((int)o);
+				}else if(v.getType() == "double")
+				{
+					v.setValue((double)o);
+				}else
+				{
+					v.setValue((boolean)o);
+				}
+				
+			}
+		}
+		return null;
+	}
 }

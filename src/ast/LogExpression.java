@@ -29,5 +29,26 @@ public class LogExpression extends Expression {
 	public void accept(VisitorPrint visitor, int nbTab) {
 		visitor.visit(this, nbTab);
 	}
+
+	@Override
+	public Object interpret(Context context) {
+		
+		// vérifier que c'est bien des booleans
+		
+		
+		Boolean left = (Boolean)this.getGauche().interpret(context);
+		Boolean right = (Boolean)this.getDroite().interpret(context);
+		
+		switch(logical_connector.getConnector())
+		{
+		case "&&":
+			return left&&right;
+		case "||":
+			return left||right;
+			default:
+				System.out.println("Something went wrong interpret LogExpression");
+				return null;
+		}
+	}
 	
 }

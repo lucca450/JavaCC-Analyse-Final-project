@@ -84,13 +84,35 @@ public class Grammaire implements GrammaireConstants {
                 Function_body funcB = (Function_body)stack.pop();
                 func.setFunction_body(funcB);
 
-                func.accept(new VisitorPrint(), 0);
+
+                /*
+		Boolean ok = false;
+		while(!ok){
+        	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+
+         	System.out.println("Voulez-vous afficher l'AST ? (o/n)");
+        	String answer = reader.readLine(); 
+
+			ok = answer == "o" || answer == "n";
+			if(!ok) {
+				System.out.prinln("Entrée invalide");
+			}
+		}
+		
+		if(answer == "o") {
+			func.accept(new VisitorPrint(), 0);
+		}
+		*/
+
+
 
                 DataGenerator dG = new DataGenerator(func);
-                ArrayList<Path> paths = dG.GenerateData();
+                ArrayList<Execution> executions = dG.GenerateData();
 
-                for(Path p : paths) {
-                        Context context = dG.GenerateContext(p);
+                for(Execution e : executions) {
+                        Context context = dG.GenerateContext(e);
+
+                        fuct.interpret(context);
 
                         int allo = 100;
                 }
@@ -210,9 +232,11 @@ public class Grammaire implements GrammaireConstants {
       break;
     case WHILE:
       while_loop();
+
       break;
     case FOR:
       for_loop();
+
       break;
     default:
       jj_la1[8] = jj_gen;
@@ -269,7 +293,7 @@ public class Grammaire implements GrammaireConstants {
       break;
     case TRUE:
     case FALSE:
-      boolean_value();
+      t = boolean_value();
       break;
     default:
       jj_la1[10] = jj_gen;
@@ -280,19 +304,22 @@ public class Grammaire implements GrammaireConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public void boolean_value() throws ParseException {
+  final public Token boolean_value() throws ParseException {
+  Token t = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case TRUE:
-      jj_consume_token(TRUE);
+      t = jj_consume_token(TRUE);
       break;
     case FALSE:
-      jj_consume_token(FALSE);
+      t = jj_consume_token(FALSE);
       break;
     default:
       jj_la1[11] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+                {if (true) return t;}
+    throw new Error("Missing return statement in function");
   }
 
   final public Token type() throws ParseException {
@@ -507,7 +534,6 @@ public class Grammaire implements GrammaireConstants {
     case 42:
       jj_consume_token(42);
       expression();
-
       jj_consume_token(44);
       break;
     default:
@@ -837,19 +863,8 @@ public class Grammaire implements GrammaireConstants {
     finally { jj_save(2, xla); }
   }
 
-  private boolean jj_3_2() {
-    if (jj_scan_token(46)) return true;
-    if (jj_scan_token(ELSE)) return true;
-    return false;
-  }
-
   private boolean jj_3_3() {
     if (jj_3R_17()) return true;
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_3R_16()) return true;
     return false;
   }
 
@@ -862,6 +877,17 @@ public class Grammaire implements GrammaireConstants {
   private boolean jj_3R_16() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(ASSIGN)) return true;
+    return false;
+  }
+
+  private boolean jj_3_2() {
+    if (jj_scan_token(46)) return true;
+    if (jj_scan_token(ELSE)) return true;
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_3R_16()) return true;
     return false;
   }
 

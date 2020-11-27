@@ -2,9 +2,8 @@ package ast;
 
 
 
-public class ASTNode{
+public abstract class ASTNode{
 
-	
 	static int ctrID;
 	private int ID;
 
@@ -13,6 +12,9 @@ public class ASTNode{
 		ID = ++ctrID;
 	}
 
+	public abstract Object interpret(Context context);
+	
+	
 	public void setID(int iD) {
 		ID = iD;
 	}
@@ -21,5 +23,5 @@ public class ASTNode{
 		return ID;
 	}
 	
-
+	
 }

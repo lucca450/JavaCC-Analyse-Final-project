@@ -4,10 +4,21 @@ import java.util.ArrayList;
 
 public class Context {
 	private ArrayList<Variable> variables;
+	private Object result;
 	public Boolean isEmpty = true;
-	
+	private ExecutionError error;
+
 	public Context() {
 		variables = new ArrayList<Variable>();
+		result = null;
+	}
+	
+	public boolean getHasError() {
+		return error != null;
+	}
+
+	public void setHasError(ExecutionError e) {
+		this.error = e;
 	}
 	
 	public void AddVariable(int ID, String identificator, String type, Object value) {
@@ -23,6 +34,14 @@ public class Context {
 		}
 	}
 	
+	public Object getResult() {
+		return result;
+	}
+
+	public void setResult(Object result) {
+		this.result = result;
+	}
+
 	public Variable FindVariable(int ID) {
 		for(Variable v : variables){
 			if(v.getID() == ID) {

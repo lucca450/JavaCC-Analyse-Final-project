@@ -33,4 +33,10 @@ public class Variable_declaration extends ASTNode {
 	public void accept(VisitorPrint visitor, int nbTab) {
 		visitor.visit(this, nbTab);
 	}
+
+	@Override
+	public Object interpret(Context context) {
+		assignment_list.interpret(context);
+		return null;
+	}
 }

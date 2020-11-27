@@ -1,8 +1,5 @@
 package ast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Function_body extends ASTNode {
 
 	private VariableDeclarationList variable_declaration_list;
@@ -65,6 +62,20 @@ public class Function_body extends ASTNode {
 			sl.accept(visitor, nbTab + 1);
 		}
 
+	}
+
+	@Override
+	public Object interpret(Context context) {
+		variable_declaration_list.interpret(context);
+		
+		if(!context.getHasError()) {
+			statement_list;			
+		}
+		
+		if(!context.getHasError()) {
+			return return_statement;		
+		}
+		return null;
 	}
 
 }

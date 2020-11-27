@@ -15,4 +15,10 @@ public class Return_statement extends ASTNode {
 	public void setExpression(Expression expression) {
 		this.expression = expression;
 	}
+
+	@Override
+	public Object interpret(Context context) {
+		context.setResult(expression.interpret(context));
+		return null;
+	}
 }
