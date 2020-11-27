@@ -1,7 +1,10 @@
 void test (bool a) {
 	bool c = a == 0;
 	if (a == 4 || c > 0){
-	  c = 2.6;
-	  a = 4.5;
+	  	c = 2.6;
+	 	a = 4.5;
+	  	if(a > b){
+	  		c = 8;
+	  	}
 	}
 }

@@ -11,77 +11,15 @@ import java.lang.Math;
 import java.util.Random;
 
 public class Grammaire{
-
-  static Object[][] myArray;
   static Stack stack = new Stack();
   static int uniqueID = 0;
-
-
-
-  public static Object[][] DataGenerator(Function myFunction) 
-  {
-    int max =  10000; 
-    int min = -10000; 
-    int range = max - min + 1;
-    
-	String type = "";
-	
-	int qty = myFunction.getParameter_declaration_list().size();
-	int ctr = 0;	
-	Object[][] tmpArray = new Object[qty][10];
-	
-    for(Parameter_declaration pd : myFunction.getParameter_declaration_list())
-    {
-    	type = pd.getType();
-    	
-    	if(type.equals("int"))
-    	{
-    	  int random_int;
-    	  for (int i = 0; i < 10; i++)
-    	  { 
-            	random_int = (int)(Math.random() * range) + min;
-				tmpArray[ctr][i] = random_int;
-		  }
-    	  		
-    	  
-    	}else if(type.equals("double"))
-    	{
-    	  double random_double;
-    	  for (int i = 0; i < 10; i++)
-    	  { 
-            	random_double = (double)(Math.random() * range) + min;
-            	tmpArray[ctr][i] = random_double;
-		  }
-    	  
-    	}else if(type.equals("bool"))
-    	{
-    	  for (int i = 0; i < 10; i++)
-    	  { 
-		    	Random r = new Random();
-		    	tmpArray[ctr][i] = r.nextBoolean();
-		  }
-    	}
-
-
-    	ctr++;
-    }
-
-    return tmpArray;
-  }
   
   public static void main(String args []) throws ParseException  {    
     try {      
 	    InputStream inputStream = new FileInputStream(new File("test.txt"));	    Grammaire parser = new Grammaire(inputStream);
 	    parser.function();
 
-		//System.out.println(stack.peek());
-
-
-
-
-
 		Function myFunction = (Function)stack.peek();
-		myArray = DataGenerator(myFunction);
 
 	
 
@@ -179,10 +117,22 @@ void function() :
 	"}"
 
 	{
-	  Function_body funcB = (Function_body)stack.pop();
-	  func.setFunction_body(funcB);
+		Function_body funcB = (Function_body)stack.pop();
+	  	func.setFunction_body(funcB);
 	  
-	  func.accept(new VisitorPrint(), 0);
+	  	func.accept(new VisitorPrint(), 0);
+
+		DataGenerator dG = new DataGenerator(func);
+		ArrayList<Path> paths =	dG.GenerateData();
+
+		for(Path p : paths) {
+		 	Context context = dG.GenerateContext(p);
+
+			int allo = 100;
+		}
+
+
+	  	
 	}
 	
 	(function())*

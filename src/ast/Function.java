@@ -6,16 +6,11 @@ import java.util.List;
 
 public class Function extends ASTNode{
 
-
-
-
 	private String type;
 	private String function_name;
 	private List<Parameter_declaration> parameter_declaration_list = new ArrayList<Parameter_declaration>();
 	private Function_body function_body;
 	
-
-
 	public Function(String type, String function_name, List<Parameter_declaration> parameter_declaration_list, Function_body function_body) {
 		this.type = type;
 		this.function_name = function_name;
