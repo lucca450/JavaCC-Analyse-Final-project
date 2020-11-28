@@ -1,19 +1,6 @@
 void test (int a, int b, int c) {
-	int d = 0;
-	int e = 0;
+	int d = 4+5;
 	
-	if (a > 0){
-	  	d = 1;
-	}elseif(b > 0)
-	{
-		d = 2;
-	}elseif(c > 0)
-	{
-		d = 3;
-	}else
-	{
-		d = 4;
-	}	
+	Fly(a+1, b>0, ++c);
 	
-	e = 100;
 }

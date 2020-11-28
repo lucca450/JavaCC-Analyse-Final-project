@@ -1,9 +1,9 @@
 package ast;
 
 public class Value extends ASTNode {
-	String identificateur;
+	Object identificateur;
 
-	public Value(String identificateur) {
+	public Value(Object identificateur) {
 		this.identificateur = identificateur;
 	}
 
@@ -11,18 +11,18 @@ public class Value extends ASTNode {
 		
 	}
 
-	public String getIdentificateur() {
+	public Object getIdentificateur() {
 		return identificateur;
 	}
 
-	public void setIdentificateur(String identificateur) {
+	public void setIdentificateur(Object identificateur) {
 		this.identificateur = identificateur;
 	}
 
 
 	@Override
 	public String toString() {
-		return identificateur.toString() ;
+		return identificateur.toString();
 	}
 
 	public void accept(VisitorPrint visitor, int nbTab) {

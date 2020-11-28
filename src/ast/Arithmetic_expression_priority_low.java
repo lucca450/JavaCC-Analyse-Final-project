@@ -32,39 +32,19 @@ public class Arithmetic_expression_priority_low extends Expression{
 		Object oLeft = getGauche().interpret(context);
 		Object oRight = getDroite().interpret(context);
 		
-		boolean isDouble = (oLeft instanceof Double || oRight instanceof Double);
+		Double dLeft = Double.valueOf(oLeft.toString());
+		Double dRight = Double.valueOf(oRight.toString());
 		
-		if(isDouble) {
-			double left = (double)oLeft;
-			double right = (double)oRight;
-			
-			if(arithmetic_operation_priority_low.getOperation() == "+") {
-				return left + right;
-			}else if(arithmetic_operation_priority_low.getOperation() == "-")
-			{
-				return left - right;
-			}else 
-			{
-				context.setHasError(new ExecutionError("Doit être un + ou un -"));
-			}
-		}else {
-			int left = (int)oLeft;
-			int right = (int)oRight;
-			if(arithmetic_operation_priority_low.getOperation() == "+") {
-				return left + right;
-			}else if(arithmetic_operation_priority_low.getOperation() == "-")
-			{
-				return left - right;
-			}else 
-			{
-				context.setHasError(new ExecutionError("Doit être un + ou un -"));
-			}
+		if(arithmetic_operation_priority_low.getOperation() == "+") {
+			return dLeft + dRight;
+		}else if(arithmetic_operation_priority_low.getOperation() == "-")
+		{
+			return dLeft - dRight;
+		}else 
+		{
+			context.setHasError(new ExecutionError("Doit être un + ou un -"));
 		}
+
 		return null;
 	}
-
-
-
-
-
 }

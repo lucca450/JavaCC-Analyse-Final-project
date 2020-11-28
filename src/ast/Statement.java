@@ -3,16 +3,20 @@ package ast;
 public class Statement extends ASTNode {
 	private Conditional_statement conditional_statement;
 	private Assignment assignment;
-	 
-	public Statement(Conditional_statement conditional_statement, Assignment assignment) {
-		this.conditional_statement = conditional_statement;
-		this.assignment = assignment;
-	}
+	private FunctionCall functionCall;
 	
 	public Statement() {
 
 	}
+	
+	public FunctionCall getFunctionCall() {
+		return functionCall;
+	}
 
+	public void setFunctionCall(FunctionCall fonctionCall) {
+		this.functionCall = fonctionCall;
+	}
+	
 	public Conditional_statement getConditional_statement() {
 		return conditional_statement;
 	}

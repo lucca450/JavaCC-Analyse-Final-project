@@ -141,18 +141,24 @@ void function() :
 		*/
 
 		
-
+		/*
 		DataGenerator dG = new DataGenerator(func);
 		ArrayList<Execution> executions = dG.GenerateData();
+
+		int nbWorked = 0;
 
 		for(Execution e : executions) {
 		 	Context context = dG.GenerateContext(e);
 
-			fuct.interpret(context);
+			Object result = fuct.interpret(context);
+
+			if(!context.getHasError()) {
+				nbWorked ++;
+			}
 
 			int allo = 100;
 		}
-
+		*/
 
 	  	
 	}
@@ -192,6 +198,9 @@ void function_body() :
 {
 	{
 	    Function_body myFunction_body = new Function_body();
+
+		
+
 
 	  	VariableDeclarationList myVariableDeclarationList = new VariableDeclarationList();	}
 	
@@ -235,6 +244,10 @@ void statement() :
 			   myStatement.setAssignment(myAssignment);
 			}
 			| function_call()
+			{
+			  	FunctionCall fCall = (FunctionCall)stack.pop();
+			  	myStatement.setFunctionCall(fCall);
+			}
 		) ";"
 		| conditional_statement()
 		{
@@ -268,23 +281,19 @@ void variable_declaration():
 		Variable_declaration myVariable_declaration = new Variable_declaration();
 
 		AssignmentList myAssignmentList = new AssignmentList();
-		stack.push(myAssignmentList);
 	}
 	t = type() assignment()
 	{
 		Assignment myAssignment = (Assignment)stack.pop();
-		myAssignmentList = (AssignmentList)stack.peek();
 	  	myAssignmentList.add(myAssignment); 
 	}
 	("," assignment()
 	{
 	  	myAssignment = (Assignment)stack.pop();
-		myAssignmentList = (AssignmentList)stack.peek();
 	  	myAssignmentList.add(myAssignment); 
 	}
 	)*
 	{
-		myAssignmentList = (AssignmentList)stack.pop();
 		
 		myVariable_declaration.setAssignment_list(myAssignmentList);
 		myVariable_declaration.setType(t.toString());
@@ -352,7 +361,9 @@ void conditional_statement():
 	}
 	"{" (
 	statement()
-
+	{
+	  
+	}
 	     )*
 	( LOOKAHEAD(2) "}" < ELSE > "{" ( statement() )* )?
 
@@ -427,85 +438,72 @@ void arithmetic_expression_priority_low():
 {
 }
 {
-  	 /*{
-  		Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
-		stack.push(myArithmetic_expression_priority_low);
-	 }*/
-	 
 	 arithmetic_expression() // a/b ou a*b ou a
 	 (
 	    {
   			Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
-			stack.push(myArithmetic_expression_priority_low);
+  			Expression expression = (Expression)stack.pop();
+  			myArithmetic_expression_priority_low.setGauche(expression);
 	    }
 	    
-	   	arithmetic_operation_piority_low() arithmetic_expression() // a/b + a*b ou a/b - a*b
+	   	arithmetic_operation_priority_low() arithmetic_expression() // a/b + a*b ou a/b - a*b ou a+b
+	   	{
+	   	  	expression = (Expression)stack.pop();
+	   	  	myArithmetic_expression_priority_low.setDroite(expression);
 
-	   {
-  		myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.pop();
-		Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-		myComparaison_expression.setDroite(myArithmetic_expression_priority_low);	
+	   	  	Arithmetic_operation_priority_low operator = (Arithmetic_operation_priority_low)stack.pop();
+			myArithmetic_expression_priority_low.setArithmetic_operation_priority_low(operator);
+	   	  	
+	  		stack.push(myArithmetic_expression_priority_low);
 	 	}
-
 	 )*
-
-	 /*{
-  		myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.pop();
-  		Comparaison_expression myComparaison_expression = (Comparaison_expression)stack.peek();
-  		List<Arithmetic_expression_priority_low> arithmetic_expression_priority_lowList = myComparaison_expression.getArithmetic_expression_priority_lowList();
-  		arithmetic_expression_priority_lowList.add(myArithmetic_expression_priority_low);
-  		myComparaison_expression.setArithmetic_expression_priority_lowList(arithmetic_expression_priority_lowList);
-	 }*/
 }
 
 void arithmetic_expression():
 {
 }
-{
-   	/*{
-  		Arithmetic_expression myArithmetic_expression = new Arithmetic_expression ();
-		stack.push(myArithmetic_expression);
-	}*/
-	
-	unary_expression() // a
+{	
+	unary_expression() // a ou a++ ou !a etc.
 	(
 	    {
-  		Arithmetic_expression myArithmetic_expression = new Arithmetic_expression ();
-		stack.push(myArithmetic_expression);
+	  		Arithmetic_expression myArithmetic_expression = new Arithmetic_expression ();
+	  		Unary_expression uExpression = (Unary_expression)stack.pop();
+	  		myArithmetic_expression.setGauche(uExpression);
 	    }
 	    
 	  	arithmetic_operation() unary_expression() // a/b ou a*b
 	  	
 	  	{
-  		myArithmetic_expression = (Arithmetic_expression)stack.pop();
-		Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();
-		myArithmetic_expression_priority_low.setDroite(myArithmetic_expression);	
+	  		uExpression = (Unary_expression)stack.pop();
+			myArithmetic_expression.setDroite(uExpression);
+
+			Arithmetic_operation operator = (Arithmetic_operation)stack.pop();
+			myArithmetic_expression.setArithmetic_operation(operator);
+
+			stack.push(myArithmetic_expression);
 	 	}
 	)*
-
-	/*{
-  		myArithmetic_expression = (Arithmetic_expression)stack.pop();
-  		Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();
-  		List<Arithmetic_expression> arithmetic_expressionList = myArithmetic_expression_priority_low.getArithmetic_expressionList();
-  		arithmetic_expressionList.add(myArithmetic_expression);
-  		myArithmetic_expression_priority_low.setArithmetic_expressionList(arithmetic_expressionList);
-	}*/
 }
 
 void unary_expression():
 {
+  	Unary_expression uExpression = null;
 }
 {
-
-	
-	(unary_operator() // a++ ou a-- ou !a
+	(unary_operator() // ++ ou -- ou ! avec le terme
 	{
-  		Unary_expression myUnary_expression = new Unary_expression();
-		stack.push(myUnary_expression);
+  		uExpression = new Unary_expression();
+		Unary_operator operator = (Unary_operator)stack.pop();
+		uExpression.setUnary_operator(operator);
 	}
 	)? term() // a
-
 	{
+		if(uExpression != null)
+	  	{
+	    	Term t = (Term)stack.pop();
+	    	uExpression.setTerm(t);
+	    	stack.push(uExpression);
+	  	}
 	}
 }
 
@@ -536,17 +534,14 @@ void unary_operator():
 {
     {
   		Unary_operator myUnary_operator = new Unary_operator ();
-		stack.push(myUnary_operator);
 	}
 	(		t = < PREFIX_INCREMENT >
 		| t = < PREFIX_DECREMENT >
 		| t = < NOT >
 	)
 	{
-  		myUnary_operator = (Unary_operator)stack.pop();
   		myUnary_operator.setOperator(t.toString());
-  		Unary_expression myUnary_expression = (Unary_expression)stack.peek();
-		myUnary_expression.setUnary_operator(myUnary_operator);
+		stack.push(myUnary_operator);
 	}
 }
 
@@ -560,14 +555,20 @@ void value():
 	}
 	( 
 		LOOKAHEAD(2) function_call()
+		{
+		  	FunctionCall fCall = (FunctionCall)stack.pop();
+		  	myValue.setIdentificateur(fCall);
+		}
 		| t = < IDENTIFIER >
+		{
+		 	 myValue.setIdentificateur(t.toString());
+		}
 		| t = litteral_value()
-
-
-		
+		{
+		 	 myValue.setIdentificateur(t.toString());
+		}
 	)
 	{			  
-		myValue.setIdentificateur(t.toString());
 		stack.push(myValue);
 	}	
 }
@@ -579,41 +580,30 @@ void arithmetic_operation():
 {
   	{
   	    Arithmetic_operation myArithmetic_operation = new Arithmetic_operation();
-		stack.push(myArithmetic_operation);
 	}
 	
 	( t = < MULTIPLY > | t = < DIVIDE > | t = < MODULO > )
 	
 	{
-		myArithmetic_operation = (Arithmetic_operation)stack.pop();
-		myArithmetic_operation.setOperation(t.toString());	
-  		Arithmetic_expression myArithmetic_expression = (Arithmetic_expression)stack.peek();
-  		List<Arithmetic_operation> Arithmetic_operationList = myArithmetic_expression.getArithmetic_operationList(); 		
-  		Arithmetic_operationList.add(myArithmetic_operation);		
-  		myArithmetic_expression.setArithmetic_operationList(Arithmetic_operationList);
+		myArithmetic_operation.setOperation(t.toString());
+		stack.push(myArithmetic_operation);
 	}
 }
 
-void arithmetic_operation_piority_low():
+void arithmetic_operation_priority_low():
 {
     Token t = null;
 }
 {
     {
-  	    Arithmetic_operation_piority_low myArithmetic_operation_piority_low = new Arithmetic_operation_piority_low();
-		stack.push(myArithmetic_operation_piority_low);
+  	    Arithmetic_operation_priority_low myArithmetic_operation_priority_low = new Arithmetic_operation_priority_low();
 	}
 	
 	( t = < PLUS > | t = < MINUS > )
 
 	{
-		myArithmetic_operation_piority_low = (Arithmetic_operation_piority_low)stack.pop();
-		myArithmetic_operation_piority_low.setOperation(t.toString());		
-  		Arithmetic_expression_priority_low myArithmetic_expression_priority_low = (Arithmetic_expression_priority_low)stack.peek();		
-  		List<Arithmetic_operation_piority_low> Arithmetic_operation_piority_lowList = myArithmetic_expression_priority_low.getArithmetic_operation_priority_lowList();
-  		 		
-  		Arithmetic_operation_piority_lowList.add(myArithmetic_operation_piority_low);		
-  		myArithmetic_expression_priority_low.setArithmetic_operation_piority_lowList(Arithmetic_operation_priority_lowList);
+		myArithmetic_operation_priority_low.setOperation(t.toString());
+		stack.push(myArithmetic_operation_priority_low);
 	}
 }
 
@@ -652,9 +642,27 @@ void logical_connector():
 
 void function_call():
 {
+  	Token identifier = null;
+  	FunctionCall fCall = new FunctionCall();
+  	ArrayList<Expression> parameters = new ArrayList<Expression>();
 }
 {
-	< IDENTIFIER > "(" (expression() ("," expression())*)* ")" // pouquoi y'a un 2e *
+	identifier = < IDENTIFIER > "(" (expression()
+	{
+		Expression e = (Expression)stack.pop();
+		parameters.add(e);
+	}
+	("," expression()
+	{
+	  	e = (Expression)stack.pop();
+		parameters.add(e);
+	}
+	)*)? ")" // pourquoi y'a un 2e *
+	{
+	 	fCall.setIdentifier(identifier.toString());
+	 	fCall.setParameters(parameters);
+	 	stack.push(fCall); 
+	}
 }
 
 void assignment():

@@ -31,23 +31,29 @@ public class LogExpression extends Expression {
 	}
 
 	@Override
-	public Object interpret(Context context) {
+	public Object interpret(Context context) {		
+		Object oLeft = getGauche().interpret(context);
+		Object oRight = getDroite().interpret(context);
 		
-		// vérifier que c'est bien des booleans
-		
-		
-		Boolean left = (Boolean)this.getGauche().interpret(context);
-		Boolean right = (Boolean)this.getDroite().interpret(context);
-		
-		switch(logical_connector.getConnector())
+		if(oLeft instanceof Boolean && oRight instanceof Boolean) 
 		{
-		case "&&":
-			return left&&right;
-		case "||":
-			return left||right;
-			default:
-				System.out.println("Something went wrong interpret LogExpression");
-				return null;
+			boolean left = Boolean.valueOf(oLeft.toString());
+			boolean right = Boolean.valueOf(oRight.toString());
+			
+			switch(logical_connector.getConnector())
+			{
+				case "&&":
+					return left&&right;
+				case "||":
+					return left||right;
+				default:
+					context.setHasError(new ExecutionError("Mauvais opérateur dans LogExpression"));
+					return null;
+			}
+		}else 
+		{
+			context.setHasError(new ExecutionError("Gauche ou droite n'est pas un booléen"));
+			return null;
 		}
 	}
 	

@@ -29,12 +29,12 @@ public class Comparaison_expression extends Expression {
 
 
 	@Override
-	public Object interpret(Context context) {
+	public Object interpret(Context context) {		
+		Object oLeft = getGauche().interpret(context);
+		Object oRight = getDroite().interpret(context);
 		
-		// vérifier que c'est bien des doubles
-		
-		Double left = (Double)this.getGauche().interpret(context);
-		Double right = (Double)this.getDroite().interpret(context);
+		Double left = Double.valueOf(oLeft.toString());
+		Double right = Double.valueOf(oRight.toString());
 		
 		switch(comparaison_operator.getComparaison_operator())
 		{
@@ -51,7 +51,7 @@ public class Comparaison_expression extends Expression {
 		case "<>":
 			return left!=right;
 			default:
-				System.out.println("Something went wrong interpret Comparaison_expression");
+				context.setHasError(new ExecutionError("Mauvais opérateur dans Comparaison_expression"));
 				return null;
 		}
 	}

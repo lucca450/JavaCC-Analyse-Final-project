@@ -331,37 +331,55 @@ public class VisitorPrint {
 	}
 
 	public void visit(Value value, int nbTab) {
-		String strType = "";
-
-		try {
-			int a = Integer.parseInt(value.getIdentificateur());
-			strType = "INTEGER";
-		}
-		catch(Exception e1){
-			try {
-				double b = Double.parseDouble(value.getIdentificateur());
-				strType = "DOUBLE";
-			}
-			catch(Exception e2){
-					if(value.getIdentificateur().trim().equals("true") || value.getIdentificateur().trim().equals("false")){
+		String strType = "", output;
+		
+		Object valueIdentifier = value.getIdentificateur();
+		
+		if(valueIdentifier instanceof FunctionCall) {
+			this.visit((FunctionCall)valueIdentifier, nbTab);
+			return;
+		}else 
+		{
+			try
+			{
+				Integer.parseInt(valueIdentifier.toString());
+				strType = "INTEGER";
+			}catch(Exception e)
+			{
+				try
+				{
+					Double.parseDouble(valueIdentifier.toString());
+					strType = "DOUBLE";
+				}catch(Exception e1)
+				{
+					if(valueIdentifier.toString().equals("true") || valueIdentifier.toString().equals("false"))
+					{
 						strType = "BOOLEAN";
-					}else {
+					}else 
+					{
 						strType = "IDENTIFIER";
 					}
+				}
 			}
 		}
-
 		
-		
-		
-		value.getIdentificateur();
-		
-		System.out.print( " " + value.getIdentificateur() + " : " + strType + " " );
-		
-		
+		System.out.print( " " + valueIdentifier.toString() + " : " + strType + " " );
 	}
 
 	public void visit(Expression expr, int nbTab) {
 		System.out.println("JE SUIS DANS VISIT EXPR");
+	}
+	
+	public void visit(FunctionCall fC, int nbTab) {
+    	String tab = "";
+    	for(int i = 0; i< nbTab;i++) {
+    		tab += '\t';
+    	}
+    	
+		System.out.println(tab + "Appel de fonction : " + fC.getIdentifier());
+		
+		for(Expression p : fC.getParameters()) {
+			p.accept(this, nbTab+1);
+		}
 	}
 }

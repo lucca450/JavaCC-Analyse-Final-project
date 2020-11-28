@@ -50,31 +50,27 @@ public class Unary_expression  extends Expression{
 				return null;
 			}
 		case "--":
-			if(o instanceof Integer) 
+			if(o instanceof Double || o instanceof Integer) 
 			{
-				int i = (int)o;
-				return i-1;
-			}else if(o instanceof Double)
-			{
-				double d = (double)o;
+				Double d = Double.valueOf(o.toString());
 				return d-1;
-			}else {
+			}else 
+			{
 				context.setHasError(new ExecutionError("Doit être un nombre pour faire --"));
+				return null;
 			}
 		case "++":
-			if(o instanceof Integer) 
+			if(o instanceof Double || o instanceof Integer) 
 			{
-				int i = (int)o;
-				return i+1;
-			}else if(o instanceof Double)
-			{
-				double d = (double)o;
+				Double d = Double.valueOf(o.toString());
 				return d+1;
-			}else {
+			}else 
+			{
 				context.setHasError(new ExecutionError("Doit être un nombre pour faire ++"));
+				return null;
 			}
 			default:
-				System.out.println("Something went wrong interpret Unary_expression");
+				context.setHasError(new ExecutionError("Mauvais opérateur dans Unary_Expression"));
 				return null;
 		}
 	}

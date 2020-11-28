@@ -36,65 +36,30 @@ public class Arithmetic_expression extends Expression{
 		Object oLeft = getGauche().interpret(context);
 		Object oRight = getDroite().interpret(context);
 		
-		boolean isDouble = (oLeft instanceof Double || oRight instanceof Double);
+		Double dLeft = Double.valueOf(oLeft.toString());
+		Double dRight = Double.valueOf(oRight.toString());
 		
-		if(isDouble) {
-			double left = (double)oLeft;
-			double right = (double)oRight;
-			
-			switch(arithmetic_operation.getOperation())
-			{
-			case "*":
-				return left*right;
-			case "/":
-				if(right != (double)0)
-					return left/right;
-				else 
-				{
-					System.out.println("Impossible de diviser par 0");
-					return null;
-				}
-			case "%":
-				if(right != (double)0)
-					return left%right;
-				else 
-				{
-					System.out.println("Impossible de moduler par 0");
-					return null;
-				}
-			default:
-				System.out.println("Something went wrong interpret Arithmetic_expression");
-				return null;
-			}
-		}else 
+		switch(arithmetic_operation.getOperation())
 		{
-			int left = (int)oLeft;
-			int right = (int)oRight;
-			
-			switch(arithmetic_operation.getOperation())
+		case "*":
+			return dLeft*dRight;
+		case "/":
+			if(dRight != 0)
+				return dLeft/dRight;
+			else 
 			{
-			case "*":
-				return left*right;
-			case "/":
-				if(right != (int)0)
-					return left/right;
-				else 
-				{
-					System.out.println("Impossible de diviser par 0");
-					return null;
-				}
-			case "%":
-				if(right != (int)0)
-					return left/right;
-				else 
-				{
-					System.out.println("Impossible de moduler par 0");
-					return null;
-				}
-				default:
-					System.out.println("Something went wrong interpret Arithmetic_expression");
-					return null;
+				context.setHasError(new ExecutionError("Impossible de diviser par 0"));
 			}
+		case "%":
+			if(dRight != 0)
+				return dLeft%dRight;
+			else 
+			{
+				context.setHasError(new ExecutionError("Impossible de moduler par 0"));
+			}
+		default:
+			context.setHasError(new ExecutionError("Mauvais operateur dans Arithmetic_expression"));
 		}
+		return null;
 	}
 }
