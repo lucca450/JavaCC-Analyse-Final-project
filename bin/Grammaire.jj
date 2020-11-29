@@ -117,50 +117,8 @@ void function() :
 	"}"
 
 	{
-		Function_body funcB = (Function_body)stack.pop();
-	  	func.setFunction_body(funcB);
-
-
-		/*
-		Boolean ok = false;
-		while(!ok){
-        	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
-
-         	System.out.println("Voulez-vous afficher l'AST ? (o/n)");
-        	String answer = reader.readLine(); 
-
-			ok = answer == "o" || answer == "n";
-			if(!ok) {
-				System.out.prinln("Entrée invalide");
-			}
-		}
-		
-		if(answer == "o") {
-			func.accept(new VisitorPrint(), 0);
-		}
-		*/
-
-		
-		/*
-		DataGenerator dG = new DataGenerator(func);
-		ArrayList<Execution> executions = dG.GenerateData();
-
-		int nbWorked = 0;
-
-		for(Execution e : executions) {
-		 	Context context = dG.GenerateContext(e);
-
-			Object result = fuct.interpret(context);
-
-			if(!context.getHasError()) {
-				nbWorked ++;
-			}
-
-			int allo = 100;
-		}
-		*/
-
-	  	
+		FunctionBody funcB = (FunctionBody)stack.pop();
+	  	func.setFunctionBody(funcB);	  	
 	}
 	
 	(function())*
@@ -173,22 +131,20 @@ void parameter_declaration():
     Token type = null;
 }
 {
-
 	{
-	  Parameter_declaration myParameter_declaration = new Parameter_declaration();
+	  	ParameterDeclaration parameterDeclaration = new ParameterDeclaration();
 	}
   
 	type = type() ident = < IDENTIFIER >
 	
 	{
-		myParameter_declaration.setParameter_name(ident.toString());
-		myParameter_declaration.setType(type.toString());
+		parameterDeclaration.setParameterName(ident.toString());
+		parameterDeclaration.setType(type.toString());
 
 		Function func = (Function)stack.peek();
-		List<Parameter_declaration> parameter_declaration_list = func.getParameter_declaration_list();
-		parameter_declaration_list.add(myParameter_declaration);
-		
-		func.setParameter_declaration_list(parameter_declaration_list);
+		List<ParameterDeclaration> parameterDeclarations = func.getParameterDeclarations();
+		parameterDeclarations.add(parameterDeclaration);
+		func.setParameterDeclarations(parameterDeclarations);
 	}
 }
 
@@ -197,79 +153,43 @@ void function_body() :
 }
 {
 	{
-	    Function_body myFunction_body = new Function_body();
-
-		
-
-
-	  	VariableDeclarationList myVariableDeclarationList = new VariableDeclarationList();	}
+	    FunctionBody functionBody = new FunctionBody();
+	  	ArrayList<VariableDeclaration> variableDeclarations = new ArrayList<VariableDeclaration>();
+	  	ArrayList<Statement> statements = new ArrayList<Statement>();	}
 	
     ( variable_declaration() ";"
 	{
-		Variable_declaration varD = (Variable_declaration)stack.pop();
-		myVariableDeclarationList.add(varD);
+		VariableDeclaration varD = (VariableDeclaration)stack.pop();
+		variableDeclarations.add(varD);
 	}
     )*
-	{
-	    myFunction_body.setVariable_declaration_list(myVariableDeclarationList);
-	
-	   	StatementList myStatementList = new StatementList();
-	   	stack.push(myStatementList);
-	}
-  	( statement())*
+  	( statement() 
   	{
-		myFunction_body.setStatement_list((StatementList)stack.pop());
-	}
+  	  	Statement statement = (Statement)stack.pop();
+  	  	statements.add(statement);
+  	}
+  	)*
 	( return_statement()
 	{
-	  	Return_statement rStatement = (Return_statement)stack.pop();
-	  	myFunction_body.setReturn_statement(rStatement);
+	  	ReturnStatement rStatement = (ReturnStatement)stack.pop();
+	  	statements.add(rStatement);
 	}
 	)?
-
 	{
-		stack.push(myFunction_body);
+		stack.push(functionBody);
 	}}
 void statement() :
 {		
 }
 {
-	{
-		Statement myStatement = new Statement();
-	}
 	(		(
 			LOOKAHEAD(2)			assignment()
-			{
-			   Assignment myAssignment = (Assignment)stack.pop();
-			   myStatement.setAssignment(myAssignment);
-			}
 			| function_call()
-			{
-			  	FunctionCall fCall = (FunctionCall)stack.pop();
-			  	myStatement.setFunctionCall(fCall);
-			}
 		) ";"
 		| conditional_statement()
-		{
-			Conditional_statement cStatement = (Conditional_statement)stack.pop();
-			myStatement.setConditional_statement(cStatement);
-		}
 		| while_loop()
-		{
-		  	
-		}
-		| for_loop()
-		{
-		  	
-		}
-		  
+		| for_loop()  
 	)
-
-	{
-	  	StatementList statementList = (StatementList)stack.peek();
-		statementList.add(myStatement);
-	}
-
 }
 
 void variable_declaration():
@@ -278,27 +198,27 @@ void variable_declaration():
 }
 {
   	{
-		Variable_declaration myVariable_declaration = new Variable_declaration();
+		VariableDeclaration variableDeclaration = new VariableDeclaration();
 
-		AssignmentList myAssignmentList = new AssignmentList();
+		ArrayList<Assignment> assignments = new ArrayList<Assignment>();
 	}
 	t = type() assignment()
 	{
-		Assignment myAssignment = (Assignment)stack.pop();
-	  	myAssignmentList.add(myAssignment); 
+		Assignment assignment = (Assignment)stack.pop();
+	  	assignments.add(assignment); 
 	}
 	("," assignment()
 	{
-	  	myAssignment = (Assignment)stack.pop();
-	  	myAssignmentList.add(myAssignment); 
+	  	assignment = (Assignment)stack.pop();
+	  	assignments.add(assignment); 
 	}
 	)*
 	{
 		
-		myVariable_declaration.setAssignment_list(myAssignmentList);
-		myVariable_declaration.setType(t.toString());
+		variableDeclaration.setAssignments(assignments);
+		variableDeclaration.setType(t.toString());
 		
-		stack.push(myVariable_declaration);
+		stack.push(variableDeclaration);
 	}
 }
 
@@ -346,59 +266,121 @@ Token type() :
 
 void conditional_statement():
 {
+  	ConditionalStatement cStatement = new ConditionalStatement();
+  	ArrayList<Statement> ifBody = new ArrayList<Statement>();
+  	ArrayList<Statement> elseBody = new ArrayList<Statement>();
 }
 {
-	< IF > "("
+	< IF > "("expression()")"
 	{
-	  Conditional_statement cStatement = new Conditional_statement();
-	  StatementList ifBody = new StatementList();
-	  stack.push(ifBody);
-	}
-	expression()	")"
-	{
-		Expression exp = (Expression)stack.pop();
+		Item exp = (Item)stack.pop();
 		cStatement.setExpression(exp);
 	}
-	"{" (
-	statement()
-	{
-	  
-	}
-	     )*
-	( LOOKAHEAD(2) "}" < ELSE > "{" ( statement() )* )?
+	"{"
+	(statement()
+		{
+			  Statement statement = (Statement)stack.pop();
+			  ifBody.add(statement);
+		}
+	)*
+	( LOOKAHEAD(2)
+	"}"
+	< ELSE >
+	"{"
+		( statement()
+		{
+		  	Statement statement = (Statement)stack.pop();
+			elseBody.add(statement);
+		}
+		)*
+	)?
+	"}"
 
-	 "}"
-
 	{
-	  	ifBody = (StatementList)stack.pop();
 	  	cStatement.setIfBody(ifBody);
+	  	cStatement.setElseBody(elseBody);
 		stack.push(cStatement);
 	}
 
 }
 
+void while_loop():
+{
+  	WhileLoop whileLoop = new WhileLoop();
+	Item item;
+	ArrayList<Statement> body = new ArrayList<Statement>();
+}
+{
+	< WHILE > "(" expression() ")"
+	{
+		item = (Item)stack.pop();
+		whileLoop.setExpression(item);
+	}
+	"{"
+		(statement()
+			{
+			  	Statement statement = (Statement)stack.pop();
+			  	body.add(statement);
+			}
+		)*
+	"}"
+	{
+	  	whileLoop.setBody(body);
+		stack.push(whileLoop);
+	}
+}
+
+void for_loop():
+{
+  	ForLoop forLoop = new ForLoop();
+  	ArrayList<Statement> body = new ArrayList<Statement>();  	
+}
+{
+	< FOR > "(" (assignment()
+	{
+	  	forLoop.setStartAssignment((Assignment)stack.pop());
+	}
+	)? ";" (expression()
+	{
+	  	forLoop.setExpression((Item)stack.pop());
+	}
+	)? ";" (assignment()
+	{
+	  	forLoop.setIterationAssignment((Assignment)stack.pop());
+	}
+	)?  ")" "{" (statement()
+	{
+	  	body.add((Statement)stack.pop());
+	}
+	)* "}"
+	{
+	  	forLoop.setBody(body);
+	  	stack.push(forLoop);
+	}
+}
+
 void expression():
 {
   	LogExpression lExp = new LogExpression();
-  	Expression exp;
+  	String connector;
+  	Item exp;
 }
 {
  	comparaison_expression() // A > B
  	(
 		{
-	 	   exp = (Expression)stack.pop();
+	 	   exp = (Item)stack.pop();
 	 	   lExp.setGauche(exp);
 	 	}
 		
-	 	logical_connector()
+	 	connector = logical_connector()
 	 	{
-			Logical_connector lCon = (Logical_connector)stack.pop();
-			lExp.setLogical_connector(lCon);	
+			lExp.setConnector(connector);	
 	 	}
 	 	
 	 	comparaison_expression()
 		{
-	  		exp = (Expression)stack.pop();
+	  		exp = (Item)stack.pop();
 	 	  	lExp.setDroite(exp);
 	 	  	stack.push(lExp);
 		}
@@ -408,27 +390,27 @@ void expression():
 
 void comparaison_expression():
 {
-  	Comparaison_expression myComparaison_expression = new Comparaison_expression();
+  	ComparaisonExpression cExpression = new ComparaisonExpression();
+  	String operator;
 }
 {
 	 arithmetic_expression_priority_low() // a ou a+b ou a-b ou a*b ou a/b
 	 (
 	  	{ 	  
-	  	    Expression expGauche = (Expression)stack.pop();
-	  		myComparaison_expression.setGauche(expGauche);
+	  	    Item expGauche = (Item)stack.pop();
+	  		cExpression.setGauche(expGauche);
 		}
 		
-	   	comparaison_operator()
+	   	operator = comparaison_operator()
 	   	{
-	     	Comparaison_operator operator = (Comparaison_operator)stack.pop();
-	     	myComparaison_expression.setComparaison_operator(operator);
+	     	cExpression.setOperator(operator);
 	   	}
 	   	
 	   	arithmetic_expression_priority_low() // a > b ou a+b < a/b etc.
 		{
-			Expression expDroite = (Expression)stack.pop();		
-	   		myComparaison_expression.setDroite(expDroite);
-	   		stack.push(myComparaison_expression);  
+			Item expDroite = (Item)stack.pop();		
+	   		cExpression.setDroite(expDroite);
+	   		stack.push(cExpression);  
 		}
 	 )*
 }
@@ -436,112 +418,100 @@ void comparaison_expression():
 
 void arithmetic_expression_priority_low():
 {
+  	String operator;
 }
 {
 	 arithmetic_expression() // a/b ou a*b ou a
 	 (
 	    {
-  			Arithmetic_expression_priority_low myArithmetic_expression_priority_low = new Arithmetic_expression_priority_low ();
+  			LowPriorityArithmeticExpression lowExpression = new LowPriorityArithmeticExpression ();
   			Expression expression = (Expression)stack.pop();
-  			myArithmetic_expression_priority_low.setGauche(expression);
+  			lowExpression.setGauche(expression);
 	    }
 	    
-	   	arithmetic_operation_priority_low() arithmetic_expression() // a/b + a*b ou a/b - a*b ou a+b
+	   	operator = arithmetic_operation_priority_low() arithmetic_expression() // a/b + a*b ou a/b - a*b ou a+b
 	   	{
 	   	  	expression = (Expression)stack.pop();
-	   	  	myArithmetic_expression_priority_low.setDroite(expression);
-
-	   	  	Arithmetic_operation_priority_low operator = (Arithmetic_operation_priority_low)stack.pop();
-			myArithmetic_expression_priority_low.setArithmetic_operation_priority_low(operator);
+	   	  	lowExpression.setDroite(expression);
+			lowExpression.setOperator(operator);
 	   	  	
-	  		stack.push(myArithmetic_expression_priority_low);
+	  		stack.push(lowExpression);
 	 	}
 	 )*
 }
 
 void arithmetic_expression():
 {
+  	String operator;
 }
 {	
 	unary_expression() // a ou a++ ou !a etc.
 	(
 	    {
-	  		Arithmetic_expression myArithmetic_expression = new Arithmetic_expression ();
-	  		Unary_expression uExpression = (Unary_expression)stack.pop();
-	  		myArithmetic_expression.setGauche(uExpression);
+	  		ArithmeticExpression aExpression = new ArithmeticExpression ();
+	  		UnaryExpression uExpression = (UnaryExpression)stack.pop();
+	  		aExpression.setGauche(uExpression);
 	    }
 	    
-	  	arithmetic_operation() unary_expression() // a/b ou a*b
+	  	operator = arithmetic_operation() unary_expression() // a/b ou a*b
 	  	
 	  	{
-	  		uExpression = (Unary_expression)stack.pop();
-			myArithmetic_expression.setDroite(uExpression);
+	  		uExpression = (UnaryExpression)stack.pop();
+			aExpression.setDroite(uExpression);
 
-			Arithmetic_operation operator = (Arithmetic_operation)stack.pop();
-			myArithmetic_expression.setArithmetic_operation(operator);
-
-			stack.push(myArithmetic_expression);
+			aExpression.setOperator(operator);
+			stack.push(aExpression);
 	 	}
 	)*
 }
 
 void unary_expression():
 {
-  	Unary_expression uExpression = null;
+  	UnaryExpression uExpression = null;
+  	String operator;
 }
 {
-	(unary_operator() // ++ ou -- ou ! avec le terme
+	(operator = unary_operator() // ++ ou -- ou ! avec le terme
 	{
-  		uExpression = new Unary_expression();
-		Unary_operator operator = (Unary_operator)stack.pop();
-		uExpression.setUnary_operator(operator);
+  		uExpression = new UnaryExpression();
+		uExpression.setOperator(operator);
 	}
 	)? term() // a
 	{
-		if(uExpression != null)
+	  	if(uExpression != null)
 	  	{
-	    	Term t = (Term)stack.pop();
-	    	uExpression.setTerm(t);
+    		Term t = (Term)stack.pop();
+    		uExpression.setTerm(t);
 	    	stack.push(uExpression);
-	  	}
+	 	}  
 	}
 }
 
 void term():
 {
+  	Term myTerm = new Term ();
 }
 {
-    {
-  		Term myTerm = new Term ();
-	}
-	
-	value()
-	
+	(	  value()	| "("expression()")"
+	)
 	{
-		Value val = (Value)stack.pop();
+		Object val = (Object)stack.pop();
 		myTerm.setValue(val);
 		stack.push(myTerm);
 	}
-	| "("expression()")"
-
-
 }
 
-void unary_operator():
+String unary_operator():
 {
   Token t = null;
 }
 {
-    {
-  		Unary_operator myUnary_operator = new Unary_operator ();
-	}
-	(		t = < PREFIX_INCREMENT >
+  	(		t = < PREFIX_INCREMENT >
 		| t = < PREFIX_DECREMENT >
 		| t = < NOT >
 	)
 	{
-  		myUnary_operator.setOperator(t.toString());
-		stack.push(myUnary_operator);
+  		return t.toString();
 	}
 }
 
@@ -550,93 +520,61 @@ void value():
   Token t = null ;
 }
 {
-	{
-  		Value myValue = new Value();
-	}
 	( 
 		LOOKAHEAD(2) function_call()
-		{
-		  	FunctionCall fCall = (FunctionCall)stack.pop();
-		  	myValue.setIdentificateur(fCall);
-		}
 		| t = < IDENTIFIER >
 		{
-		 	 myValue.setIdentificateur(t.toString());
+		 	 stack.push(t.toString());
 		}
 		| t = litteral_value()
 		{
-		 	 myValue.setIdentificateur(t.toString());
+		 	 stack.push(t.toString());
 		}
 	)
-	{			  
-		stack.push(myValue);
-	}	
 }
 
-void arithmetic_operation():
+String arithmetic_operation():
 {
   Token t = null;
 }
-{
-  	{
-  	    Arithmetic_operation myArithmetic_operation = new Arithmetic_operation();
-	}
-	
+{	
 	( t = < MULTIPLY > | t = < DIVIDE > | t = < MODULO > )
-	
 	{
-		myArithmetic_operation.setOperation(t.toString());
-		stack.push(myArithmetic_operation);
+		return t.toString();
 	}
 }
 
-void arithmetic_operation_priority_low():
+String arithmetic_operation_priority_low():
 {
     Token t = null;
 }
-{
-    {
-  	    Arithmetic_operation_priority_low myArithmetic_operation_priority_low = new Arithmetic_operation_priority_low();
-	}
-	
+{	
 	( t = < PLUS > | t = < MINUS > )
-
 	{
-		myArithmetic_operation_priority_low.setOperation(t.toString());
-		stack.push(myArithmetic_operation_priority_low);
+		return t.toString();
 	}
 }
 
-void comparaison_operator():
+String comparaison_operator():
 {
-  	Token comp_operator=null;
+  	Token operator=null;
 }
 {
-
- 	{
-  		Comparaison_operator myOperator = new Comparaison_operator();
-	}
-	
-  	(comp_operator= < EQUAL > | comp_operator= < NOT_EQUAL > | comp_operator= < GREATER > | comp_operator = < GREATER_OR_EQUAL > | comp_operator = < LOWER > | comp_operator= < LOWER_OR_EQUAL > )
+  	(operator= < EQUAL > | operator= < NOT_EQUAL > | operator= < GREATER > | operator = < GREATER_OR_EQUAL > | operator = < LOWER > | operator= < LOWER_OR_EQUAL > )
   	
   	{
-				myOperator.setComparaison_operator(comp_operator.toString());
-				stack.push(myOperator);
+				return operator.toString();
   	}
 }
 
-void logical_connector():
+String logical_connector():
 {
   Token t = null;
 }
 {
-  	 {
-	   Logical_connector lCon = new Logical_connector();
-	 }
-	    ( t = < AND > | t = < OR > )
+	 ( t = < AND > | t = < OR > )
 	 {
-	   lCon.setConnector(t.toString());
-	   stack.push(lCon);
+	   	return t.toString();
 	 }
 }
 
@@ -644,20 +582,20 @@ void function_call():
 {
   	Token identifier = null;
   	FunctionCall fCall = new FunctionCall();
-  	ArrayList<Expression> parameters = new ArrayList<Expression>();
+  	ArrayList<Item> parameters = new ArrayList<Item>();
 }
 {
 	identifier = < IDENTIFIER > "(" (expression()
 	{
-		Expression e = (Expression)stack.pop();
+		Item e = (Item)stack.pop();
 		parameters.add(e);
 	}
 	("," expression()
 	{
-	  	e = (Expression)stack.pop();
+	  	e = (Item)stack.pop();
 		parameters.add(e);
 	}
-	)*)? ")" // pourquoi y'a un 2e *
+	)*)? ")"
 	{
 	 	fCall.setIdentifier(identifier.toString());
 	 	fCall.setParameters(parameters);
@@ -673,42 +611,28 @@ void assignment():
 }
 {
 	{
-	  Assignment myAssignment = new Assignment();
+	  Assignment assignment = new Assignment();
 	}
     identifier = < IDENTIFIER > assign = < ASSIGN > expression()
     {
-      Expression myExpr = (Expression)stack.pop();
-            
-      myAssignment.setIdentifier(identifier.toString());
-      myAssignment.setAssign(assign.toString());
-	  myAssignment.setExpr(myExpr);
-
-	  stack.push(myAssignment);
+	      Item item = (Item)stack.pop();
+	            
+	      assignment.setIdentifier(identifier.toString());
+	      assignment.setAssign(assign.toString());
+		  assignment.setExpression(item);
+	
+		  stack.push(assignment);
 	}
-}
-
-void while_loop():
-{
-}
-{
-	< WHILE > "(" expression() ")" "{" (statement())* "}"
-}
-
-void for_loop():
-{
-}
-{
-	< FOR > "(" (assignment())? ";" (expression())? ";" (assignment())?  ")" "{" (statement())* "}"
 }
 
 void return_statement():
 {
- 	Return_statement rStatement = new Return_statement();
+ 	ReturnStatement rStatement = new ReturnStatement();
 }
 {
 	< RETURN > expression() ";"
 	{
-		Expression exp = (Expression)stack.pop();
+		Item exp = (Item)stack.pop();
 		rStatement.setExpression(exp);
 		stack.push(rStatement);
 		

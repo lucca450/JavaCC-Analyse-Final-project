@@ -7,28 +7,28 @@ import java.util.List;
 public class Function extends ASTNode{
 
 	private String type;
-	private String function_name;
-	private List<Parameter_declaration> parameter_declaration_list = new ArrayList<Parameter_declaration>();
-	private Function_body function_body;
+	private String functionName;
+	private List<ParameterDeclaration> parameterDeclarations = new ArrayList<ParameterDeclaration>();
+	private FunctionBody functionBody;
 	
-	public Function(String type, String function_name, List<Parameter_declaration> parameter_declaration_list, Function_body function_body) {
+	public Function(String type, String function_name, List<ParameterDeclaration> parameterDeclarations, FunctionBody functionBody) {
 		this.type = type;
-		this.function_name = function_name;
-		this.parameter_declaration_list = parameter_declaration_list;
-		this.function_body = function_body;
+		this.functionName = function_name;
+		this.parameterDeclarations = parameterDeclarations;
+		this.functionBody = functionBody;
 	}
 
 	public Function( String type, String function_name) {
 		this.type = type;
-		this.function_name = function_name;
+		this.functionName = function_name;
 	}
 
 
 
 	@Override
 	public String toString() {
-		return "Function [type=" + type + ", function_name=" + function_name + ", parameter_declaration_list="
-				+ parameter_declaration_list + ", function_body=" + function_body + "]";
+		return "Function [type=" + type + ", function_name=" + functionName + ", parameterDeclarations="
+				+ parameterDeclarations + ", FunctionBody=" + functionBody + "]";
 	}
 	
 	
@@ -42,49 +42,49 @@ public class Function extends ASTNode{
 	}
 
 
-	public String getFunction_name() {
-		return function_name;
+	public String getFunctionName() {
+		return functionName;
 	}
 
 
-	public void setFunction_name(String function_name) {
-		this.function_name = function_name;
+	public void setFunctionName(String function_name) {
+		this.functionName = function_name;
 	}
 
 
-	public List<Parameter_declaration> getParameter_declaration_list() {
-		return parameter_declaration_list;
+	public List<ParameterDeclaration> getParameterDeclarations() {
+		return parameterDeclarations;
 	}
 
 
-	public void setParameter_declaration_list(List<Parameter_declaration> parameter_declaration_list) {
-		this.parameter_declaration_list = parameter_declaration_list;
+	public void setParameterDeclarations(List<ParameterDeclaration> parameterDeclarations) {
+		this.parameterDeclarations = parameterDeclarations;
 	}
 
 
-	public Function_body getFunction_body() {
-		return function_body;
+	public FunctionBody getFunctionBody() {
+		return functionBody;
 	}
 
 
-	public void setFunction_body(Function_body function_body) {
-		this.function_body = function_body;
+	public void setFunctionBody(FunctionBody functionBody) {
+		this.functionBody = functionBody;
 	}
 
 
 	public void accept(VisitorPrint visitor, int nbTab) {
 		visitor.visit(this, nbTab);
 		
-        for (Parameter_declaration pd : parameter_declaration_list) {
+        for (ParameterDeclaration pd : parameterDeclarations) {
             pd.accept(visitor, nbTab + 1);
         }
 		
-        function_body.accept(visitor, nbTab + 1);
+        functionBody.accept(visitor, nbTab + 1);
 	}
 
 	@Override
 	public Object interpret(Context context) {
-		return function_body.interpret(context);
+		return functionBody.interpret(context);
 	}
 	
 }

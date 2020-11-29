@@ -1,43 +1,35 @@
 package ast;
 
-public class Term extends Expression{
-	private Value value;
-	private LogExpression expression;
+public class Term extends Item{
+	private Object value;
+
+	public Term() {}
 	
-	public Term(Value value, LogExpression expression) {
-		super();
+	public void setValue(Object value) {
 		this.value = value;
-		this.expression = expression;
-	}
-	public Term() {
 	}
 	
-	public Value getValue() {
+
+	public Object getValue() {
 		return value;
 	}
-	public void setValue(Value value) {
-		this.value = value;
+
+	@Override
+	public Object interpret(Context context) {
+		
+		if(value instanceof String) {
+			return (String)value;
+		}else if(value instanceof Expression) {
+			return ((Expression) value).interpret(context);
+		}
+		
+		context.setHasError(new ExecutionError("Le terme est vide"));
+		return null;
 	}
-	public LogExpression getExpression() {
-		return expression;
-	}
-	public void setExpression(LogExpression expression) {
-		this.expression = expression;
-	}
+
+	@Override
 	public void accept(VisitorPrint visitor, int nbTab) {
 		visitor.visit(this, nbTab);
 	}
-	@Override
-	public Object interpret(Context context) {
-		if(value != null) {
-			return value.interpret(context);
-		}else if(expression != null)
-		{
-			return expression.interpret(context);
-		}
-		context.setHasError(new ExecutionError("Le terme n'a pas de valeur ni de Log Expression"));
-		return null;
-	}
-	
-	
+
 }

@@ -1,6 +1,23 @@
-void test (int a, int b, int c) {
-	int d = 4+5;
+void test (int a, int b, int c)
+{
+	int a = 1;
 	
-	Fly(a+1, b>0, ++c);
+	if(Fly())
+	{
+		a = 2;
+	}else
+	{
+		a = 3;	
+	}	
 	
+	while(a == 0)
+	{
+		b = 5;
+		while(b == 2)
+		{
+			c= 5;
+		}
+	}
+	
+	return a;
 }

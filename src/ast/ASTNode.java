@@ -1,8 +1,6 @@
 package ast;
 
-
-
-public abstract class ASTNode{
+public abstract class ASTNode {
 
 	static int ctrID;
 	private int ID;
@@ -13,7 +11,7 @@ public abstract class ASTNode{
 	}
 
 	public abstract Object interpret(Context context);
-	
+	public abstract void accept(VisitorPrint visitor, int nbTab);
 	
 	public void setID(int iD) {
 		ID = iD;
@@ -22,6 +20,4 @@ public abstract class ASTNode{
 	public int getID() {
 		return ID;
 	}
-	
-	
 }

@@ -1,31 +1,21 @@
 package ast;
 
-public class LogExpression extends Expression {
-	
-	private Logical_connector logical_connector;
+public class LogExpression extends Expression{
+	private String connector;
 
 	public LogExpression() {
 		
 	}
 	
-	public LogExpression(Expression expr_gauche, Logical_connector logical_connector, Expression expr_droite) {
-		super(expr_gauche,expr_droite);
-		this.logical_connector = logical_connector;
+	public String getConnector() {
+		return connector;
 	}
 
-	public LogExpression(Logical_connector logical_connector) {
-		super();
-		this.logical_connector = logical_connector;
+	public void setConnector(String connector) {
+		this.connector = connector;
 	}
 
-	public Logical_connector getLogical_connector() {
-		return logical_connector;
-	}
-
-	public void setLogical_connector(Logical_connector logical_connector) {
-		this.logical_connector = logical_connector;
-	}
-
+	@Override
 	public void accept(VisitorPrint visitor, int nbTab) {
 		visitor.visit(this, nbTab);
 	}
@@ -40,7 +30,7 @@ public class LogExpression extends Expression {
 			boolean left = Boolean.valueOf(oLeft.toString());
 			boolean right = Boolean.valueOf(oRight.toString());
 			
-			switch(logical_connector.getConnector())
+			switch(connector)
 			{
 				case "&&":
 					return left&&right;
@@ -56,5 +46,4 @@ public class LogExpression extends Expression {
 			return null;
 		}
 	}
-	
 }

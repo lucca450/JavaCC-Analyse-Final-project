@@ -1,9 +1,9 @@
 package ast;
 
-public abstract class Expression extends ASTNode{
-
-	protected Expression gauche;
-	protected Expression droite;
+public abstract class Expression extends Item{
+	
+	protected Item gauche;
+	protected Item droite;
 	
 	public Expression() {
 
@@ -14,30 +14,22 @@ public abstract class Expression extends ASTNode{
 		droite = expr_droite;
 	}
 	
-	public abstract void accept(VisitorPrint visitor, int nbTab);
-
-
-	public Expression getGauche() {
+	public Item getGauche() {
 		return gauche;
 	}
 
 
-	public void setGauche(Expression gauche) {
+	public void setGauche(Item gauche) {
 		this.gauche = gauche;
 	}
 
 
-	public Expression getDroite() {
+	public Item getDroite() {
 		return droite;
 	}
 
 
-	public void setDroite(Expression droite) {
+	public void setDroite(Item droite) {
 		this.droite = droite;
 	}
-
-	
-	
-	
-	
 }
