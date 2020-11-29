@@ -26,15 +26,6 @@ public class FunctionBody extends ASTNode {
 
 	public void accept(VisitorPrint visitor, int nbTab) {
 		visitor.visit(this, nbTab);
-
-		for (VariableDeclaration vd : variableDeclarations) {
-			vd.accept(visitor, nbTab + 1);
-		}
-
-		for (Statement sl : statements) {
-			sl.accept(visitor, nbTab + 1);
-		}
-
 	}
 	
 	@Override
@@ -53,7 +44,7 @@ public class FunctionBody extends ASTNode {
 		{
 			if(!context.getHasError()) {
 				if(s instanceof ReturnStatement) {
-					return s.interpret(context);
+					s.interpret(context);
 				}
 				s.interpret(context);				
 			}else {

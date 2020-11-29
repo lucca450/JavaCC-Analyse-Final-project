@@ -83,6 +83,44 @@ public class Grammaire implements GrammaireConstants {
     jj_consume_token(46);
                 FunctionBody funcB = (FunctionBody)stack.pop();
                 func.setFunctionBody(funcB);
+
+                /*
+		Boolean ok = false;
+		while(!ok){
+        	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+
+         	System.out.println("Voulez-vous afficher l'AST ? (o/n)");
+        	String answer = reader.readLine(); 
+
+			ok = answer == "o" || answer == "n";
+			if(!ok) {
+				System.out.prinln("Entrée invalide");
+			}
+		}
+		
+		if(answer == "o") {
+			func.accept(new VisitorPrint(), 0);
+		}*/
+
+
+
+
+                DataGenerator dG = new DataGenerator(func);
+                ArrayList<Execution> executions = dG.GenerateData();
+
+                int nbWorked = 0;
+
+                for(Execution e : executions) {
+                        Context context = dG.GenerateContext(e);
+
+                        Object result = func.interpret(context);
+
+                        if(!context.getHasError()) {
+                                nbWorked ++;
+                        }
+
+                        int allo = 100;
+                }
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -164,6 +202,8 @@ public class Grammaire implements GrammaireConstants {
       jj_la1[6] = jj_gen;
       ;
     }
+                functionBody.setVariableDeclarations(variableDeclarations);
+                functionBody.setStatements(statements);
                 stack.push(functionBody);
   }
 
@@ -520,11 +560,11 @@ public class Grammaire implements GrammaireConstants {
         break label_12;
       }
                         LowPriorityArithmeticExpression lowExpression = new LowPriorityArithmeticExpression ();
-                        Expression expression = (Expression)stack.pop();
+                        Item expression = (Item)stack.pop();
                         lowExpression.setGauche(expression);
       operator = arithmetic_operation_priority_low();
       arithmetic_expression();
-                        expression = (Expression)stack.pop();
+                        expression = (Item)stack.pop();
                         lowExpression.setDroite(expression);
                         lowExpression.setOperator(operator);
 

@@ -46,12 +46,7 @@ public class ConditionalStatement extends Statement{
 
 	@Override
 	public void accept(VisitorPrint visitor, int nbTab) {
-		visitor.visit(this, nbTab);
-		
-		for(Statement s : ifBody) {
-			s.accept(visitor, nbTab+1);
-		}
-		
+		visitor.visit(this, nbTab);		
 	}
 
 }

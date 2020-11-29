@@ -27,20 +27,17 @@ public class VariableDeclaration extends ASTNode{
 		this.assignments = assignments;
 	}
 
-
-
-
-
 	@Override
 	public Object interpret(Context context) {
-		// TODO Auto-generated method stub
+		for(Assignment a : assignments) {
+			a.interpret(context);			
+		}
 		return null;
 	}
 
 	@Override
 	public void accept(VisitorPrint visitor, int nbTab) {
-		// TODO Auto-generated method stub
-		
+		visitor.visit(this, nbTab);
 	}
 
 }

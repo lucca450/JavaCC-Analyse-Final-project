@@ -51,8 +51,7 @@ public class ForLoop extends Statement{
 
 	@Override
 	public void accept(VisitorPrint visitor, int nbTab) {
-		// TODO Auto-generated method stub
-		
+		visitor.visit(this,nbTab);
 	}
 
 }

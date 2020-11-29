@@ -27,14 +27,13 @@ public class WhileLoop extends Statement{
 
 	@Override
 	public Object interpret(Context context) {
-		// TODO Auto-generated method stub
+		System.out.println("Interpret while pas implémenté");
 		return null;
 	}
 
 	@Override
 	public void accept(VisitorPrint visitor, int nbTab) {
-		// TODO Auto-generated method stub
-		
+		visitor.visit(this, nbTab);
 	}
 
 }

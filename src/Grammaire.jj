@@ -21,7 +21,7 @@ public class Grammaire{
 
 		Function myFunction = (Function)stack.peek();
 
-	
+		
 
 		
 
@@ -118,7 +118,48 @@ void function() :
 
 	{
 		FunctionBody funcB = (FunctionBody)stack.pop();
-	  	func.setFunctionBody(funcB);	  	
+	  	func.setFunctionBody(funcB);
+
+		/*
+		Boolean ok = false;
+		while(!ok){
+        	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+
+         	System.out.println("Voulez-vous afficher l'AST ? (o/n)");
+        	String answer = reader.readLine(); 
+
+			ok = answer == "o" || answer == "n";
+			if(!ok) {
+				System.out.prinln("Entrée invalide");
+			}
+		}
+		
+		if(answer == "o") {
+			func.accept(new VisitorPrint(), 0);
+		}*/
+		
+
+		
+		
+		DataGenerator dG = new DataGenerator(func);
+		ArrayList<Execution> executions = dG.GenerateData();
+
+		int nbWorked = 0;
+
+		for(Execution e : executions) {
+		 	Context context = dG.GenerateContext(e);
+
+			Object result = func.interpret(context);
+
+			if(!context.getHasError()) {
+				nbWorked ++;
+			}
+
+			int allo = 100;
+		}	
+		
+
+	  		  	
 	}
 	
 	(function())*
@@ -176,6 +217,8 @@ void function_body() :
 	}
 	)?
 	{
+	  	functionBody.setVariableDeclarations(variableDeclarations);
+	  	functionBody.setStatements(statements);
 		stack.push(functionBody);
 	}}
 void statement() :
@@ -425,13 +468,13 @@ void arithmetic_expression_priority_low():
 	 (
 	    {
   			LowPriorityArithmeticExpression lowExpression = new LowPriorityArithmeticExpression ();
-  			Expression expression = (Expression)stack.pop();
+  			Item expression = (Item)stack.pop();
   			lowExpression.setGauche(expression);
 	    }
 	    
 	   	operator = arithmetic_operation_priority_low() arithmetic_expression() // a/b + a*b ou a/b - a*b ou a+b
 	   	{
-	   	  	expression = (Expression)stack.pop();
+	   	  	expression = (Item)stack.pop();
 	   	  	lowExpression.setDroite(expression);
 			lowExpression.setOperator(operator);
 	   	  	
