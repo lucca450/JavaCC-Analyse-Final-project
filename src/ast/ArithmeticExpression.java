@@ -19,23 +19,20 @@ public class ArithmeticExpression extends Expression{
 		Object oLeft = getGauche().interpret(context);
 		Object oRight = getDroite().interpret(context);
 		
-		Double dLeft = Double.valueOf(oLeft.toString());
-		Double dRight = Double.valueOf(oRight.toString());
-		
 		switch(operator)
 		{
 		case "*":
-			return dLeft*dRight;
+			return Utilities.Multiply(oLeft, oRight);
 		case "/":
-			if(dRight != 0)
-				return dLeft/dRight;
+			if(Double.valueOf(oRight.toString()) != 0)
+				return Utilities.Divide(oLeft, oRight);
 			else 
 			{
 				context.setHasError(new ExecutionError("Impossible de diviser par 0"));
 			}
 		case "%":
-			if(dRight != 0)
-				return dLeft%dRight;
+			if(Double.valueOf(oRight.toString()) != 0)
+				return Utilities.Modulo(oLeft, oRight);
 			else 
 			{
 				context.setHasError(new ExecutionError("Impossible de moduler par 0"));

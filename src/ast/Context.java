@@ -30,7 +30,7 @@ public class Context {
 			variables.add(v);
 			isEmpty = false;
 		}else {
-			System.out.println("La variable " + v.getIdentificator() + " existe déjà");
+			this.setHasError(new ExecutionError("La variable " + v.getIdentificator() + " existe déjà."));
 		}
 	}
 	
@@ -65,6 +65,14 @@ public class Context {
 	
 	private Boolean VariableExists(Variable v) {
 		return FindVariable(v) != null;
+	}
+
+	public Variable FindVariable(String identificator) {
+		for(Variable v : variables) {
+			if(v.getIdentificator().equals(identificator))
+				return v;
+		}
+		return null;
 	}
 	
 

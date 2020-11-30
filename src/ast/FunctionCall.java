@@ -27,8 +27,7 @@ public class FunctionCall extends Statement{
 	
 	@Override
 	public Object interpret(Context context) {
-		context.setHasError(new ExecutionError("Interpret de Function call n'est pas supposé ce faire appeler"));
-		return null;
+		return this;
 	}
 
 	@Override

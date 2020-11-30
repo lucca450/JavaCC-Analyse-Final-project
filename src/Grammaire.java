@@ -588,12 +588,12 @@ public class Grammaire implements GrammaireConstants {
         break label_13;
       }
                         ArithmeticExpression aExpression = new ArithmeticExpression ();
-                        UnaryExpression uExpression = (UnaryExpression)stack.pop();
-                        aExpression.setGauche(uExpression);
+                        Item item = (Item)stack.pop();
+                        aExpression.setGauche(item);
       operator = arithmetic_operation();
       unary_expression();
-                        uExpression = (UnaryExpression)stack.pop();
-                        aExpression.setDroite(uExpression);
+                        item = (Item)stack.pop();
+                        aExpression.setDroite(item);
 
                         aExpression.setOperator(operator);
                         stack.push(aExpression);

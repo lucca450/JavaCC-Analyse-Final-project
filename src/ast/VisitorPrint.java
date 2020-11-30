@@ -106,13 +106,19 @@ public class VisitorPrint {
     	for(int i = 0; i< nbTab;i++) {
     		tab += '\t';
     	}
-    	System.out.println(tab + "For Loop");
+    	System.out.println(tab + "For Loop"); 
     	
-    	//checker si sont pas null 
+    	Assignment sAssignment = forLoop.getStartAssignment();
+    	if(sAssignment != null)
+    		sAssignment.accept(this, nbTab+1);
     	
-    	forLoop.getStartAssignment().accept(this, nbTab+1);
-    	forLoop.getExpression().accept(this,nbTab+1);
-    	forLoop.getIterationAssignment().accept(this, nbTab+1);
+    	Item item = forLoop.getExpression();
+    	if(item != null)
+    		item.accept(this,nbTab+1);
+    	
+    	Assignment iAssignment = forLoop.getIterationAssignment();
+    	if(iAssignment != null)
+    	iAssignment.accept(this, nbTab+1);
     	
     	for(Statement s : forLoop.getBody()) {
     		s.accept(this, nbTab+2);

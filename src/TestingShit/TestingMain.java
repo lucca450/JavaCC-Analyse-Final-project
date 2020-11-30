@@ -1,14 +1,15 @@
 package TestingShit;
 
+import ast.Utilities;
+
 public class TestingMain {
 
 	public static void main(String[] args) {
-		int i = 0;
-		for(;;i++) {
-			System.out.println("a");
-			i++;
-		}
-		int j = 0;
+		Object o = 3.5;
+		Object o1 = 1.4;
+		
+		Object j = Utilities.Subtract(o, o1);
+			
+		int i = 0 ;
 	}
-
 }

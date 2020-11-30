@@ -39,8 +39,11 @@ public class DataGenerator {
     public Context GenerateContext(Execution path) {
     	Context context = new Context();
     	
-    	for(Variable v : path.getRandomValues()) {	//Paramètres
-    		context.AddVariable(v);
+    	for(Variable v : path.getRandomValues()) {	// paramètres
+    		if(!context.getHasError())
+    			context.AddVariable(v);
+    		else
+    			return context;
     	}
     	
     	for(VariableDeclaration vD : function.getFunctionBody().getVariableDeclarations()) {	// Déclaration
@@ -49,13 +52,11 @@ public class DataGenerator {
     			int ID = a.getID();
     			Object value = a.getExpression();
     			context.AddVariable(ID, a.getIdentifier(), type, value);
+    			
+    			if(context.getHasError())
+    				return context;
     		}
-    	}
-    	
-    	
-    	// Peut-être les déclarations de for (voir avec Alex)
-    	
-    	
+    	}    	
     	
     	return context;
     }

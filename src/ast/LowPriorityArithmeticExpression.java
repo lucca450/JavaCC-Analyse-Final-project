@@ -18,17 +18,12 @@ public class LowPriorityArithmeticExpression extends Expression {
 	public Object interpret(Context context) {
 		Object oLeft = getGauche().interpret(context);
 		Object oRight = getDroite().interpret(context);
-		
-		Double dLeft = Double.valueOf(oLeft.toString());
-		Double dRight = Double.valueOf(oRight.toString());
-		
+				
 		if(operator == "+") {
-			return dLeft + dRight;
-		}else if(operator == "-")
-		{
-			return dLeft - dRight;
-		}else 
-		{
+			return Utilities.Add(oLeft, oRight);
+		}else if(operator == "-") {
+			return Utilities.Subtract(oLeft, oRight);
+		}else {
 			context.setHasError(new ExecutionError("Doit être un + ou un -"));
 		}
 

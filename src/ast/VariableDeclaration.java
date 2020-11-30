@@ -30,7 +30,33 @@ public class VariableDeclaration extends ASTNode{
 	@Override
 	public Object interpret(Context context) {
 		for(Assignment a : assignments) {
-			a.interpret(context);			
+			Variable v = context.FindVariable(a.getID());
+			if(v != null) {
+				Object o = a.interpret(context);
+				if(!context.getHasError()) {
+					if(!(o instanceof FunctionCall)) {
+						if(v.getType() == "int") {
+							if(Utilities.TryParseInt(o)) {
+								v.setValue(Integer.valueOf(o.toString()));			
+							}else {
+								context.setHasError(new ExecutionError("Le résultat de l'expression doit être un entier, " + v.getIdentificator()));
+								return null;
+							}
+						}
+						else if(v.getType() == "double")
+							if(Utilities.TryParseDouble(o) || Utilities.TryParseInt(o)) {
+								v.setValue(Double.valueOf(o.toString()));			
+							}else {
+								context.setHasError(new ExecutionError("Le résultat de l'expression doit être un nombre, " + v.getIdentificator()));
+								return null;
+							}	
+						else
+							v.setValue(Boolean.valueOf(o.toString()));	
+					}else
+						v.setValue((FunctionCall)o);
+				}else
+					return null;
+			}
 		}
 		return null;
 	}
