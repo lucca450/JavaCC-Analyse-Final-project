@@ -18,7 +18,11 @@ public class LowPriorityArithmeticExpression extends Expression {
 	public Object interpret(Context context) {
 		Object oLeft = getGauche().interpret(context);
 		Object oRight = getDroite().interpret(context);
-				
+		
+		if(oLeft instanceof ASTNode || oRight instanceof ASTNode) {
+			return this;
+		}
+		
 		if(operator == "+") {
 			return Utilities.Add(oLeft, oRight);
 		}else if(operator == "-") {

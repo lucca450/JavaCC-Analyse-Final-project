@@ -34,7 +34,7 @@ public class VariableDeclaration extends ASTNode{
 			if(v != null) {
 				Object o = a.interpret(context);
 				if(!context.getHasError()) {
-					if(!(o instanceof FunctionCall)) {
+					if(!(o instanceof ASTNode)) {
 						if(v.getType() == "int") {
 							if(Utilities.TryParseInt(o)) {
 								v.setValue(Integer.valueOf(o.toString()));			
@@ -53,7 +53,7 @@ public class VariableDeclaration extends ASTNode{
 						else
 							v.setValue(Boolean.valueOf(o.toString()));	
 					}else
-						v.setValue((FunctionCall)o);
+						v.setValue(o);
 				}else
 					return null;
 			}

@@ -1,7 +1,7 @@
 void test (int a, int b, int c)
 {
-	int d = 4+5;
-	int e = d+5;
+	int d = 4+Fly();
+	int j = d + 5;
 	
 	if(Fly(10))
 	{
