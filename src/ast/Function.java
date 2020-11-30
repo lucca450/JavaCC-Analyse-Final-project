@@ -70,16 +70,15 @@ public class Function extends ASTNode{
 	public void setFunctionBody(FunctionBody functionBody) {
 		this.functionBody = functionBody;
 	}
-
-
-	public void accept(VisitorPrint visitor, int nbTab) {
-		visitor.visit(this, nbTab);
+	
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
+		
 		
         for (ParameterDeclaration pd : parameterDeclarations) {
-            pd.accept(visitor, nbTab + 1);
+            pd.accept(visitor);
         }
-		
-        functionBody.accept(visitor, nbTab + 1);
+        functionBody.accept(visitor);
 	}
 
 	@Override

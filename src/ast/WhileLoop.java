@@ -27,13 +27,27 @@ public class WhileLoop extends Statement{
 
 	@Override
 	public Object interpret(Context context) {
-		System.out.println("Interpret while pas implémenté");
+		Object expressionResult = expression.interpret(context);
+		
+		if(expressionResult instanceof Boolean) {
+			boolean result = (boolean)expressionResult;
+			while(result) {
+				for(Statement s : body) {
+					s.interpret(context);
+				}
+				expressionResult = expression.interpret(context);
+				result = (boolean)expressionResult;
+			}
+		}else if(expressionResult instanceof ASTNode) {}
+		else {
+			context.setHasError(new ExecutionError("Le résultat de l'expression du while doit être un booléen"));
+		}
 		return null;
 	}
 
 	@Override
-	public void accept(VisitorPrint visitor, int nbTab) {
-		visitor.visit(this, nbTab);
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
 	}
 
 }

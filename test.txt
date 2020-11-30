@@ -1,24 +1,19 @@
 void test (int a, int b, int c)
 {
-	int d = 4+Fly();
-	int j = d + 5;
+	int d = 4;
+	int e = 3;
+
 	
-	if(Fly(10))
-	{
-		a = 2;
-	}else
-	{
-		a = 3;	
-	}	
-	
-	while(a == 0)
-	{
-		b = 5;
-		while(b == 2)
-		{
-			c= 5;
-		}
+	if(++d > e){
 	}
 	
-	return a;
+	for(a = 0;a<7; a = ++a){
+		a = 6;
+	}
+	
+	a = 0;
+	
+	while(a<7){
+		a = ++a;
+	}
 }

@@ -19,8 +19,8 @@ public class ReturnStatement extends Statement{
 	}
 
 	@Override
-	public void accept(VisitorPrint visitor, int nbTab) {
-		visitor.visit(this,nbTab);		
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);		
 	}
 
 }

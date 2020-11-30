@@ -29,11 +29,12 @@ public abstract class Utilities {
 	}
 	
 	public static Object Add(Object o1, Object o2) {
+		Double result = Double.valueOf(o1.toString()) + Double.valueOf(o2.toString());
 		
-		if(Utilities.TryParseInt(o1) && Utilities.TryParseInt(o2)) {
-			return Integer.valueOf(o1.toString()) + Integer.valueOf(o2.toString());
+		if(result == Math.floor(result)) { // if result is an integer
+			return Integer.valueOf((int)Math.round(result));
 		}else {
-			return Double.valueOf(o1.toString()) + Double.valueOf(o2.toString());
+			return Double.valueOf(result.toString());
 		}
 	}
 	public static Object Subtract(Object o1, Object o2) {

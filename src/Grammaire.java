@@ -84,8 +84,8 @@ public class Grammaire implements GrammaireConstants {
                 FunctionBody funcB = (FunctionBody)stack.pop();
                 func.setFunctionBody(funcB);
 
-                /*
-		Boolean ok = false;
+
+                /*Boolean ok = false;
 		while(!ok){
         	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
 
@@ -98,25 +98,29 @@ public class Grammaire implements GrammaireConstants {
 			}
 		}
 		
-		if(answer == "o") {
-			func.accept(new VisitorPrint(), 0);
-		}*/
-
-
+		if(answer == "o") {*/
+                        //func.accept(new VisitorPrint());
+                //}
 
 
                 DataGenerator dG = new DataGenerator(func);
+
                 ArrayList<Execution> executions = dG.GenerateData();
 
                 int nbWorked = 0;
 
                 for(Execution e : executions) {
                         Context context = dG.GenerateContext(e);
+                        context.setResultType(func.getType());
 
                         Object result = func.interpret(context);
 
                         if(!context.getHasError()) {
                                 nbWorked ++;
+
+
+
+
                         }
 
                         int allo = 100;

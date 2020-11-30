@@ -24,8 +24,10 @@ public class FunctionBody extends ASTNode {
 		this.statements = statements;
 	}
 
-	public void accept(VisitorPrint visitor, int nbTab) {
-		visitor.visit(this, nbTab);
+	public void accept(VisitorPrint visitor) {
+		visitor.PreVisit();
+		visitor.visit(this);
+		visitor.PostVisit();
 	}
 	
 	@Override
@@ -43,10 +45,7 @@ public class FunctionBody extends ASTNode {
 		for(Statement s : statements)
 		{
 			if(!context.getHasError()) {
-				if(s instanceof ReturnStatement) {
-					s.interpret(context);
-				}
-				s.interpret(context);				
+				s.interpret(context);
 			}else {
 				return null;
 			}

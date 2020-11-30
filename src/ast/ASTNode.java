@@ -11,7 +11,7 @@ public abstract class ASTNode {
 	}
 
 	public abstract Object interpret(Context context);
-	public abstract void accept(VisitorPrint visitor, int nbTab);
+	public abstract void accept(VisitorPrint visitor);
 	
 	public void setID(int iD) {
 		ID = iD;

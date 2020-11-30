@@ -40,7 +40,7 @@ public class UnaryExpression extends Item{
 			if(o instanceof Double || o instanceof Integer) 
 			{
 				Double d = Double.valueOf(o.toString());
-				return d-1;
+				return Utilities.Subtract(d, 1);
 			}else 
 			{
 				context.setHasError(new ExecutionError("Doit être un nombre pour faire --"));
@@ -50,7 +50,10 @@ public class UnaryExpression extends Item{
 			if(o instanceof Double || o instanceof Integer) 
 			{
 				Double d = Double.valueOf(o.toString());
-				return d+1;
+				Variable v = context.FindVariable(term.getValue().toString());
+				v.setValue(Utilities.Add(d, 1));
+				
+				return Utilities.Add(d, 1);
 			}else 
 			{
 				context.setHasError(new ExecutionError("Doit être un nombre pour faire ++"));
@@ -63,7 +66,9 @@ public class UnaryExpression extends Item{
 	}
 	
 	@Override
-	public void accept(VisitorPrint visitor, int nbTab) {
-		visitor.visit(this, nbTab);
+	public void accept(VisitorPrint visitor) {
+		visitor.PreVisit();
+		visitor.visit(this);
+		visitor.PostVisit();
 	}	
 }

@@ -31,8 +31,10 @@ public class FunctionCall extends Statement{
 	}
 
 	@Override
-	public void accept(VisitorPrint visitor, int nbTab) {
-		visitor.visit(this, nbTab);
+	public void accept(VisitorPrint visitor) {
+		visitor.PreVisit();
+		visitor.visit(this);
+		visitor.PostVisit();
 	}
 
 }

@@ -46,8 +46,8 @@ public class Term extends Item{
 	}
 
 	@Override
-	public void accept(VisitorPrint visitor, int nbTab) {
-		visitor.visit(this, nbTab);
+	public void accept(VisitorPrint visitor) {
+		visitor.visit(this);
 	}
 
 }

@@ -5,12 +5,22 @@ import java.util.ArrayList;
 public class Context {
 	private ArrayList<Variable> variables;
 	private Object result;
+	private String resultType;
 	public Boolean isEmpty = true;
 	private ExecutionError error;
 
 	public Context() {
 		variables = new ArrayList<Variable>();
 		result = null;
+	}
+	
+	
+	public String getResultType() {
+		return resultType;
+	}
+
+	public void setResultType(String resultType) {
+		this.resultType = resultType;
 	}
 	
 	public boolean getHasError() {

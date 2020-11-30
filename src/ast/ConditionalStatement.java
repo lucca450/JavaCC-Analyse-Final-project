@@ -40,13 +40,31 @@ public class ConditionalStatement extends Statement{
 	
 	@Override
 	public Object interpret(Context context) {
-		// TODO Auto-generated method stub
+		Object expressionResult = expression.interpret(context);
+		if(expressionResult instanceof Boolean) {
+			boolean result = (boolean)expressionResult;
+			if(result) {
+				for(Statement s : ifBody){
+					s.interpret(context);
+				}
+			}else{
+				for(Statement s : elseBody){
+					s.interpret(context);
+				}
+			}
+		}else if(expressionResult instanceof ASTNode){
+		}else {
+			context.setHasError(new ExecutionError("Le résultat du if doit être un booléen"));
+		}
+		
 		return null;
 	}
 
 	@Override
-	public void accept(VisitorPrint visitor, int nbTab) {
-		visitor.visit(this, nbTab);		
+	public void accept(VisitorPrint visitor) {
+		visitor.PreVisit();
+		visitor.visit(this);
+		visitor.PostVisit();		
 	}
 
 }

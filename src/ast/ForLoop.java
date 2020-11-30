@@ -45,13 +45,42 @@ public class ForLoop extends Statement{
 
 	@Override
 	public Object interpret(Context context) {
-		// TODO Auto-generated method stub
+		if(startAssignment != null) {
+			startAssignment.interpret(context);			
+		}
+		
+		if(expression == null) {
+			while(true) {
+				System.out.println("Expression du for null");
+			}
+		}
+		
+		Object expressionResult = expression.interpret(context);
+		if(expressionResult instanceof Boolean) {
+			boolean result = (boolean)expressionResult;
+			while(result) {
+				for(Statement s : body) {
+					s.interpret(context);
+				}
+				if(iterationAssignment != null) {
+					iterationAssignment.interpret(context);
+				}
+				expressionResult = expression.interpret(context);					
+				result = (boolean)expressionResult;
+			}
+		}else if(expressionResult instanceof ASTNode) {}
+		else {
+			context.setHasError(new ExecutionError("Le résultat de l'expression du for doit être un booléen"));
+		}
+		
 		return null;
 	}
 
 	@Override
-	public void accept(VisitorPrint visitor, int nbTab) {
-		visitor.visit(this,nbTab);
+	public void accept(VisitorPrint visitor) {
+		visitor.PreVisit();
+		visitor.visit(this);
+		visitor.PostVisit();
 	}
 
 }
