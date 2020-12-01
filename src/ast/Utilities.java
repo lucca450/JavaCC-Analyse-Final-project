@@ -74,4 +74,14 @@ public abstract class Utilities {
 		}
 	}
 	
+	public static boolean CompareTypes(Object o1, Object o2) {
+		Object c1 = o1.getClass();
+		Object c2 = o2.getClass();
+		
+		if(o1 instanceof Boolean || o2 instanceof Boolean)
+			return c1 == c2;
+		else 
+			return true;
+	}
+	
 }

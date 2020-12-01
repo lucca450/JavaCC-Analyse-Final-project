@@ -25,6 +25,8 @@ public class UnaryExpression extends Item{
 	@Override
 	public Object interpret(Context context) {
 		Object o = term.interpret(context);
+		if(o instanceof ASTNode)
+			return this;
 		
 		switch(operator)
 		{

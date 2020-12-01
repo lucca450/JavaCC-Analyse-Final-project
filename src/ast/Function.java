@@ -83,7 +83,8 @@ public class Function extends ASTNode{
 
 	@Override
 	public Object interpret(Context context) {
-		return functionBody.interpret(context);
+		functionBody.interpret(context);
+		return null;
 	}
 	
 }

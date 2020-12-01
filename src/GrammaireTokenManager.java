@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.lang.Math;
 import java.util.Random;
+import java.util.Hashtable;
 
 /** Token Manager. */
 public class GrammaireTokenManager implements GrammaireConstants

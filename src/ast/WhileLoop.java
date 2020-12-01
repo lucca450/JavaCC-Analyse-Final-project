@@ -34,6 +34,8 @@ public class WhileLoop extends Statement{
 			while(result) {
 				for(Statement s : body) {
 					s.interpret(context);
+					if(context.getHasError())
+						return null;
 				}
 				expressionResult = expression.interpret(context);
 				result = (boolean)expressionResult;

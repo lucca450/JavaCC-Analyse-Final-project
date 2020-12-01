@@ -14,6 +14,9 @@ public class Context {
 		result = null;
 	}
 	
+	public boolean HasResult() {
+		return result != null;
+	}
 	
 	public String getResultType() {
 		return resultType;

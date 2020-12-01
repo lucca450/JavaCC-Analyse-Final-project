@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.lang.Math;
 import java.util.Random;
+import java.util.Hashtable;
 
 public class Grammaire implements GrammaireConstants {
   static Stack stack = new Stack();
@@ -106,6 +107,7 @@ public class Grammaire implements GrammaireConstants {
                 DataGenerator dG = new DataGenerator(func);
 
                 ArrayList<Execution> executions = dG.GenerateData();
+                Hashtable<Execution, Object> workedExecutions = new Hashtable<Execution, Object>();
 
                 int nbWorked = 0;
 
@@ -113,14 +115,10 @@ public class Grammaire implements GrammaireConstants {
                         Context context = dG.GenerateContext(e);
                         context.setResultType(func.getType());
 
-                        Object result = func.interpret(context);
+                        func.interpret(context);
 
                         if(!context.getHasError()) {
-                                nbWorked ++;
-
-
-
-
+                                workedExecutions.put(e, context.getResult());
                         }
 
                         int allo = 100;

@@ -19,6 +19,9 @@ public class ArithmeticExpression extends Expression{
 		Object oLeft = getGauche().interpret(context);
 		Object oRight = getDroite().interpret(context);
 		
+		if(oLeft instanceof ASTNode || oRight instanceof ASTNode)
+			return this;
+		
 		switch(operator)
 		{
 		case "*":

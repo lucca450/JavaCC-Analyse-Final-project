@@ -51,7 +51,12 @@ public class ForLoop extends Statement{
 		
 		if(expression == null) {
 			while(true) {
-				System.out.println("Expression du for null");
+				for(Statement s : body) {
+					s.interpret(context);
+				}
+				System.out.println("For infini");
+				if(context.getHasError())
+					return null;
 			}
 		}
 		
@@ -61,6 +66,8 @@ public class ForLoop extends Statement{
 			while(result) {
 				for(Statement s : body) {
 					s.interpret(context);
+					if(context.getHasError())
+						return null;
 				}
 				if(iterationAssignment != null) {
 					iterationAssignment.interpret(context);

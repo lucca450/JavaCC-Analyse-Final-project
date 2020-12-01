@@ -10,8 +10,9 @@ public class TestingMain {
 	
 	
 	public static void main(String[] args) {
-		int a = 4;
-		int b = a + ++a;
-		int j = 0;
+		Object o1 = 10;
+		Object o2 = 10.5;
+		
+		Utilities.CompareTypes(o1, o2);
 	}
 }

@@ -67,7 +67,7 @@ public class VisitorPrint {
         }
     }    
     public void visit(ReturnStatement rStatement) {
-    	System.out.println("Retourne");
+    	System.out.println(tab + "Retourne");
     	rStatement.getExpression().accept(this);
     }
     

@@ -35,20 +35,17 @@ public class FunctionBody extends ASTNode {
 		
 		for(VariableDeclaration vD : variableDeclarations)
 		{
-			if(!context.getHasError()) {
-				vD.interpret(context);				
-			}else {
+			if(context.getHasError())
 				return null;
-			}
+			
+			vD.interpret(context);				
 		}
 				
 		for(Statement s : statements)
 		{
-			if(!context.getHasError()) {
-				s.interpret(context);
-			}else {
+			if(context.getHasError())
 				return null;
-			}
+			s.interpret(context);
 		}
 		return null;
 	}

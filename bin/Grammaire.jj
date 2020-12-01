@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.lang.Math;
 import java.util.Random;
+import java.util.Hashtable;
 
 public class Grammaire{
   static Stack stack = new Stack();
@@ -19,15 +20,44 @@ public class Grammaire{
 	    InputStream inputStream = new FileInputStream(new File("test.txt"));	    Grammaire parser = new Grammaire(inputStream);
 	    parser.function();
 
-		Function myFunction = (Function)stack.peek();
-
+		while(!stack.empty()) {
 		
-
-		
-
-		
-
-	    
+			Function myFunction = (Function)stack.pop();
+	
+			/*Boolean ok = false;
+			while(!ok){
+	        	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+	
+	         	System.out.println("Voulez-vous afficher l'AST ? (o/n)");
+	        	String answer = reader.readLine(); 
+	
+				ok = answer == "o" || answer == "n";
+				if(!ok) {
+					System.out.prinln("Entrée invalide");
+				}
+			}
+			
+			if(answer == "o") {*/
+				//func.accept(new VisitorPrint());
+			//}
+			
+			
+			DataGenerator dG = new DataGenerator(func);
+			
+			ArrayList<Execution> executions = dG.GenerateData();
+			Hashtable<Execution, Object> workedExecutions = new Hashtable<Execution, Object>();
+	
+			for(Execution e : executions) {
+			 	Context context = dG.GenerateContext(e);
+			 	context.setResultType(func.getType());
+	
+				func.interpret(context);
+	
+				if(!context.getHasError()) {
+					workedExecutions.put(e, context.getResult());
+				}
+			}
+		}
  	 } catch(IOException exception) {
 		exception.printStackTrace();
  	 }  }}PARSER_END(Grammaire)
@@ -118,51 +148,7 @@ void function() :
 
 	{
 		FunctionBody funcB = (FunctionBody)stack.pop();
-	  	func.setFunctionBody(funcB);
-
-		
-		/*Boolean ok = false;
-		while(!ok){
-        	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
-
-         	System.out.println("Voulez-vous afficher l'AST ? (o/n)");
-        	String answer = reader.readLine(); 
-
-			ok = answer == "o" || answer == "n";
-			if(!ok) {
-				System.out.prinln("Entrée invalide");
-			}
-		}
-		
-		if(answer == "o") {*/
-			//func.accept(new VisitorPrint());
-		//}
-		
-		
-		DataGenerator dG = new DataGenerator(func);
-		
-		ArrayList<Execution> executions = dG.GenerateData();
-
-		int nbWorked = 0;
-
-		for(Execution e : executions) {
-		 	Context context = dG.GenerateContext(e);
-		 	context.setResultType(func.getType());
-
-			func.interpret(context);
-
-			if(!context.getHasError()) {
-				nbWorked ++;
-				Object result = context.getResult();
-
-
-				
-			}
-
-			int allo = 100;
-		}
-
-	  		  	
+	  	func.setFunctionBody(funcB);	  		  	
 	}
 	
 	(function())*

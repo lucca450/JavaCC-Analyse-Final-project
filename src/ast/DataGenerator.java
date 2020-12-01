@@ -24,9 +24,11 @@ public class DataGenerator {
 	    		String type = pd.getType();
 	    		Object randomValue;
 	    		
-    			if(type.equals("int") || type.equals("double"))
+    			if(type.equals("double"))
     				randomValue = (Math.random() * range + 1);
-    	    	else
+    	    	else if(type.equals("int")) {
+    	    		randomValue = (int)Math.floor((Math.random() * range + 1));
+    	    	}else
     	    		randomValue = ((Math.random() * 2)) == 0;
     			
     			execution.AddRandomValues(new Variable(pd.getID(), pd.getParameterName(), type, randomValue));	

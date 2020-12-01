@@ -45,10 +45,14 @@ public class ConditionalStatement extends Statement{
 			boolean result = (boolean)expressionResult;
 			if(result) {
 				for(Statement s : ifBody){
+					if(context.getHasError())
+						return null;
 					s.interpret(context);
 				}
 			}else{
 				for(Statement s : elseBody){
+					if(context.getHasError())
+						return null;
 					s.interpret(context);
 				}
 			}
