@@ -7,6 +7,7 @@ import java.util.List;
 import java.lang.Math;
 import java.util.Random;
 import java.util.Hashtable;
+import java.util.Set;
 
 public class Grammaire implements GrammaireConstants {
   static Stack stack = new Stack();
@@ -14,25 +15,100 @@ public class Grammaire implements GrammaireConstants {
 
   public static void main(String args []) throws ParseException
   {
-    try {
-            InputStream inputStream = new FileInputStream(new File("test.txt"));
-            Grammaire parser = new Grammaire(inputStream);
+                try
+                {
 
-            parser.function();
+                String directory = args[0];
+                File dir = new File(directory);
 
-                Function myFunction = (Function)stack.peek();
+                File[] files = dir.listFiles();
 
+                        for(File f : files)
+                        {
+                                if (f.isFile() && f.getName().endsWith(".txt"))
+                                {
+                                        InputStream inputStream = new FileInputStream(f);
+                                    Grammaire parser = new Grammaire(inputStream);
 
+                                    parser.function();
 
+                                        while(!stack.empty())
+                                        {
+                                                Function function = (Function)stack.pop();
+                                                String answer = "";
+                                                Boolean ok = false;
+                                                while(!ok)
+                                                {
+                                                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+                                                System.out.println("Voulez-vous afficher l'AST ? (o/n)");
+                                                answer = reader.readLine();
 
+                                                        ok = answer.equals("o") || answer.equals("n");
+                                                        if(!ok)
+                                                        {
+                                                                System.out.println("Entr\u00e9e invalide");
+                                                        }
+                                                }
 
+                                                if(answer.equals("o"))
+                                                {
+                                                        function.accept(new VisitorPrint());
+                                                }
 
+                                                DataGenerator dG = new DataGenerator(function);
 
-         } catch(IOException exception) {
-                exception.printStackTrace();
-         }
-  }
+                                                ArrayList<Execution> executions = dG.GenerateData();
+                                                Hashtable<Execution, Object> workedExecutions = new Hashtable<Execution, Object>();
+
+                                                for(Execution e : executions)
+                                                {
+                                                        Context context = dG.GenerateContext(e);
+                                                        context.setResultType(function.getType());
+
+                                                        function.interpret(context);
+
+                                                        if(!context.getHasError())
+                                                        {
+                                                                e.SetPath(context.GetExecutedPath());
+                                                                workedExecutions.put(e, context.getResult());
+                                                        }
+                                                }
+
+                                                System.out.println(workedExecutions.size() + " Entr\u00e9es de test g\u00e9n\u00e9r\u00e9es");
+                                                executions = new ArrayList<Execution>();
+
+                                                Set<Execution> wExecutions = workedExecutions.keySet();
+                                                for(Execution e : wExecutions)
+                                                {
+                                                        executions.add(e);
+                                                        Object returnValue = workedExecutions.get(e);
+                                                        if(returnValue != null)
+                                                        {
+                                                                if(!(returnValue instanceof ASTNode))
+                                                                        System.out.println(e.toString() + "valeur de retour : " + returnValue.toString());
+                                                                else
+                                                                        System.out.println(e.toString() + "valeur de retour : expresion contenant un appel de fonction");
+                                                        }else
+                                                        {
+                                                                System.out.println(e.toString() + "aucune valeur de  retour : expresion contenant un appel de fonction");
+                                                        }
+                                                }
+
+                                                int nbPaths = function.GetNbPaths();
+                                                int nbDifferentExecution = Utilities.CalculateDifferentPaths(executions);
+                                                double p = Double.valueOf(Utilities.Divide(nbDifferentExecution,nbPaths).toString());
+                                                double pourcentage = p * 100;
+                                                System.out.println(nbDifferentExecution + " / " + nbPaths + " soit " + pourcentage + "% des chemins d'\u00e9x\u00e9cution couverts");
+                                                System.out.println("\u005cn************************\u005cn");
+                                        }
+                                }
+                        }
+                }catch(IOException exception)
+                {
+                        exception.printStackTrace();
+                }
+        }
 
   final public void function() throws ParseException {
   Token ident = null;
@@ -84,45 +160,6 @@ public class Grammaire implements GrammaireConstants {
     jj_consume_token(46);
                 FunctionBody funcB = (FunctionBody)stack.pop();
                 func.setFunctionBody(funcB);
-
-
-                /*Boolean ok = false;
-		while(!ok){
-        	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
-
-         	System.out.println("Voulez-vous afficher l'AST ? (o/n)");
-        	String answer = reader.readLine(); 
-
-			ok = answer == "o" || answer == "n";
-			if(!ok) {
-				System.out.prinln("Entrée invalide");
-			}
-		}
-		
-		if(answer == "o") {*/
-                        //func.accept(new VisitorPrint());
-                //}
-
-
-                DataGenerator dG = new DataGenerator(func);
-
-                ArrayList<Execution> executions = dG.GenerateData();
-                Hashtable<Execution, Object> workedExecutions = new Hashtable<Execution, Object>();
-
-                int nbWorked = 0;
-
-                for(Execution e : executions) {
-                        Context context = dG.GenerateContext(e);
-                        context.setResultType(func.getType());
-
-                        func.interpret(context);
-
-                        if(!context.getHasError()) {
-                                workedExecutions.put(e, context.getResult());
-                        }
-
-                        int allo = 100;
-                }
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -335,6 +372,9 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void conditional_statement() throws ParseException {
+        Function f = (Function)stack.peek();
+        f.IncrementNbConditions();
+
         ConditionalStatement cStatement = new ConditionalStatement();
         ArrayList<Statement> ifBody = new ArrayList<Statement>();
         ArrayList<Statement> elseBody = new ArrayList<Statement>();
@@ -393,6 +433,8 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void while_loop() throws ParseException {
+        Function f = (Function)stack.peek();
+        f.IncrementNbConditions();
         WhileLoop whileLoop = new WhileLoop();
         Item item;
         ArrayList<Statement> body = new ArrayList<Statement>();
@@ -426,6 +468,8 @@ public class Grammaire implements GrammaireConstants {
   }
 
   final public void for_loop() throws ParseException {
+        Function f = (Function)stack.peek();
+        f.IncrementNbConditions();
         ForLoop forLoop = new ForLoop();
         ArrayList<Statement> body = new ArrayList<Statement>();
     jj_consume_token(FOR);
@@ -882,25 +926,25 @@ public class Grammaire implements GrammaireConstants {
     return false;
   }
 
-  private boolean jj_3R_16() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(42)) return true;
-    return false;
-  }
-
-  private boolean jj_3_3() {
-    if (jj_3R_16()) return true;
-    return false;
-  }
-
   private boolean jj_3_2() {
     if (jj_scan_token(46)) return true;
     if (jj_scan_token(ELSE)) return true;
     return false;
   }
 
+  private boolean jj_3R_16() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(42)) return true;
+    return false;
+  }
+
   private boolean jj_3_1() {
     if (jj_3R_15()) return true;
+    return false;
+  }
+
+  private boolean jj_3_3() {
+    if (jj_3R_16()) return true;
     return false;
   }
 

@@ -1,16 +1,31 @@
-bool test (int a, int b, int c)
+int test (bool a)
 {
-	int d = 4 * Fly();
-	int e = 3;
-
+	int b = 0;
+	int i = 0;
+	int j = 0;
+	bool k = true;
+	bool g = false;
 	
-	if(++d > e){
+	if(a){
+		j = 100;
+	}else{
+		i = 100;
 	}
-	a = 0;
 	
-	while(a<7){
-		a = ++a;
+	g = 100 == i;
+	
+	if(g == true){
+		b = 5;
+	}else{
+		b = 2;
 	}
 	
-	return e == 3;
+	i = 0;
+	
+	while(b<7){
+		b = ++b;
+		i = i + 1;
+	}
+	
+	return i;
 }

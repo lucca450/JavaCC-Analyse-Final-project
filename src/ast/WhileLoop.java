@@ -27,22 +27,27 @@ public class WhileLoop extends Statement{
 
 	@Override
 	public Object interpret(Context context) {
+		context.AddIDInPath(getID());
 		Object expressionResult = expression.interpret(context);
 		
-		if(expressionResult instanceof Boolean) {
-			boolean result = (boolean)expressionResult;
-			while(result) {
-				for(Statement s : body) {
-					s.interpret(context);
-					if(context.getHasError())
-						return null;
+		if(!context.getHasError()) {
+			if(expressionResult instanceof Boolean) {
+				boolean result = (boolean)expressionResult;
+				if(result)
+					context.AddIDInPath(getID());
+				while(result) {
+					for(Statement s : body) {
+						s.interpret(context);
+						if(context.getHasError())
+							return null;
+					}
+					expressionResult = expression.interpret(context);
+					result = (boolean)expressionResult;
 				}
-				expressionResult = expression.interpret(context);
-				result = (boolean)expressionResult;
+			}else if(expressionResult instanceof ASTNode) {}
+			else {
+				context.setHasError(new ExecutionError("Le résultat de l'expression du while doit être un booléen"));
 			}
-		}else if(expressionResult instanceof ASTNode) {}
-		else {
-			context.setHasError(new ExecutionError("Le résultat de l'expression du while doit être un booléen"));
 		}
 		return null;
 	}

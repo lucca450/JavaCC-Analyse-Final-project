@@ -1,5 +1,7 @@
 package ast;
 
+import java.util.ArrayList;
+
 public abstract class Utilities {
 	
 	public static boolean TryParseInt(Object o) {
@@ -84,4 +86,42 @@ public abstract class Utilities {
 			return true;
 	}
 	
+	public static int CalculateDifferentPaths(ArrayList<Execution> workedExecutions) {
+		ArrayList<Execution> differentExecutions = new ArrayList<Execution>();
+		Execution first = workedExecutions.remove(0);
+		differentExecutions.add(first);
+		
+		for(Execution e : workedExecutions) {
+			boolean foundIdentical = false;
+			for(Execution dE : differentExecutions) {
+				if(IfExecutionIdentical(e, dE)) {
+					foundIdentical = true;
+					break;
+				}
+			}
+			if(!foundIdentical)
+				differentExecutions.add(e);
+		}
+		return differentExecutions.size();
+	}
+	
+	public static boolean IfExecutionIdentical(Execution e1, Execution e2) {
+		ArrayList<Integer> idsE1 = e1.GetPath();
+		ArrayList<Integer> idsE2 = e2.GetPath();
+		int e1PathSize = idsE1.size();
+		int e2PathSize = idsE2.size();
+		
+		
+		if(e1PathSize != e2PathSize)
+			return false;
+		
+		for(int i = 0 ; i < e1PathSize; i++) {
+			int id1 = idsE1.get(i);
+			int id2 = idsE2.get(i);
+			if(id1 != id2) {
+				return false;
+			}
+		}
+		return true;		
+	}
 }

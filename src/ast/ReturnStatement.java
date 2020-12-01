@@ -42,7 +42,9 @@ public class ReturnStatement extends Statement{
 
 	@Override
 	public void accept(VisitorPrint visitor) {
-		visitor.visit(this);		
+		visitor.PreVisit();
+		visitor.visit(this);
+		visitor.PostVisit();
 	}
 
 }

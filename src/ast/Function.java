@@ -10,6 +10,7 @@ public class Function extends ASTNode{
 	private String functionName;
 	private List<ParameterDeclaration> parameterDeclarations = new ArrayList<ParameterDeclaration>();
 	private FunctionBody functionBody;
+	private int nbConditions = 0;	
 	
 	public Function(String type, String function_name, List<ParameterDeclaration> parameterDeclarations, FunctionBody functionBody) {
 		this.type = type;
@@ -23,7 +24,13 @@ public class Function extends ASTNode{
 		this.functionName = function_name;
 	}
 
-
+	public void IncrementNbConditions() {
+		nbConditions++;
+	}
+	
+	public int GetNbPaths() {
+		return (int)(Math.pow(2, nbConditions));
+	}
 
 	@Override
 	public String toString() {

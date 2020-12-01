@@ -28,8 +28,10 @@ public class DataGenerator {
     				randomValue = (Math.random() * range + 1);
     	    	else if(type.equals("int")) {
     	    		randomValue = (int)Math.floor((Math.random() * range + 1));
-    	    	}else
-    	    		randomValue = ((Math.random() * 2)) == 0;
+    	    	}else {
+    	    		double d = Math.floor(Math.random() * 2);			
+    	    		randomValue = Math.floor(Math.random() * 2) == 0;
+    	    	}
     			
     			execution.AddRandomValues(new Variable(pd.getID(), pd.getParameterName(), type, randomValue));	
 	        }
@@ -43,7 +45,7 @@ public class DataGenerator {
     	
     	for(Variable v : path.getRandomValues()) {	// paramètres
     		if(!context.getHasError())
-    			context.AddVariable(v);
+    			context.AddVariable(v.Clone());
     		else
     			return context;
     	}

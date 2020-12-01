@@ -63,6 +63,8 @@ public class ForLoop extends Statement{
 		Object expressionResult = expression.interpret(context);
 		if(expressionResult instanceof Boolean) {
 			boolean result = (boolean)expressionResult;
+			if(result)
+				context.AddIDInPath(getID());
 			while(result) {
 				for(Statement s : body) {
 					s.interpret(context);

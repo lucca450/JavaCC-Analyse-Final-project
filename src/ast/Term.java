@@ -18,8 +18,8 @@ public class Term extends Item{
 	public Object interpret(Context context) {
 		
 		if(value != null) {
-			if(value.toString().equals("true") || value.toString().equals("false"))
-				return value.toString().equals("true");
+			if(value.toString().equalsIgnoreCase("true") || value.toString().equalsIgnoreCase("false"))
+				return value.toString().equalsIgnoreCase("true");
 			
 			if(value instanceof String) {
 				String identificator = value.toString();
@@ -47,7 +47,9 @@ public class Term extends Item{
 
 	@Override
 	public void accept(VisitorPrint visitor) {
+		visitor.PreVisit();
 		visitor.visit(this);
+		visitor.PostVisit();
 	}
 
 }

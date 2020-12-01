@@ -44,6 +44,7 @@ public class ConditionalStatement extends Statement{
 		if(expressionResult instanceof Boolean) {
 			boolean result = (boolean)expressionResult;
 			if(result) {
+				context.AddIDInPath(getID());
 				for(Statement s : ifBody){
 					if(context.getHasError())
 						return null;

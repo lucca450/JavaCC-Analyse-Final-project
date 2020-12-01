@@ -70,7 +70,12 @@ public class Assignment extends Statement{
 							return null;
 						}	
 					else
-						v.setValue(Boolean.valueOf(o.toString()));	
+						if(!(Utilities.TryParseDouble(o) || Utilities.TryParseInt(o)))
+							v.setValue(Boolean.valueOf(o.toString()));
+						else {
+							context.setHasError(new ExecutionError("Le résultat de l'expression doit être un bouléen"));
+							return null;
+						}
 				}else
 					v.setValue(o);
 			}else

@@ -67,8 +67,9 @@ public class VisitorPrint {
         }
     }    
     public void visit(ReturnStatement rStatement) {
-    	System.out.println(tab + "Retourne");
+    	System.out.print(tab + "Retourne");
     	rStatement.getExpression().accept(this);
+    	System.out.println();
     }
     
     public void visit(WhileLoop whileLoop) {
@@ -133,7 +134,7 @@ public class VisitorPrint {
     }
     
     public void visit(Assignment assignment) {
-    	System.out.print(assignment.getIdentifier() + " " + assignment.getAssign());
+    	System.out.print(assignment.getIdentifier() + " " + assignment.getAssign() + " ");
     	
     	assignment.getExpression().accept(this);
     }
@@ -142,8 +143,10 @@ public class VisitorPrint {
     	if(logExpression.getConnector() != null) {
     		System.out.println(tab + "Logical connector: " + logExpression.getConnector());	
     	}
+    	System.out.print(tab);
     	logExpression.getGauche().accept(this);
     	System.out.println();
+    	System.out.print(tab);
     	logExpression.getDroite().accept(this);
     } 
         
@@ -153,27 +156,27 @@ public class VisitorPrint {
     	String op = comparaisonExpression.getOperator();
     	
     	if(op == ">") {		
-        	System.out.print("PLUS_GRAND," );	
+        	System.out.print("PLUS_GRAND, " );	
     	}
     	
     	if(op == "<") {  		
-        	System.out.print("PLUS_PETIT," );	
+        	System.out.print("PLUS_PETIT, " );	
     	}
     		
     	if(op == ">=") {  		
-        	System.out.print("PLUS_GRAND_EGAL," );	
+        	System.out.print("PLUS_GRAND_EGAL, " );	
     	}
     	
     	if(op == "<=") {  		
-        	System.out.print("PLUS_PETIT_EGAL,");	
+        	System.out.print("PLUS_PETIT_EGAL, ");	
     	}
     	
     	if(op== "==") {  		
-        	System.out.print("EGAL," );	
+        	System.out.print("EGAL, " );	
     	}
     	
     	if(op == "<>") {  		
-        	System.out.print("PAS_EGAL," );	
+        	System.out.print("PAS_EGAL, " );	
     	}
     	comparaisonExpression.getGauche().accept(this);
     	comparaisonExpression.getDroite().accept(this);
@@ -198,10 +201,8 @@ public class VisitorPrint {
     	arithmeticExpression.getDroite().accept(this);
 	}
 	public void visit(UnaryExpression unaryExpression) {
-    	System.out.println(unaryExpression.getOperator());
-    	this.PreVisit();
+    	System.out.print(unaryExpression.getOperator());
     	unaryExpression.getTerm().accept(this);
-    	this.PostVisit();
 	}
 	
 	public void visit(Term term) {
@@ -221,7 +222,7 @@ public class VisitorPrint {
 					strType = "DOUBLE";
 				}catch(Exception e1)
 				{
-					if(termValue.equals("true") || termValue.equals("false"))
+					if(termValue.toString().equalsIgnoreCase("true") || termValue.toString().equalsIgnoreCase("false"))
 					{
 						strType = "BOOLEAN";
 					}else 
@@ -231,7 +232,7 @@ public class VisitorPrint {
 				}
 			}			
 			
-			System.out.print(" " + termValue + " : " + strType + " " );
+			System.out.print(termValue + " : " + strType + " " );
 		}else if(termValue instanceof FunctionCall) {
 			this.visit((FunctionCall)termValue);
 			return;

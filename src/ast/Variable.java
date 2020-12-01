@@ -1,6 +1,6 @@
 package ast;
 
-public class Variable {
+public class Variable implements Cloneable{
 	private int ID;
 	private String identificator;
 	private String type;
@@ -35,6 +35,18 @@ public class Variable {
 	
 	public void setValue(Object value) {
 		this.value = value;
+	}
+	
+	public String Output() {
+		return identificator + " = " + value.toString();
+	}
+	
+	public Variable Clone() {
+		try {
+			return (Variable) super.clone();	
+		}catch(Exception e) {
+			return this;
+		}
 	}
 
 }

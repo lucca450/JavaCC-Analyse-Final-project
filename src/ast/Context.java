@@ -8,10 +8,20 @@ public class Context {
 	private String resultType;
 	public Boolean isEmpty = true;
 	private ExecutionError error;
+	private ArrayList<Integer> executedPath;
 
 	public Context() {
 		variables = new ArrayList<Variable>();
+		executedPath = new ArrayList<Integer>();
 		result = null;
+	}
+	
+	public void AddIDInPath(int id) {
+		executedPath.add(id);
+	}
+	
+	public ArrayList<Integer> GetExecutedPath(){
+		return executedPath;
 	}
 	
 	public boolean HasResult() {
