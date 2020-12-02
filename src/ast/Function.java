@@ -29,7 +29,7 @@ public class Function extends ASTNode{
 	}
 	
 	public int GetNbPaths() {
-		return (int)(Math.pow(2, nbConditions));
+		return nbConditions + 1;
 	}
 
 	@Override
@@ -91,6 +91,8 @@ public class Function extends ASTNode{
 	@Override
 	public Object interpret(Context context) {
 		functionBody.interpret(context);
+		if(!context.getHasError()  && (context.getResult() == null && !type.equals("void")))
+			context.setHasError(new ExecutionError("La fonction a un type de retour, mais n'a pas de return statement"));
 		return null;
 	}
 	

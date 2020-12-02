@@ -16,23 +16,23 @@ public class ReturnStatement extends Statement{
 	public Object interpret(Context context) {
 		String functionType = context.getResultType();
 		Object expressionResult = expression.interpret(context);
-		if(expressionResult instanceof Integer) {
+		if(Utilities.TryParseInt(expressionResult)) {
 			if(functionType.equals("int")) {
 				context.setResult(expressionResult);
 			}else {
-				context.setHasError(new ExecutionError("Le type de retour de la fonction doit être un entier"));
+				context.setHasError(new ExecutionError("L'expression de retour doit être un entier"));
 			}
-		}else if(expressionResult instanceof Double) {
+		}else if(Utilities.TryParseDouble(expressionResult)) {
 			if(functionType.equals("double")) {
 				context.setResult(expressionResult);
 			}else {
-				context.setHasError(new ExecutionError("Le type de retour de la fonction doit être un nombre décimal"));
+				context.setHasError(new ExecutionError("L'expression de retour doit être un nombre décimal"));
 			}
 		}else if(expressionResult instanceof Boolean) {
 			if(functionType.equals("bool")) {
 				context.setResult(expressionResult);
 			}else {
-				context.setHasError(new ExecutionError("Le type de retour de la fonction doit être un booléen"));
+				context.setHasError(new ExecutionError("L'expression de retour doit être un booléen"));
 			}
 		}else if(expressionResult instanceof ASTNode) {
 			context.setResult(expressionResult);
