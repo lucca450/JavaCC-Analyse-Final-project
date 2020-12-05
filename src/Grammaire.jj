@@ -63,16 +63,17 @@ public class Grammaire{
 						}
 				
 						DataGenerator dG = new DataGenerator(function);
-						
-						ArrayList<Execution> executions = dG.GenerateData();
+
+						// Génération des exécutions avec données aléatoires
+						ArrayList<Execution> executions = dG.GenerateData();							
 						HashMap<Execution, Object> workedExecutions = new HashMap<Execution, Object>();
 				
 						for(Execution e : executions)
 						{
-						 	Context context = dG.GenerateContext(e);
+						 	Context context = dG.GenerateContext(e);	//	Génération du contexte à partir de l'exécution
 						 	context.setResultType(function.getType());
 				
-							function.interpret(context);
+							function.interpret(context);				//  Interprétation de la fonction selon le contexte
 	
 							if(!context.getHasError())
 							{
@@ -85,6 +86,7 @@ public class Grammaire{
 						executions = new ArrayList<Execution>();
 					
 						Set<Execution> wExecutions = workedExecutions.keySet();
+						//	Affichage des exécutions réussies
 						for(Execution e : wExecutions)
 						{
 						 	executions.add(e);
@@ -103,17 +105,18 @@ public class Grammaire{
 
 						if(workedExecutions.size() != 0) {
 						  	int nbPaths = function.GetNbPaths();
-						  	String[] executedPaths = Utilities.BuildPath(executions);
+						  	String[] executedPaths = Utilities.BuildPath(executions);	//	Construction des chemins d'exécutions
 
 						  	IndependantPathCalculator pathCalculator = new IndependantPathCalculator(executedPaths);
 							int nbIndependantPaths = pathCalculator.getIndependantPathsCount();
 
+							// Pourcentage de chemins traversés
 							double p = Double.valueOf(Utilities.Divide(nbIndependantPaths,nbPaths).toString());
 							double pourcentage = p * 100;
 							
 							System.out.println(nbIndependantPaths + " / " + nbPaths + " soit " + pourcentage + "% des chemins d'éxécution couverts");
 						}else
-							System.out.println("Aucune e");
+							System.out.println("Aucune exécution réussie");
 						System.out.println("\n************************\n");
 					}
 				}
