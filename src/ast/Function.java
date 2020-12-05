@@ -9,7 +9,7 @@ import utilities.*;
 
 public class Function extends ASTNode{
 
-	private String type;
+	private String type;		
 	private String functionName;
 	private List<ParameterDeclaration> parameterDeclarations = new ArrayList<ParameterDeclaration>();
 	private FunctionBody functionBody;
@@ -94,7 +94,8 @@ public class Function extends ASTNode{
 	@Override
 	public Object interpret(Context context) {
 		functionBody.interpret(context);
-		if(!context.getHasError()  && (context.getResult() == null && !type.equals("void")))
+		//	Si pas d'erreur et qu'il y a un resultat et que le type de retour est différent de void
+		if(!context.getHasError()  && context.getResult() == null && !type.equals("void"))
 			context.setHasError(new ExecutionError("La fonction a un type de retour, mais n'a pas de return statement"));
 		return null;
 	}

@@ -24,8 +24,8 @@ public class LowPriorityArithmeticExpression extends Expression {
 		Object oLeft = getGauche().interpret(context);
 		Object oRight = getDroite().interpret(context);
 		
-		if(oLeft instanceof ASTNode || oRight instanceof ASTNode) {
-			return this;
+		if(oLeft instanceof ASTNode || oRight instanceof ASTNode) {	// Si un des 2 objet dérive d'un appel de fonction
+			return this;	//	ignore
 		}
 		
 		if(operator == "+") {

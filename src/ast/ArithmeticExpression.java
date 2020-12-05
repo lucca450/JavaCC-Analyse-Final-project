@@ -32,14 +32,14 @@ public class ArithmeticExpression extends Expression{
 		case "*":
 			return Utilities.Multiply(oLeft, oRight);
 		case "/":
-			if(Double.valueOf(oRight.toString()) != 0)
+			if(Double.valueOf(oRight.toString()) != 0)			// Si diviseur différent de 0
 				return Utilities.Divide(oLeft, oRight);
 			else 
 			{
 				context.setHasError(new ExecutionError("Impossible de diviser par 0"));
 			}
 		case "%":
-			if(Double.valueOf(oRight.toString()) != 0)
+			if(Double.valueOf(oRight.toString()) != 0)			// Si modulo différent de 0
 				return Utilities.Modulo(oLeft, oRight);
 			else 
 			{

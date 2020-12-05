@@ -139,9 +139,7 @@ public class VisitorPrint {
     	System.out.println(tab + "Expression conditionnelle");
       	
     	Item i = cStatement.getExpression();
-    	//if(i instanceof UnaryExpression || i instanceof Term) {
-    		System.out.print(tab + "\t");
-    	//}
+    	System.out.print(tab + "\t");
     	cStatement.getExpression().accept(this);
     	System.out.println();
     	

@@ -23,7 +23,7 @@ public class Term extends Item{
 	public Object interpret(Context context) {
 		
 		if(value != null) {
-			if(value.toString().equalsIgnoreCase("true") || value.toString().equalsIgnoreCase("false"))
+			if(value.toString().equalsIgnoreCase("true") || value.toString().equalsIgnoreCase("false"))	// si la chaine de caractères est TRUE OU FALSE
 				return value.toString().equalsIgnoreCase("true");
 			
 			if(value instanceof String) {
@@ -39,9 +39,9 @@ public class Term extends Item{
 						return null;
 					}
 				}
-			}else if(value instanceof Item) {
+			}else if(value instanceof Item) {									// Si value contient un Terme ou une Expression
 				return ((Item) value).interpret(context);
-			}else if(value instanceof FunctionCall) {
+			}else if(value instanceof FunctionCall) {							// Si c'est un appel de fonction
 				return ((FunctionCall)value).interpret(context);
 			}
 			

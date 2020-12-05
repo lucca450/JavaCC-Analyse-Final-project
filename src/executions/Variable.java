@@ -41,6 +41,7 @@ public class Variable implements Cloneable{
 		return identificator + " = " + value.toString();
 	}
 	
+	//	Sans cette fonction, les valeurs aléatoires de l'exécution étaient aussi modifier par référence
 	public Variable Clone() {
 		try {
 			return (Variable) super.clone();	

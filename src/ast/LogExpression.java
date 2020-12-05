@@ -32,7 +32,7 @@ public class LogExpression extends Expression{
 		Object oLeft = getGauche().interpret(context);
 		Object oRight = getDroite().interpret(context);
 		
-		if(oLeft instanceof Boolean && oRight instanceof Boolean) 
+		if(oLeft instanceof Boolean && oRight instanceof Boolean) // Confirme que les 2 objets sont des booléens
 		{
 			boolean left = Boolean.valueOf(oLeft.toString());
 			boolean right = Boolean.valueOf(oRight.toString());

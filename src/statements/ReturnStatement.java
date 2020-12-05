@@ -21,25 +21,25 @@ public class ReturnStatement extends Statement{
 	public Object interpret(Context context) {
 		String functionType = context.getResultType();
 		Object expressionResult = expression.interpret(context);
-		if(Utilities.TryParseInt(expressionResult)) {
+		if(Utilities.TryParseInt(expressionResult)) {			//	Si c'est un int
 			if(functionType.equals("int")) {
 				context.setResult(expressionResult);
 			}else {
 				context.setHasError(new ExecutionError("L'expression de retour doit être un entier"));
 			}
-		}else if(Utilities.TryParseDouble(expressionResult)) {
+		}else if(Utilities.TryParseDouble(expressionResult)) {	//	Si c'est un double
 			if(functionType.equals("double")) {
 				context.setResult(expressionResult);
 			}else {
 				context.setHasError(new ExecutionError("L'expression de retour doit être un nombre décimal"));
 			}
-		}else if(expressionResult instanceof Boolean) {
+		}else if(expressionResult instanceof Boolean) {			//	Si c'est un booléen
 			if(functionType.equals("bool")) {
 				context.setResult(expressionResult);
 			}else {
 				context.setHasError(new ExecutionError("L'expression de retour doit être un booléen"));
 			}
-		}else if(expressionResult instanceof ASTNode) {
+		}else if(expressionResult instanceof ASTNode) {			// Si l'expression dérive d'un appel de fonction
 			context.setResult(expressionResult);
 		}
 		return null;

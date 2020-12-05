@@ -55,11 +55,11 @@ public class Assignment extends Statement{
 	@Override
 	public Object interpret(Context context) {
 		Variable v = context.FindVariable(identifier);
-		if(v != null) {
+		if(v != null) {									//	si la variable existe
 			Object o = expression.interpret(context);
 			if(!context.getHasError()) {
-				if(!(o instanceof ASTNode)) {
-					if(v.getType() == "int") {
+				if(!(o instanceof ASTNode)) {				//	si l'objet ne dérive pas d'un appel de fonction
+					if(v.getType().equals("int")) {					//	si entier
 						if(Utilities.TryParseInt(o)) {
 							v.setValue(Integer.valueOf(o.toString()));			
 						}else {
@@ -67,14 +67,14 @@ public class Assignment extends Statement{
 							return null;
 						}
 					}
-					else if(v.getType() == "double")
+					else if(v.getType().equals("double"))			// si double
 						if(Utilities.TryParseDouble(o) || Utilities.TryParseInt(o)) {
 							v.setValue(Double.valueOf(o.toString()));			
 						}else {
 							context.setHasError(new ExecutionError("Le résultat de l'expression doit être un nombre, " + v.getIdentificator()));
 							return null;
 						}	
-					else
+					else											// else donc booléen
 						if(!(Utilities.TryParseDouble(o) || Utilities.TryParseInt(o)))
 							v.setValue(Boolean.valueOf(o.toString()));
 						else {

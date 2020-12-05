@@ -30,7 +30,7 @@ public class FunctionCall extends Statement{
 	
 	@Override
 	public Object interpret(Context context) {
-		return this;
+		return this;							// Retourne this pour plus tard ignorer l'appel
 	}
 
 	@Override

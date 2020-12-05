@@ -10,6 +10,7 @@ public class Execution {
 		this.path = path;
 	}
 	
+	//	Construit la trace depuis le chemin
 	public String BuildTrace() {
 		String trace = "";
 		for(int i = 0 ; i < path.size();i++) {

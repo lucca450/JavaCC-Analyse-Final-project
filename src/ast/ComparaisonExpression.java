@@ -27,44 +27,40 @@ public class ComparaisonExpression extends Expression{
 		Object oLeft = getGauche().interpret(context);
 		Object oRight = getDroite().interpret(context);
 		
-		boolean comparaisonOk = Utilities.CompareTypes(oLeft, oRight);
+		boolean objetsAreBools = Utilities.AreObjetsBool(oLeft, oRight); // S'arrive que si un des 2 obj est boolean que les 2 le soi
 		
-		if(comparaisonOk) {
-			if(oLeft instanceof Boolean || oRight instanceof Boolean) {
+		if(objetsAreBools) {
+			switch(operator)
+			{
+				case "==":
+					return Boolean.valueOf(oLeft.toString())==Boolean.valueOf(oRight.toString());
+				case "<>":
+					return Boolean.valueOf(oLeft.toString())!=Boolean.valueOf(oRight.toString());
+			}
+		}else {
+			if(!(oLeft instanceof ASTNode || oRight instanceof ASTNode)){	//	Si aucun objet dérive d'un appel de fonction
+				double left = Double.valueOf(oLeft.toString());
+				double right = Double.valueOf(oRight.toString());
 				switch(operator)
 				{
-					case "==":
-						return Boolean.valueOf(oLeft.toString())==Boolean.valueOf(oRight.toString());
-					case "<>":
-						return Boolean.valueOf(oLeft.toString())!=Boolean.valueOf(oRight.toString());
+				case ">":
+					return left>right;
+				case ">=":
+					return left>=right;
+				case "<":
+					return left<right;
+				case "<=":
+					return left<=right;
+				case "==":
+					return left==right;
+				case "<>":
+					return left!=right;
 				}
 			}else {
-				if(!(oLeft instanceof ASTNode || oRight instanceof ASTNode)){
-					double left = Double.valueOf(oLeft.toString());
-					double right = Double.valueOf(oRight.toString());
-					switch(operator)
-					{
-					case ">":
-						return left>right;
-					case ">=":
-						return left>=right;
-					case "<":
-						return left<right;
-					case "<=":
-						return left<=right;
-					case "==":
-						return left==right;
-					case "<>":
-						return left!=right;
-					}
-				}else {
-					return this;
-				}
+				return this;
 			}
-			context.setHasError(new ExecutionError("Mauvais opérateur dans Comparaison_expression selon les types"));
-		}else {
-			context.setHasError(new ExecutionError("Les types de la comparaison ne peuvent être comparés ensemble"));
 		}
+		context.setHasError(new ExecutionError("Mauvais opérateur dans Comparaison_expression selon les types"));
 		return null;
 	}
 

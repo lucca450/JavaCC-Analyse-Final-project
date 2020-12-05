@@ -30,7 +30,7 @@ public class UnaryExpression extends Item{
 	@Override
 	public Object interpret(Context context) {
 		Object o = term.interpret(context);
-		if(o instanceof ASTNode)
+		if(o instanceof ASTNode)		// Si objet dérive d'un appel de fonction
 			return this;
 		
 		switch(operator)
@@ -47,6 +47,9 @@ public class UnaryExpression extends Item{
 			if(o instanceof Double || o instanceof Integer) 
 			{
 				Double d = Double.valueOf(o.toString());
+				Variable v = context.FindVariable(term.getValue().toString());
+				v.setValue(Utilities.Subtract(d, 1));
+				
 				return Utilities.Subtract(d, 1);
 			}else 
 			{

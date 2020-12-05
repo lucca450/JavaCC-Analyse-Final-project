@@ -22,7 +22,7 @@ public class DataGenerator {
     public ArrayList<Execution> GenerateData() {
     	ArrayList<Execution> executions = new ArrayList<Execution>();
 		
-    	for (int i = 0; i < 10; i++) {
+    	for (int i = 0; i < 10; i++) {					// 10 exécutions demandées
     		Execution execution = new Execution();
     	
 	    	for(ParameterDeclaration pd : function.getParameterDeclarations())
@@ -30,13 +30,12 @@ public class DataGenerator {
 	    		String type = pd.getType();
 	    		Object randomValue;
 	    		
-    			if(type.equals("double"))
+    			if(type.equals("double"))						// Si c'est un double
     				randomValue = (Math.random() * range + min);
-    	    	else if(type.equals("int")) {
-    	    		randomValue = (int)Math.floor((Math.random() * range + min));
-    	    	}else {
-    	    		double d = Math.floor(Math.random() * 2);			
-    	    		randomValue = Math.floor(Math.random() * 2) == 0;
+    	    	else if(type.equals("int")) {					// Si c'est un int
+    	    		randomValue = (int)Math.floor((Math.random() * range + min));		// Calcul un double entre -10000 et 10000, puis retourne le résultat en integer
+    	    	}else {											// Si c'est un bool
+    	    		randomValue = Math.floor(Math.random() * 2) == 0;	// retourne vrai si le nombre est 0
     	    	}
     			
     			execution.AddRandomValues(new Variable(pd.getID(), pd.getParameterName(), type, randomValue));	
@@ -46,6 +45,7 @@ public class DataGenerator {
     	return executions;
     }
     
+    // Ajoute les paramètres et les variables dans le contexte
     public Context GenerateContext(Execution path) {
     	Context context = new Context();
     	

@@ -68,7 +68,7 @@ public class ForLoop extends Statement{
 		if(expressionResult instanceof Boolean) {
 			boolean result = (boolean)expressionResult;
 			if(result)
-				context.AddIDInPath(getID());
+				context.AddIDInPath(getID());		// ajoute le ID du for dans le chemin parcouru
 			while(result) {
 				for(Statement s : body) {
 					s.interpret(context);
@@ -81,7 +81,7 @@ public class ForLoop extends Statement{
 				expressionResult = expression.interpret(context);					
 				result = (boolean)expressionResult;
 			}
-		}else if(expressionResult instanceof ASTNode) {}
+		}else if(expressionResult instanceof ASTNode) {}	//	Si expression dérive d'un appel de fonction
 		else {
 			context.setHasError(new ExecutionError("Le résultat de l'expression du for doit être un booléen"));
 		}

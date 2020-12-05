@@ -31,24 +31,22 @@ public class WhileLoop extends Statement{
 
 	@Override
 	public Object interpret(Context context) {
-		context.AddIDInPath(getID());
 		Object expressionResult = expression.interpret(context);
-		
 		if(!context.getHasError()) {
-			if(expressionResult instanceof Boolean) {
+			if(expressionResult instanceof Boolean) {			// Si l'expression est un booléen
 				boolean result = (boolean)expressionResult;
 				if(result)
-					context.AddIDInPath(getID());
+					context.AddIDInPath(getID());				// Ajoute le ID du while dans le chemin parcouru
 				while(result) {
 					for(Statement s : body) {
 						s.interpret(context);
 						if(context.getHasError())
 							return null;
 					}
-					expressionResult = expression.interpret(context);
+					expressionResult = expression.interpret(context);	//	Recalcule l'expression
 					result = (boolean)expressionResult;
 				}
-			}else if(expressionResult instanceof ASTNode) {}
+			}else if(expressionResult instanceof ASTNode) {}			//	Si l'expression dérive d'un appel de fonction
 			else {
 				context.setHasError(new ExecutionError("Le résultat de l'expression du while doit être un booléen"));
 			}

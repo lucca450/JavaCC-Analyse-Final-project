@@ -48,7 +48,7 @@ public class ConditionalStatement extends Statement{
 		if(expressionResult instanceof Boolean) {
 			boolean result = (boolean)expressionResult;
 			if(result) {
-				context.AddIDInPath(getID());
+				context.AddIDInPath(getID());		//	Ajoute le ID du conditional statement dans le chemin parcouru
 				for(Statement s : ifBody){
 					if(context.getHasError())
 						return null;
@@ -61,7 +61,7 @@ public class ConditionalStatement extends Statement{
 					s.interpret(context);
 				}
 			}
-		}else if(expressionResult instanceof ASTNode){
+		}else if(expressionResult instanceof ASTNode){	//	Si expression dérive d'un appel de fonction, ignore
 		}else {
 			context.setHasError(new ExecutionError("Le résultat du if doit être un booléen"));
 		}

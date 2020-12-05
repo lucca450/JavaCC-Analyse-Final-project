@@ -41,7 +41,6 @@ public class FunctionBody extends ASTNode {
 		{
 			if(context.getHasError())
 				return null;
-			
 			vD.interpret(context);				
 		}
 				
