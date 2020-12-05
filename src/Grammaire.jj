@@ -2,14 +2,18 @@
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
  */options{  static = false;
   debug_parser = false;}PARSER_BEGIN(Grammaire)
-import java.io.*;
+import independantPathCalculator.*;
+import executions.*;
+import visitor.*;
+import utilities.*;
 import ast.*;
+import statements.*;
+
+import java.io.*;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Math;
-import java.util.Random;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Set;
 
 public class Grammaire{
@@ -61,7 +65,7 @@ public class Grammaire{
 						DataGenerator dG = new DataGenerator(function);
 						
 						ArrayList<Execution> executions = dG.GenerateData();
-						Hashtable<Execution, Object> workedExecutions = new Hashtable<Execution, Object>();
+						HashMap<Execution, Object> workedExecutions = new HashMap<Execution, Object>();
 				
 						for(Execution e : executions)
 						{
@@ -73,7 +77,7 @@ public class Grammaire{
 							if(!context.getHasError())
 							{
 							  	e.SetPath(context.GetExecutedPath());
-								workedExecutions.put(e, context.getResult());
+								workedExecutions.put(e, context.getResult());									
 							}
 						}
 					
@@ -98,13 +102,18 @@ public class Grammaire{
 						}
 
 						if(workedExecutions.size() != 0) {
-							int nbPaths = function.GetNbPaths();
-							int nbDifferentExecution = Utilities.CalculateDifferentPaths(executions);
-							double p = Double.valueOf(Utilities.Divide(nbDifferentExecution,nbPaths).toString());
+						  	int nbPaths = function.GetNbPaths();
+						  	String[] executedPaths = Utilities.BuildPath(executions);
+
+						  	IndependantPathCalculator pathCalculator = new IndependantPathCalculator(executedPaths);
+							int nbIndependantPaths = pathCalculator.getIndependantPathsCount();
+
+							double p = Double.valueOf(Utilities.Divide(nbIndependantPaths,nbPaths).toString());
 							double pourcentage = p * 100;
-							System.out.println(nbDifferentExecution + " / " + nbPaths + " soit " + pourcentage + "% des chemins d'éxécution couverts");
+							
+							System.out.println(nbIndependantPaths + " / " + nbPaths + " soit " + pourcentage + "% des chemins d'éxécution couverts");
 						}else
-							System.out.println("Aucune e")
+							System.out.println("Aucune e");
 						System.out.println("\n************************\n");
 					}
 				}
@@ -461,6 +470,10 @@ void expression():
  	(
 		{
 	 	   exp = (Item)stack.pop();
+	 	   if(lExp == exp)
+			{
+			  	lExp = new LogExpression();
+			}
 	 	   lExp.setGauche(exp);
 	 	}
 		

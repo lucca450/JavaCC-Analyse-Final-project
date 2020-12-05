@@ -1,6 +1,6 @@
 package TestingShit;
 
-import ast.Utilities;
+import utilities.*;
 
 public class TestingMain {
 
@@ -10,9 +10,9 @@ public class TestingMain {
 	
 	
 	public static void main(String[] args) {
-		Object o1 = 10;
-		Object o2 = 10.5;
-		
-		Utilities.CompareTypes(o1, o2);
+		boolean a = true;
+		for(;a;) {
+			int i = 0;
+		}
 	}
 }

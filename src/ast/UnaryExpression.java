@@ -1,5 +1,10 @@
 package ast;
 
+import executions.*;
+import statements.*;
+import visitor.*;
+import utilities.*;
+
 public class UnaryExpression extends Item{
 	private String operator;
 	private Term term;

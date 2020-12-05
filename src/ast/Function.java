@@ -2,7 +2,10 @@ package ast;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import executions.*;
+import statements.*;
+import visitor.*;
+import utilities.*;
 
 public class Function extends ASTNode{
 

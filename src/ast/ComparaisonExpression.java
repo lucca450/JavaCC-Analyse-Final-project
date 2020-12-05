@@ -1,6 +1,10 @@
 package ast;
 
 import java.security.KeyPair;
+import executions.*;
+import statements.*;
+import visitor.*;
+import utilities.*;
 
 public class ComparaisonExpression extends Expression{
 

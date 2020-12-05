@@ -1,5 +1,10 @@
 package ast;
 
+import executions.*;
+import statements.*;
+import visitor.*;
+import utilities.*;
+
 public class ParameterDeclaration extends ASTNode {
 	private String type;
 	private String parameterName;
